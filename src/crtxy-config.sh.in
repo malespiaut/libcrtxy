@@ -17,7 +17,7 @@ if [ $# -ne 0 ]; then
     exit
   fi
   if [ $1 = "--libs" ]; then
-    echo `sdl-config --libs` -L__LIBDIR__ -lcrtxy
+    echo `sdl-config --libs` -lSDL_image -L__LIBDIR__ -lcrtxy
     exit
   fi
   if [ $1 = "--static-libs" ]; then

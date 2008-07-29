@@ -37,8 +37,14 @@
 
 #define XY_bool Uint8
 
+#define XY_WINDOWED 0
+#define XY_FULLSCREEN_REQUEST 1
+#define XY_FULLSCREEN_REQUIRED 2
+
 typedef struct XY_options_s {
   int displayw, displayh;
+  int displaybpp;
+  int fullscreen;
   XY_bool antialias;
   XY_bool blur;
   XY_bool additive;

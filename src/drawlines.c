@@ -24,7 +24,15 @@ int main(int argc, char * argv[])
     return(1);
   }
 
-  /* ... */
+  XY_set_background(XY_getcolor(0xFF, 0xFF, 0xFF, 0x00), NULL,
+                    0, 0, 0, 0);
+
+  XY_start_frame(0);
+  XY_end_frame();
+
+  SDL_Delay(1000);
+
+  XY_quit();
 
   return(0);
 }

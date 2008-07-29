@@ -9,33 +9,96 @@
 */
 
 #include "crtxy.h"
+#include <SDL_image.h>
+
+SDL_Surface * XY_screen;
+XY_fixed XY_canvasw, XY_canvash;
+Uint32 XY_background_color;
+XY_bitmap * XY_background_bitmap;
+int XY_background_x, XY_background_y;
 
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
+  SDL_Init(SDL_INIT_VIDEO); /* FIXME: Test error */
+
+  XY_canvasw = canvasw;
+  XY_canvash = canvash;
+
+  XY_screen = SDL_SetVideoMode(320, 240, 24, SDL_SWSURFACE); /* FIXME: Options */
+  /* FIXME: Test error */
+
+  XY_background_color = SDL_MapRGB(XY_screen->format, 0x00, 0x00, 0x00);
+  XY_background_bitmap = NULL;
+  XY_background_x = XY_background_y = 0;
+
   return(0);
 }
 
 void XY_quit(void)
 {
+  SDL_Quit();
 }
 
 XY_bitmap * XY_load_bitmap(char * filename)
 {
-  return(NULL);
+  SDL_Surface * surf, * dispsurf;
+  XY_bitmap * xyb;
+
+  xyb = (XY_bitmap *) malloc(sizeof(XY_bitmap));
+  if (xyb == NULL)
+    return(NULL); /* FIXME: Set error */
+
+  surf = IMG_Load(filename);
+  if (surf == NULL)
+  {
+    free(xyb);
+    return(NULL); /* FIXME: Set error */
+  }
+
+  dispsurf = SDL_DisplayFormatAlpha(surf);
+  SDL_FreeSurface(surf);
+  if (dispsurf == NULL)
+  {
+    free(xyb);
+    return(NULL); /* FIXME: Set error */
+  }
+
+  xyb->surf = dispsurf;
+
+  return(xyb);
 }
 
 XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer)
 {
+  /* FIXME: Do it */
   return(NULL);
 }
 
 void XY_free_bitmap(XY_bitmap * bitmap)
 {
+  if (bitmap != NULL)
+  {
+    if (bitmap->surf != NULL)
+      SDL_FreeSurface(bitmap->surf);
+
+    free(bitmap);
+  }
 }
 
 void XY_set_background(XY_color color, XY_bitmap * bitmap,
                        XY_fixed x, XY_fixed y, int posflags, int scaling)
 {
+  XY_background_color = SDL_MapRGB(XY_screen->format,
+				   (color >> 24) & 0xFF,
+				   (color >> 16) & 0xFF,
+				   (color >> 8) & 0xFF);
+
+  /* FIXME: Scale bitmap */
+  XY_background_bitmap = bitmap;
+
+  /* FIXME: Deal with posflags and scaling */
+  XY_background_x = x;
+  XY_background_y = y;
 }
 
 XY_color XY_getcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
@@ -49,10 +112,13 @@ void XY_enable_background(XY_bool enable)
 
 void XY_start_frame(int fps)
 {
+  SDL_FillRect(XY_screen, NULL, XY_background_color);
 }
 
 int XY_end_frame(void)
 {
+  SDL_Flip(XY_screen);
+
   return(1);
 }
 
