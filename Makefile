@@ -21,11 +21,15 @@ OBJ=crtxy.o
 
 all:	libcrtxy.so libcrtxy.a crtxy-config
 
+tests:	drawlines
+
 clean:
 	-rm libcrtxy.so
 	-rm libcrtxy.a
 	-rm crtxy.o
 	-rm crtxy-config
+	-rm drawlines.o
+	-rm drawlines
 
 install:
 	install -d $(LIBDIR)
@@ -54,5 +58,12 @@ crtxy-config:	src/crtxy-config.sh.in
 	    -e s=__INCDIR__=$(INCDIR)= \
             -e s=__LIBDIR__=$(LIBDIR)= \
 	    $< > $@
+	chmod a+x $@
 
-.PHONY: all clean install
+drawlines.o:	src/drawlines.c src/crtxy.h crtxy-config
+	$(CC) $(shell ./crtxy-config --cflags) $< -c -o $@
+
+drawlines:	drawlines.o
+	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
+
+.PHONY: all clean install tests

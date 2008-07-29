@@ -10,7 +10,7 @@
 
 #include "crtxy.h"
 
-void XY_init(XY_options * opts)
+int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
   return(0);
 }

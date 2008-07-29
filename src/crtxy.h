@@ -50,5 +50,5 @@ typedef Uint32 XY_color;
 
 typedef Sint32 XY_fixed;
 
-void XY_init(XY_options * opts);
+int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash);
 
