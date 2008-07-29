@@ -16,31 +16,74 @@ XY_fixed XY_canvasw, XY_canvash;
 Uint32 XY_background_color;
 XY_bitmap * XY_background_bitmap;
 XY_bool XY_background_bitmap_enabled;
-int XY_background_x, XY_background_y;
+SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
+
+int XY_trig[91] = {
+  65536,  65526,  65496,  65446,  65376,
+  65287,  65177,  65048,  64898,  64729,
+  64540,  64332,  64104,  63856,  63589,
+  63303,  62997,  62672,  62328,  61966,
+  61584,  61183,  60764,  60326,  59870,
+  59396,  58903,  58393,  57865,  57319,
+  56756,  56175,  55578,  54963,  54332,
+  53684,  53020,  52339,  51643,  50931,
+  50203,  49461,  48703,  47930,  47143,
+  46341,  45525,  44695,  43852,  42995,
+  42126,  41243,  40348,  39441,  38521,
+  37590,  36647,  35693,  34729,  33754,
+  32768,  31772,  30767,  29753,  28729,
+  27697,  26656,  25607,  24550,  23486,
+  22415,  21336,  20252,  19161,  18064,
+  16962,  15855,  14742,  13626,  12505,
+  11380,  10252,   9121,   7987,   6850,
+   5712,   4572,   3430,   2287,   1144,
+      0
+};
+
+void putpixel(SDL_Surface * surface, int x, int y, Uint32 pixel);
+
 
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
-  SDL_Init(SDL_INIT_VIDEO); /* FIXME: Test error */
+  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  {
+    /* FIXME: Set error */
+    /* FIXME: Call SDL_QuitSubSystem(SDL_INIT_VIDEO) here? */
+    return(-1);
+  }
 
   XY_canvasw = canvasw;
   XY_canvash = canvash;
 
-  XY_screen = SDL_SetVideoMode(320, 240, 24, SDL_SWSURFACE); /* FIXME: Options */
-  /* FIXME: Test error */
+  /* FIXME: Options */
+  XY_screen = SDL_SetVideoMode(320, 240, 24, SDL_SWSURFACE);
+
+  if (XY_screen == NULL)
+  {
+    /* FIXME: Set error */
+    SDL_Quit();
+    return(-1);
+  }
 
   XY_background_color = SDL_MapRGB(XY_screen->format, 0x00, 0x00, 0x00);
   XY_background_bitmap = NULL;
   XY_background_bitmap_enabled = XY_FALSE;
-  XY_background_x = XY_background_y = 0;
+  XY_background_dest.x = 0;
+  XY_background_dest.y = 0;
 
   return(0);
 }
 
 void XY_quit(void)
 {
+  /* FIXME: Use SDL_QuitSubSystem(SDL_INIT_VIDEO) instead? */
+  if (XY_background_bitmap != NULL)
+    XY_free_bitmap(XY_background_bitmap);
+
   SDL_Quit();
 }
+
 
 XY_bitmap * XY_load_bitmap(char * filename)
 {
@@ -101,8 +144,8 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
   XY_background_bitmap_enabled = XY_TRUE;
 
   /* FIXME: Deal with posflags and scaling */
-  XY_background_x = x;
-  XY_background_y = y;
+  XY_background_dest.x = x;
+  XY_background_dest.y = y;
 }
 
 XY_color XY_getcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
@@ -117,7 +160,12 @@ void XY_enable_background(XY_bool enable)
 
 void XY_start_frame(int fps)
 {
+  /* FIXME: Dirty rects? */
   SDL_FillRect(XY_screen, NULL, XY_background_color);
+
+  if (XY_background_bitmap != NULL && XY_background_bitmap_enabled == XY_TRUE)
+    SDL_BlitSurface(XY_background_bitmap->surf, NULL,
+                    XY_screen, &XY_background_dest);
 
   XY_want_fps = (fps == 0 ? 1 : fps);
   XY_start_time = SDL_GetTicks();
@@ -145,29 +193,50 @@ int XY_end_frame(XY_bool throttle)
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color)
 {
+  int sx1, sy1, sx2, sy2;
+  Uint32 sdlcolor;
+
+  sdlcolor = SDL_MapRGBA(XY_screen->format,
+                         (color >> 24) & 0xFF,
+                         (color >> 16) & 0xFF,
+                         (color >> 8) & 0xFF,
+                         color & 0xFF);
+
+  XY_canvas_to_screen(x1, y1, &sx1, &sy1);
+  XY_canvas_to_screen(x2, y2, &sx2, &sy2);
+
+  /* FIXME: Draw a line */
+  putpixel(XY_screen, sx1, sy1, sdlcolor);
 }
 
 void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color)
 {
-}
-
-XY_fixed XY_sin(int degrees)
-{
-  return(0);
+  XY_draw_line(x, y, x, y, color);
 }
 
 XY_fixed XY_cos(int degrees)
 {
-  return(0);
+  while (degrees >= 360) degrees -= 360;
+  while (degrees < 0) degrees += 360;
+
+  if (degrees < 90)
+    return(XY_trig[degrees]);
+
+  else if (degrees <= 180)
+    return(-XY_trig[180 - degrees]);
+
+  else if (degrees <= 270)
+    return(-XY_trig[degrees - 180]);
+
+  else
+    return(XY_trig[360 - degrees]);
 }
 
-/* FIXME: Macro */
 XY_fixed XY_screenx_to_canvasx(int sx)
 {
   return(sx * XY_canvasw) / XY_screen->w;
 }
 
-/* FIXME: Macro */
 XY_fixed XY_screeny_to_canvasy(int sy)
 {
   return(sy * XY_canvash) / XY_screen->h;
@@ -179,14 +248,11 @@ void XY_screen_to_canvas(int sx, int sy, XY_fixed * cx, XY_fixed * cy)
   *cy = XY_screeny_to_canvasy(sy);
 }
 
-
-/* FIXME: Macro */
 int XY_canvasx_to_screenx(XY_fixed cx)
 {
   return(cx * XY_screen->w) / XY_canvasw;
 }
 
-/* FIXME: Macro */
 int XY_canvasy_to_screeny(XY_fixed cy)
 {
   return(cy * XY_screen->h) / XY_canvash;
@@ -206,4 +272,40 @@ int XY_get_screenw(void)
 int XY_get_screenh(void)
 {
   return(XY_screen->h);
+}
+
+void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to set */
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+      return;
+
+    switch(bpp) {
+    case 1:
+        *p = pixel;
+        break;
+
+    case 2:
+        *(Uint16 *)p = pixel;
+        break;
+
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+            p[0] = (pixel >> 16) & 0xff;
+            p[1] = (pixel >> 8) & 0xff;
+            p[2] = pixel & 0xff;
+        } else {
+            p[0] = pixel & 0xff;
+            p[1] = (pixel >> 8) & 0xff;
+            p[2] = (pixel >> 16) & 0xff;
+        }
+        break;
+
+    case 4:
+        *(Uint32 *)p = pixel;
+        break;
+    }
 }

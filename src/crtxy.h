@@ -44,14 +44,15 @@
 #define XY_FULLSCREEN_REQUIRED 2
 
 typedef struct XY_options_s {
-  int displayw, displayh;
-  int displaybpp;
-  int fullscreen;
-  XY_bool antialias;
-  XY_bool blur;
-  XY_bool additive;
-  XY_bool backgrounds;
-  int scaling;
+  int displayw, displayh;  // Size of window or fullscreen display
+  int displaybpp; // Display depth (16bpp, 24bpp, 32bpp)
+  int fullscreen; // Window, Want Fullscreen or Require Fullscreen?
+  XY_bool alpha;  // Alpha-blend, or fake it?
+  XY_bool antialias;  // Anti-alias lines?
+  XY_bool blur;  // Add blur effect?
+  XY_bool additive;  // Additive pixel effect?
+  XY_bool backgrounds;  // Support fullscreen background
+  int scaling;  // Fast or Best scaling?
 } XY_options;
 
 typedef struct XY_bitmap_s {
@@ -86,16 +87,15 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color);
 #define XY_mult(a,b) (((a) * (b)) >> XY_FIXED_SHIFT)
 #define XY_div(a,b) ((b) == 0 ? XY_FIXED_NAN : ((a) << XY_FIXED_SHIFT) / (b))
 
-
-XY_fixed XY_sin(int degrees);
 XY_fixed XY_cos(int degrees);
+#define XY_sin(degrees) (XY_cos(90 - (degrees)))
 
 XY_fixed XY_screenx_to_canvasx(int sx);
 XY_fixed XY_screeny_to_canvasy(int sy);
 void XY_screen_to_canvas(int sx, int sy, XY_fixed * cx, XY_fixed * cy);
 
-int XY_canvasx_to_screenx(XY_fixed cx);
-int XY_canvasy_to_screeny(XY_fixed cy);
+int XY_canvasx_to_screenx(int cx);
+int XY_canvasy_to_screeny(int cy);
 void XY_canvas_to_screen(XY_fixed cx, XY_fixed cy, int * sx, int * sy);
 
 int XY_get_screenw(void);

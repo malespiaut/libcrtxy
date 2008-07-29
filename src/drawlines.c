@@ -12,8 +12,12 @@
 
 int main(int argc, char * argv[])
 {
-  int i, chg;
+  int n, i, a, x, y;
   XY_options opts;
+  XY_color black;
+  XY_bool done;
+  SDL_Event event;
+
 
   /* XY_parse_options(argc, argv, &opts); */
 
@@ -28,32 +32,35 @@ int main(int argc, char * argv[])
   XY_set_background(XY_getcolor(0xFF, 0xFF, 0xFF, 0x00), NULL,
                     0, 0, 0, 0);
 
-  printf("screen is %d x %d\n", XY_get_screenw(), XY_get_screenh());
+  black = XY_getcolor(0x00, 0x00, 0x00, 0x00);
 
-  printf("0,0 in canvas is: %d,%d (%d,%d)\n",
-    XY_screenx_to_canvasx(0),
-    XY_screeny_to_canvasy(0),
-    XY_screenx_to_canvasx(0)>>XY_FIXED_SHIFT,
-    XY_screeny_to_canvasy(0)>>XY_FIXED_SHIFT);
+  n = 0;
+  done = XY_FALSE;
 
-  printf("320,240 in canvas is: %d,%d (%d,%d)\n",
-    XY_screenx_to_canvasx(320),
-    XY_screeny_to_canvasy(240),
-    XY_screenx_to_canvasx(320)>>XY_FIXED_SHIFT,
-    XY_screeny_to_canvasy(240)>>XY_FIXED_SHIFT);
-
-  printf("160,120 in canvas is: %d,%d (%d,%d)\n",
-    XY_screenx_to_canvasx(160),
-    XY_screeny_to_canvasy(120),
-    XY_screenx_to_canvasx(160)>>XY_FIXED_SHIFT,
-    XY_screeny_to_canvasy(120)>>XY_FIXED_SHIFT);
-
-  for (i = 0; i < 10; i++)
+  do
   {
-    XY_start_frame(10);
-    chg = XY_end_frame(XY_TRUE);
-    printf("change = %d\n", chg);
+    for (i = 0; i < 16; i++)
+    {
+      XY_start_frame(60);
+
+      for (a = n; a < 360 + n; a++)
+      {
+        x = (XY_cos(a) * i) + (16 << XY_FIXED_SHIFT);
+        y = (-XY_sin(a) * i) + (12 << XY_FIXED_SHIFT);
+
+        XY_draw_point(x, y, black);
+      }
+
+      XY_end_frame(XY_TRUE);
+    }
+
+    while (SDL_PollEvent(&event))
+    {
+      if (event.type == SDL_QUIT)
+        done = XY_TRUE;
+    }
   }
+  while (!done);
 
   XY_quit();
 
