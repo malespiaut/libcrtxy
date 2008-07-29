@@ -7,6 +7,7 @@
 CFLAGS=-g -Wall -pedantic -DVERSION="$(VERSION)"
 LIBDIR=$(PREFIX)/lib
 INCDIR=$(PREFIX)/include
+BINDIR=$(PREFIX)/bin
 PREFIX=/usr/local
 
 VER_MAJOR=0
@@ -23,6 +24,7 @@ clean:
 	-rm libcrtxy.so
 	-rm libcrtxy.a
 	-rm crtxy.o
+	-rm crtxy-config
 
 install:
 	install -d $(LIBDIR)
@@ -35,7 +37,7 @@ install:
 	install -d $(INCDIR)
 	install -m 644 src/crtxy.h $(INCDIR)/
 	install -d $(BINDIR)
-	install src/crtxy-config $(BINDIR)
+	install crtxy-config $(BINDIR)
 
 libcrtxy.so:	$(OBJ)
 	$(CC) $(CFLAGS) -shared $^ -o libcrtxy.so
@@ -47,9 +49,9 @@ crtxy.o:	src/crtxy.c
 	$(CC) $(CFLAGS) $< -c -o $@
 
 crtxy-config:	src/crtxy-config.sh.in
-	sed -e s/__VERSION__/$(VERSION)/ \
-	    -e s/__INCDIR__/$(INCDIR)/ \
-            -e s/__LIBDIR__/$(LIBDIR)/ \
+	sed -e s=__VERSION__=$(VERSION)= \
+	    -e s=__INCDIR__=$(INCDIR)= \
+            -e s=__LIBDIR__=$(LIBDIR)= \
 	    $< > $@
 
 .PHONY: all clean install
