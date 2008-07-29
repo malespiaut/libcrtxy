@@ -8,9 +8,9 @@
   July 29, 2008 - July 29, 2008
 */
 
-#include <stdlib.h>
+#include "crtxy.h"
 
-int XY_init(void)
+void XY_init(XY_options * opts)
 {
   return(0);
 }

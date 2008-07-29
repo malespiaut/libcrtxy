@@ -4,7 +4,8 @@
 #
 # July 28, 2008 - July 28, 2008
 
-CFLAGS=-g -Wall -pedantic -DVERSION="$(VERSION)"
+SDL_CFLAGS=$(shell sdl-config --cflags)
+CFLAGS=-g -Wall -DVERSION="$(VERSION)" $(SDL_CFLAGS)
 LIBDIR=$(PREFIX)/lib
 INCDIR=$(PREFIX)/include
 BINDIR=$(PREFIX)/bin
@@ -45,7 +46,7 @@ libcrtxy.so:	$(OBJ)
 libcrtxy.a:	$(OBJ)
 	ar rcs libcrtxy.a $^
 
-crtxy.o:	src/crtxy.c
+crtxy.o:	src/crtxy.c src/crtxy.h
 	$(CC) $(CFLAGS) $< -c -o $@
 
 crtxy-config:	src/crtxy-config.sh.in
