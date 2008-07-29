@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# crtxy-config
+
+# Bill Kendrick <bill@newbreedsoftware.com>
+
+# July 29, 2008 - July 29, 2008
+
+
+if [ $# -ne 0 ]; then
+  if [ $1 = "--version" ]; then
+    echo "__VERSION__"
+    exit
+  fi
+  if [ $1 = "--cflags" ]; then
+    echo `sdl-config --cflags` -I__INCDIR__
+    exit
+  fi
+  if [ $1 = "--libs" ]; then
+    echo `sdl-config --libs` -L__LIBDIR__ -lcrtxy
+    exit
+  fi
+  if [ $1 = "--static-libs" ]; then
+    echo `sdl-config --static-libs` -L__LIBDIR__
+    exit
+  fi
+fi
+
+echo "Usage: crtxy-config [ --version | --cflags | --libs | --static-libs ]"
+
