@@ -98,3 +98,6 @@ int XY_canvasx_to_screenx(XY_fixed cx);
 int XY_canvasy_to_screeny(XY_fixed cy);
 void XY_canvas_to_screen(XY_fixed cx, XY_fixed cy, int * sx, int * sy);
 
+int XY_get_screenw(void);
+int XY_get_screenh(void);
+

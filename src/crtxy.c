@@ -127,6 +127,7 @@ int XY_end_frame(XY_bool throttle)
 {
   Uint32 end_time;
 
+  /* FIXME: Dirty rects? */
   SDL_Flip(XY_screen);
   end_time = SDL_GetTicks();
 
@@ -160,32 +161,49 @@ XY_fixed XY_cos(int degrees)
   return(0);
 }
 
+/* FIXME: Macro */
 XY_fixed XY_screenx_to_canvasx(int sx)
 {
-  return(0);
+  return(sx * XY_canvasw) / XY_screen->w;
 }
 
+/* FIXME: Macro */
 XY_fixed XY_screeny_to_canvasy(int sy)
 {
-  return(0);
+  return(sy * XY_canvash) / XY_screen->h;
 }
 
 void XY_screen_to_canvas(int sx, int sy, XY_fixed * cx, XY_fixed * cy)
 {
+  *cx = XY_screenx_to_canvasx(sx);
+  *cy = XY_screeny_to_canvasy(sy);
 }
 
 
+/* FIXME: Macro */
 int XY_canvasx_to_screenx(XY_fixed cx)
 {
-  return(0);
+  return(cx * XY_screen->w) / XY_canvasw;
 }
 
+/* FIXME: Macro */
 int XY_canvasy_to_screeny(XY_fixed cy)
 {
-  return(0);
+  return(cy * XY_screen->h) / XY_canvash;
 }
 
 void XY_canvas_to_screen(XY_fixed cx, XY_fixed cy, int * sx, int * sy)
 {
+  *sx = XY_canvasx_to_screenx(cx);
+  *sy = XY_canvasx_to_screenx(cy);
 }
 
+int XY_get_screenw(void)
+{
+  return(XY_screen->w);
+}
+
+int XY_get_screenh(void)
+{
+  return(XY_screen->h);
+}

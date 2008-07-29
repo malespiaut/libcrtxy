@@ -28,6 +28,26 @@ int main(int argc, char * argv[])
   XY_set_background(XY_getcolor(0xFF, 0xFF, 0xFF, 0x00), NULL,
                     0, 0, 0, 0);
 
+  printf("screen is %d x %d\n", XY_get_screenw(), XY_get_screenh());
+
+  printf("0,0 in canvas is: %d,%d (%d,%d)\n",
+    XY_screenx_to_canvasx(0),
+    XY_screeny_to_canvasy(0),
+    XY_screenx_to_canvasx(0)>>XY_FIXED_SHIFT,
+    XY_screeny_to_canvasy(0)>>XY_FIXED_SHIFT);
+
+  printf("320,240 in canvas is: %d,%d (%d,%d)\n",
+    XY_screenx_to_canvasx(320),
+    XY_screeny_to_canvasy(240),
+    XY_screenx_to_canvasx(320)>>XY_FIXED_SHIFT,
+    XY_screeny_to_canvasy(240)>>XY_FIXED_SHIFT);
+
+  printf("160,120 in canvas is: %d,%d (%d,%d)\n",
+    XY_screenx_to_canvasx(160),
+    XY_screeny_to_canvasy(120),
+    XY_screenx_to_canvasx(160)>>XY_FIXED_SHIFT,
+    XY_screeny_to_canvasy(120)>>XY_FIXED_SHIFT);
+
   for (i = 0; i < 10; i++)
   {
     XY_start_frame(10);
