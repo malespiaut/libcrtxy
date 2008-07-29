@@ -36,6 +36,8 @@
 #define XY_FIXED_NAN XY_FIXED_MAX
 
 #define XY_bool Uint8
+#define XY_TRUE 1
+#define XY_FALSE 0
 
 #define XY_WINDOWED 0
 #define XY_FULLSCREEN_REQUEST 1
@@ -75,7 +77,7 @@ XY_color XY_getcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 void XY_enable_background(XY_bool enable);
 
 void XY_start_frame(int fps);
-int XY_end_frame(void);
+int XY_end_frame(XY_bool throttle);
 
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color);

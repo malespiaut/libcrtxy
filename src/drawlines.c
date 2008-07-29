@@ -12,6 +12,7 @@
 
 int main(int argc, char * argv[])
 {
+  int i, chg;
   XY_options opts;
 
   /* XY_parse_options(argc, argv, &opts); */
@@ -27,10 +28,12 @@ int main(int argc, char * argv[])
   XY_set_background(XY_getcolor(0xFF, 0xFF, 0xFF, 0x00), NULL,
                     0, 0, 0, 0);
 
-  XY_start_frame(0);
-  XY_end_frame();
-
-  SDL_Delay(1000);
+  for (i = 0; i < 10; i++)
+  {
+    XY_start_frame(10);
+    chg = XY_end_frame(XY_TRUE);
+    printf("change = %d\n", chg);
+  }
 
   XY_quit();
 

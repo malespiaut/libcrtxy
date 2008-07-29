@@ -15,7 +15,9 @@ SDL_Surface * XY_screen;
 XY_fixed XY_canvasw, XY_canvash;
 Uint32 XY_background_color;
 XY_bitmap * XY_background_bitmap;
+XY_bool XY_background_bitmap_enabled;
 int XY_background_x, XY_background_y;
+Uint32 XY_want_fps, XY_start_time;
 
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
@@ -29,6 +31,7 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 
   XY_background_color = SDL_MapRGB(XY_screen->format, 0x00, 0x00, 0x00);
   XY_background_bitmap = NULL;
+  XY_background_bitmap_enabled = XY_FALSE;
   XY_background_x = XY_background_y = 0;
 
   return(0);
@@ -95,6 +98,7 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
 
   /* FIXME: Scale bitmap */
   XY_background_bitmap = bitmap;
+  XY_background_bitmap_enabled = XY_TRUE;
 
   /* FIXME: Deal with posflags and scaling */
   XY_background_x = x;
@@ -108,18 +112,33 @@ XY_color XY_getcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 
 void XY_enable_background(XY_bool enable)
 {
+  XY_background_bitmap_enabled = enable;
 }
 
 void XY_start_frame(int fps)
 {
   SDL_FillRect(XY_screen, NULL, XY_background_color);
+
+  XY_want_fps = (fps == 0 ? 1 : fps);
+  XY_start_time = SDL_GetTicks();
 }
 
-int XY_end_frame(void)
+int XY_end_frame(XY_bool throttle)
 {
-  SDL_Flip(XY_screen);
+  Uint32 end_time;
 
-  return(1);
+  SDL_Flip(XY_screen);
+  end_time = SDL_GetTicks();
+
+  if (throttle)
+  {
+    if (end_time - XY_start_time < (1000 / XY_want_fps))
+      SDL_Delay(XY_start_time + (1000 / XY_want_fps) - end_time);
+
+    end_time = SDL_GetTicks();
+  }
+
+  return(end_time - XY_start_time);
 }
 
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
