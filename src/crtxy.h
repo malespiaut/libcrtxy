@@ -131,7 +131,7 @@ void XY_enable_background(XY_bool enable);
 
 /* Colors: */
 
-XY_color XY_getcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+XY_color XY_setcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a);
 
 

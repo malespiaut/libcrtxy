@@ -159,7 +159,7 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
   XY_background_dest.y = y;
 }
 
-XY_color XY_getcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+XY_color XY_setcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
   return ((r << 24) | (g << 16) | (b << 8) | a);
 }

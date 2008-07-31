@@ -5,7 +5,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - July 29, 2008
+  July 29, 2008 - July 31, 2008
 */
 
 #include <crtxy.h>
@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
 {
   int n, i, a, x1, y1, x2, y2;
   XY_options opts;
-  XY_color black,white;
+  XY_color black, color;
   XY_bool done;
   SDL_Event event;
 
@@ -29,7 +29,7 @@ int main(int argc, char * argv[])
     return(1);
   }
 
-  black = XY_getcolor(0x00, 0x00, 0x00, 0x00);
+  black = XY_setcolor(0x00, 0x00, 0x00, 0x00);
 
   XY_set_background(black, NULL, 0, 0, 0, 0);
 
@@ -49,9 +49,12 @@ int main(int argc, char * argv[])
         x2 = (XY_cos(a + (360 / n)) * i) + (16 << XY_FIXED_SHIFT);
         y2 = (-XY_sin(a + (360 / n)) * i) + (12 << XY_FIXED_SHIFT);
 
-        white = XY_getcolor(0xff, 0xff, 0xff, 255 - (i * 16));
+        color = XY_setcolor((a * 255) / 360,
+                            0xff,
+                            255 - ((a * 255) / 720),
+                            255 - (i * 16));
 
-        XY_draw_line(x1, y1, x2, y2, white);
+        XY_draw_line(x1, y1, x2, y2, color);
       }
     }
 
