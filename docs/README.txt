@@ -1,60 +1,68 @@
-README for libcrtxy (CRT X-Y Library)
+                     README for libcrtxy (CRT X-Y Library)
 
-Bill Kendrick
-bill@newbreedsoftware.com
+                      http://www.sf.net/projects/libcrtxy/
+                  by Bill Kendrick <bill@newbreedsoftware.com>
 
+                         July 29, 2008 - July 31, 2008
+                                 Version: 0.0.1
+
+     ----------------------------------------------------------------------
 
 Purpose:
---------
-libcrtxy is meant to allow game programmers to develop vector-graphics-style games
-like those from the late 1970s and early 1980s (some examples: Lunar Lander,
-Asteroids, Red Baron, Star Wars, BattleZone, Quantum, Boxing Bugs, Speed Freak,
-Star Castle, Black Widow, Star Trek, Tempest, and War of the Worlds.)
 
-It is named after the so-called "X-Y" arcade game displays,
-such as the "Quadrascan" (created by Wells Gardner) and "Amplifone"
-monitors used in Atari vector-based games.
+   "libcrtxy" is meant to allow game programmers to develop
+   vector-graphics-style games like those from the late 1970s and early 1980s
+   (some examples: 'Lunar Lander', 'Asteroids', 'Red Baron', 'Star Wars',
+   'BattleZone', 'Quantum', 'Boxing Bugs', 'Speed Freak', 'Star Castle',
+   'Black Widow', 'Star Trek', 'Tempest', and 'War of the Worlds'.*)
 
-I am creating this library with the intent to port a number of my own
-games (clones inspired by classic arcade games) to it:
-ICBM3D, Vectoroids, 3D Pong.
+   It is named after the so-called "X-Y" arcade game displays, such as the
+   "Quadrascan" (created by Wells Gardner) and "Amplifone" monitors used in
+   Atari vector-based games.*
 
-Helper functions are also included for doing fixed-point math
-(useful since your canvas size is not necessarily your screen size,
-and can be used for sub-pixel movement) and trigonometry
-(since most vector-based games involve things rotating).
+   I am creating this library with the intent to port a number of my own
+   games (clones inspired by classic arcade games) to it: ICBM3D, Vectoroids,
+   3D Pong.
 
+   Helper functions are also included for doing fixed-point math (useful
+   since your canvas size is not necessarily your screen size, and can be
+   used for sub-pixel movement) and trigonometry (since most vector-based
+   games involve things rotating).
+
+   * Names are trademarks of their respective trademark and copyright
+   holders.
 
 Backends:
----------
-libcrtxy is being built on top of libSDL, and therefore uses it
-(and SDL_Image for bitmap loading) as a backend.  It should be reasonable
-for someone to develop an SDL+OpenGL backend for accelerated graphics.
+
+   libcrtxy is being built on top of libSDL, the Simple DirectMedia Layer
+   library (http://www.libsdl.org/), and therefore uses it (and SDL_Image for
+   bitmap loading) as a backend. It should be reasonable for someone to
+   develop an SDL+OpenGL backend for accelerated graphics.
+
+   libcrtxy really only lets the programmer do two things:
+    1. set a background color, and optional background overlay image
+       (consider translucent colored overlays in arcade games like 'Star
+       Castle' and 'War of the Worlds', and the overlays for games on the
+       Vectrex home video game system)
+    2. draw lines (vectors) on the screen
+
+   For events (keyboard, mouse, joystick, etc.), your event loop, sound
+   effects, etc., you use SDL functions and types directly. For video
+   initialization, loading and displaying of bitmaps, and drawing vectors,
+   libcrtxy's "XY_" functions and types should be used.
 
 Options:
-libcrtxy really only lets the programmer do two things:
-1. set a background color, and optional background overlay image
-   (consider translucent colored overlays in arcade games like
-   Star Castle and War of the Worlds, and the overlays for games on
-   the Vectrex home video game system)
-2. draw lines (vectors) on the screen
 
-For events (keyboard, mouse, joystick, etc.), your event loop,
-sound effects, etc., you use SDL functions and types directly.
-For video initialization, loading and displaying of bitmaps,
-and drawing vectors, libcrtxy's "XY_" functions and types should be used.
+   Depending on the target system (e.g., a high-powered desktop PC or an
+   embedded handheld system with a slow CPU and no FPU), various options can
+   be set in libcrtxy. On a slow system, fancy visual effects intended to
+   simulate an arcade experience can be disabled (anti-aliasing, blurring,
+   etc.).
 
+   Screen-size shouldn't matter to game-play, so physical screen size in
+   pixels (e.g., 640x480 or 1280x1024) is up to the end-user, or person
+   packaging your software for a particular target, as well. Your game logic
+   is based around a virtual canvas size, and line positions are given using
+   fixed-point values.
 
-Options:
---------
-Depending on the target system (e.g., a high-powered desktop PC or
-an embedded handheld system with a slow CPU and no FPU), various
-options can be set in libcrtxy.  On a slow system, fancy visual effects
-intended to simulate an arcade experience can be disabled
-(anti-aliasing, blurring, etc.).
-
-Screen-size shouldn't matter to game-play, so physical screen size
-in pixels (e.g., 640x480 or 1280x1024) is up to the end-user,
-or person packaging your software for a particular target, as well.
-Your game logic is based around a virtual canvas size, and line
-positions are given using fixed-point values.
+   FIXME - Write the rest...
