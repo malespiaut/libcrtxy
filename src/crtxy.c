@@ -164,6 +164,14 @@ XY_color XY_getcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
   return ((r << 24) | (g << 16) | (b << 8) | a);
 }
 
+void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a)
+{
+  *r = (c >> 24) & 0xff;
+  *r = (c >> 16) & 0xff;
+  *r = (c >> 8) & 0xff;
+  *a = c & 0xff;
+}
+
 void XY_enable_background(XY_bool enable)
 {
   XY_background_bitmap_enabled = enable;
@@ -339,6 +347,13 @@ int XY_get_screenh(void)
 {
   return(XY_screen->h);
 }
+
+/* FIXME: Handle alpha value if alpha option is enabled;
+   For 'dumb' mode (XY_ALPHA_FAKE), always just blend with background color;
+   For 'real' mode (XY_ALPHA_BLEND), blend with the current pixel;
+   For 'off' mode (XY_ALPHA_NONE), just use the RBG value, ignore Alpha
+     (unless it's 0!)
+*/
 
 void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
