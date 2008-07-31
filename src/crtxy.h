@@ -5,7 +5,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - July 29, 2008
+  July 29, 2008 - July 31, 2008
 */
 
 #include <SDL.h>
@@ -29,6 +29,8 @@
 #define XY_SCALE_KEEP_ASPECT_TALL 3
 
 #define XY_FIXED_SHIFT 16
+#define XY_FIXED_SHIFT_HALF 8
+#define XY_FIXED_ONE (1 << XY_FIXED_SHIFT)
 
 #define XY_FIXED_MAX (0x7FFFFF / 2) << XY_FIXED_SHIFT
 #define XY_FIXED_MIN (-(XY_FIXED_MAX) - 1) << XY_FIXED_SHIFT
@@ -84,8 +86,12 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color);
 void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color);
 
-#define XY_mult(a,b) (((a) * (b)) >> XY_FIXED_SHIFT)
-#define XY_div(a,b) ((b) == 0 ? XY_FIXED_NAN : ((a) << XY_FIXED_SHIFT) / (b))
+#define XY_mult(a,b) (((a) >> XY_FIXED_SHIFT_HALF) * \
+		      ((b) >> XY_FIXED_SHIFT_HALF))
+#define XY_qdiv(a,b) (((a) / \
+		       ((b) >> XY_FIXED_SHIFT_HALF)) \
+                      << XY_FIXED_SHIFT_HALF)
+#define XY_div(a,b) ((b) == 0 ? XY_FIXED_NAN : XY_qdiv((a),(b)))
 
 XY_fixed XY_cos(int degrees);
 #define XY_sin(degrees) (XY_cos(90 - (degrees)))

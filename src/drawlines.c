@@ -12,9 +12,9 @@
 
 int main(int argc, char * argv[])
 {
-  int n, i, a, x, y;
+  int n, i, a, x1, y1, x2, y2;
   XY_options opts;
-  XY_color black;
+  XY_color black,white;
   XY_bool done;
   SDL_Event event;
 
@@ -29,36 +29,43 @@ int main(int argc, char * argv[])
     return(1);
   }
 
-  XY_set_background(XY_getcolor(0xFF, 0xFF, 0xFF, 0x00), NULL,
-                    0, 0, 0, 0);
-
   black = XY_getcolor(0x00, 0x00, 0x00, 0x00);
 
-  n = 0;
+  XY_set_background(black, NULL, 0, 0, 0, 0);
+
+  n = 3;
   done = XY_FALSE;
 
   do
   {
-    for (i = 0; i < 16; i++)
+    XY_start_frame(10);
+
+    for (i = 0; i < 16; i = i + 2)
     {
-      XY_start_frame(60);
-
-      for (a = n; a < 360 + n; a++)
+      for (a = 0; a < 360; a = a + (360 / n))
       {
-        x = (XY_cos(a) * i) + (16 << XY_FIXED_SHIFT);
-        y = (-XY_sin(a) * i) + (12 << XY_FIXED_SHIFT);
+        x1 = (XY_cos(a) * i) + (16 << XY_FIXED_SHIFT);
+        y1 = (-XY_sin(a) * i) + (12 << XY_FIXED_SHIFT);
+        x2 = (XY_cos(a + (360 / n)) * i) + (16 << XY_FIXED_SHIFT);
+        y2 = (-XY_sin(a + (360 / n)) * i) + (12 << XY_FIXED_SHIFT);
 
-        XY_draw_point(x, y, black);
+        white = XY_getcolor(0xff, 0xff, 0xff, 255 - (i * 16));
+
+        XY_draw_line(x1, y1, x2, y2, white);
       }
-
-      XY_end_frame(XY_TRUE);
     }
+
+    XY_end_frame(XY_TRUE);
 
     while (SDL_PollEvent(&event))
     {
       if (event.type == SDL_QUIT)
         done = XY_TRUE;
     }
+
+    n++;
+    if (n >= 30)
+      n = 3;
   }
   while (!done);
 

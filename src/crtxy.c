@@ -5,7 +5,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - July 29, 2008
+  July 29, 2008 - July 31, 2008
 */
 
 #include "crtxy.h"
@@ -41,8 +41,19 @@ int XY_trig[91] = {
       0
 };
 
+
+/* Private functions and macros: */
+
 void putpixel(SDL_Surface * surface, int x, int y, Uint32 pixel);
 
+#define XY_color_to_sdl_color(color) SDL_MapRGBA(XY_screen->format, \
+                                       ((color) >> 24) & 0xFF, \
+                                       ((color) >> 16) & 0xFF, \
+                                       ((color) >> 8) & 0xFF, \
+                                       (color) & 0xFF)
+
+
+/* Public functions: */
 
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
@@ -194,24 +205,79 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color)
 {
   int sx1, sy1, sx2, sy2;
-  Uint32 sdlcolor;
-
-  sdlcolor = SDL_MapRGBA(XY_screen->format,
-                         (color >> 24) & 0xFF,
-                         (color >> 16) & 0xFF,
-                         (color >> 8) & 0xFF,
-                         color & 0xFF);
+  int y;
+  XY_fixed fsx1, fsy1, fsx2, fsy2;
+  Uint32 sdlcolor = XY_color_to_sdl_color(color);
+  XY_fixed dx, dy;
+  XY_fixed m, b;
 
   XY_canvas_to_screen(x1, y1, &sx1, &sy1);
   XY_canvas_to_screen(x2, y2, &sx2, &sy2);
 
-  /* FIXME: Draw a line */
-  putpixel(XY_screen, sx1, sy1, sdlcolor);
+  fsx1 = sx1 << XY_FIXED_SHIFT;
+  fsy1 = sy1 << XY_FIXED_SHIFT;
+  fsx2 = sx2 << XY_FIXED_SHIFT;
+  fsy2 = sy2 << XY_FIXED_SHIFT;
+
+  /* FIXME: clip!  if (XY_clip(&sx1, &sy1, &sx2, &sy2)) */
+  {
+    dx = fsx2 - fsx1;
+    dy = fsy2 - fsy1;
+
+    if (dx != 0)
+    {
+      m = XY_div(dy, dx);
+
+      b = fsy1 - XY_mult(m, fsx1);
+
+      if (fsx2 >= fsx1)
+        dx = XY_FIXED_ONE;
+      else
+        dx = -XY_FIXED_ONE;
+
+      while (fsx1 != fsx2)
+      {
+        fsy1 = XY_mult(m, fsx1) + b;
+        fsy2 = XY_mult(m, (fsx1 + dx)) + b;
+
+        if (fsy2 > fsy1)
+        {
+          for (y = fsy1 >> XY_FIXED_SHIFT; y <= fsy2 >> XY_FIXED_SHIFT; y++)
+            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor);
+        }
+        else
+        {
+          for (y = fsy2 >> XY_FIXED_SHIFT; y <= fsy1 >> XY_FIXED_SHIFT; y++)
+            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor);
+        }
+
+        fsx1 = fsx1 + dx;
+      }
+    }
+    else
+    {
+      if (sy2 > sy1)
+      {
+        for (y = sy1; y <= sy2; y++)
+          putpixel(XY_screen, sx1, y, sdlcolor);
+      }
+      else
+      {
+        for (y = sy2; y <= sy1; y++)
+          putpixel(XY_screen, sx1, y, sdlcolor);
+      }
+    }
+  }
 }
 
 void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color)
 {
-  XY_draw_line(x, y, x, y, color);
+  int sx, sy;
+  Uint32 sdlcolor = XY_color_to_sdl_color(color);
+
+  XY_canvas_to_screen(x, y, &sx, &sy);
+
+  putpixel(XY_screen, sx, sy, sdlcolor);
 }
 
 XY_fixed XY_cos(int degrees)
@@ -309,3 +375,7 @@ void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
         break;
     }
 }
+
+/* FIXME: Implement Xiaolin Wu's antialiased line algorithm
+   ( http://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm ) */
+
