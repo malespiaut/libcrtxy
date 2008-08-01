@@ -16,7 +16,6 @@ Last modified: July 31, 2008
 * XY_init() set error
 * XY_init() pay attention to options
 * XY_load_bitmap() set error
-* Implement XY_load_bitmap_from_buffer()
 * XY_set_background() scale bitmap
 * XY_set_background() pay attention to positioning flags
 * Create a line clip routine

@@ -119,7 +119,7 @@ void XY_quit(void);
 
 /* Load and free bitmap: */
 XY_bitmap * XY_load_bitmap(char * filename);
-XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer);
+XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer, int size);
 void XY_free_bitmap(XY_bitmap * bitmap);
 
 /* Setting background: */

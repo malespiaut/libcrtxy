@@ -19,6 +19,9 @@ XY_bool XY_background_bitmap_enabled;
 SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
 
+void (*putpixel) (SDL_Surface *, int, int, Uint32);
+void (*getpixel) (SDL_Surface *, int, int, Uint32);
+
 int XY_trig[91] = {
   65536,  65526,  65496,  65446,  65376,
   65287,  65177,  65048,  64898,  64729,
@@ -44,7 +47,9 @@ int XY_trig[91] = {
 
 /* Private functions and macros: */
 
-void putpixel(SDL_Surface * surface, int x, int y, Uint32 pixel);
+void putpixel_16(SDL_Surface * surface, int x, int y, Uint32 pixel);
+void putpixel_24(SDL_Surface * surface, int x, int y, Uint32 pixel);
+void putpixel_32(SDL_Surface * surface, int x, int y, Uint32 pixel);
 
 #define XY_color_to_sdl_color(color) SDL_MapRGBA(XY_screen->format, \
                                        ((color) >> 24) & 0xFF, \
@@ -57,6 +62,8 @@ void putpixel(SDL_Surface * surface, int x, int y, Uint32 pixel);
 
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
+  int bpp, Bpp;
+
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
     /* FIXME: Set error */
@@ -67,8 +74,11 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   XY_canvasw = canvasw;
   XY_canvash = canvash;
 
+  bpp = 24;
+
+  /* FIXME: Add possibility of using SDL_ListModes to determine a suitable mode */
   /* FIXME: Options */
-  XY_screen = SDL_SetVideoMode(320, 240, 24, SDL_SWSURFACE);
+  XY_screen = SDL_SetVideoMode(320, 240, bpp, SDL_SWSURFACE);
 
   if (XY_screen == NULL)
   {
@@ -82,6 +92,24 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   XY_background_bitmap_enabled = XY_FALSE;
   XY_background_dest.x = 0;
   XY_background_dest.y = 0;
+
+  /* Determine which functions to use, based on display we actually got,
+     and rendering options: */
+
+  Bpp= XY_screen->format->BytesPerPixel;
+
+  if (Bpp == 4)
+    putpixel = putpixel_32;
+  else if (Bpp == 3)
+    putpixel = putpixel_24;
+  else if (Bpp == 2)
+    putpixel = putpixel_16;
+  else
+  {
+    /* Unsupported depth */
+    /* FIXME: Set error */
+    return(-1);
+  }
 
   return(0);
 }
@@ -125,10 +153,39 @@ XY_bitmap * XY_load_bitmap(char * filename)
   return(xyb);
 }
 
-XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer)
+XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer, int size)
 {
-  /* FIXME: Do it */
-  return(NULL);
+  SDL_RWops * rw;
+  SDL_Surface * surf, * dispsurf;
+  XY_bitmap * xyb;
+
+  if (buffer == NULL || size == 0)
+    return(NULL); /* FIXME: Set error */
+
+  xyb = (XY_bitmap *) malloc(sizeof(XY_bitmap));
+  if (xyb == NULL)
+    return(NULL); /* FIXME: Set error */
+
+  rw = SDL_RWFromMem((void *) buffer, size);
+
+  surf = IMG_Load_RW(rw, 0);
+  if (surf == NULL)
+  {
+    free(xyb);
+    return(NULL); /* FIXME: Set error */
+  }
+
+  dispsurf = SDL_DisplayFormatAlpha(surf);
+  SDL_FreeSurface(surf);
+  if (dispsurf == NULL)
+  {
+    free(xyb);
+    return(NULL); /* FIXME: Set error */
+  }
+
+  xyb->surf = dispsurf;
+
+  return(xyb);
 }
 
 void XY_free_bitmap(XY_bitmap * bitmap)
@@ -355,40 +412,42 @@ int XY_get_screenh(void)
      (unless it's 0!)
 */
 
-void putpixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
-    int bpp = surface->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to set */
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
 
     if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
       return;
 
-    switch(bpp) {
-    case 1:
-        *p = pixel;
-        break;
+    *(Uint16 *)p = pixel;
+}
 
-    case 2:
-        *(Uint16 *)p = pixel;
-        break;
+void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
 
-    case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-            p[0] = (pixel >> 16) & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = pixel & 0xff;
-        } else {
-            p[0] = pixel & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = (pixel >> 16) & 0xff;
-        }
-        break;
+    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+      return;
 
-    case 4:
-        *(Uint32 *)p = pixel;
-        break;
+    if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+        p[0] = (pixel >> 16) & 0xff;
+        p[1] = (pixel >> 8) & 0xff;
+        p[2] = pixel & 0xff;
+    } else {
+        p[0] = pixel & 0xff;
+        p[1] = (pixel >> 8) & 0xff;
+        p[2] = (pixel >> 16) & 0xff;
     }
+}
+
+void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
+
+    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+      return;
+
+    *(Uint32 *)p = pixel;
 }
 
 /* FIXME: Implement Xiaolin Wu's antialiased line algorithm
