@@ -20,7 +20,7 @@ SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
 
 void (*putpixel) (SDL_Surface *, int, int, Uint32);
-void (*getpixel) (SDL_Surface *, int, int, Uint32);
+Uint32 (*getpixel) (SDL_Surface * surface, int x, int y);
 
 int XY_trig[91] = {
   65536,  65526,  65496,  65446,  65376,
@@ -51,11 +51,17 @@ void putpixel_16(SDL_Surface * surface, int x, int y, Uint32 pixel);
 void putpixel_24(SDL_Surface * surface, int x, int y, Uint32 pixel);
 void putpixel_32(SDL_Surface * surface, int x, int y, Uint32 pixel);
 
+Uint32 getpixel_16(SDL_Surface * surface, int x, int y);
+Uint32 getpixel_24(SDL_Surface * surface, int x, int y);
+Uint32 getpixel_32(SDL_Surface * surface, int x, int y);
+
 #define XY_color_to_sdl_color(color) SDL_MapRGBA(XY_screen->format, \
                                        ((color) >> 24) & 0xFF, \
                                        ((color) >> 16) & 0xFF, \
                                        ((color) >> 8) & 0xFF, \
                                        (color) & 0xFF)
+
+SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h);
 
 
 /* Public functions: */
@@ -99,11 +105,20 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   Bpp= XY_screen->format->BytesPerPixel;
 
   if (Bpp == 4)
+  {
     putpixel = putpixel_32;
+    getpixel = getpixel_32;
+  }
   else if (Bpp == 3)
+  {
     putpixel = putpixel_24;
+    getpixel = getpixel_24;
+  }
   else if (Bpp == 2)
+  {
     putpixel = putpixel_16;
+    getpixel = getpixel_16;
+  }
   else
   {
     /* Unsupported depth */
@@ -244,7 +259,13 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
     if (w != bitmap->surf->w || h != bitmap->surf->h)
     {
       /* What we calculated is different from what we have; scale it! */
-      XY_background_bitmap->surf = NULL; /* FIXME: Do it! */
+      SDL_Surface * scaled_surf = scale_surf(bitmap->surf, w, h);
+      if (scaled_surf == NULL)
+        ; /* FIXME: Check for errors */
+      XY_background_bitmap->surf = SDL_DisplayFormatAlpha(scaled_surf);
+      if (XY_background_bitmap->surf == NULL)
+        ; /* FIXME: Check for errors */
+      SDL_FreeSurface(scaled_surf);
     }
     else
     {
@@ -277,6 +298,79 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
     XY_background_bitmap_enabled = XY_FALSE;
     XY_background_bitmap = NULL;
   }
+}
+
+SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h)
+{
+  SDL_Surface * s;
+  int x, y;
+  Uint32 tr, tg, tb, ta;
+  Uint8 r, g, b, a;
+  int tmp;
+  XY_fixed src_x, src_y, xscale, yscale, f_orig_w, f_orig_h;
+
+  yscale = (orig->h << XY_FIXED_SHIFT) / new_h;
+  xscale = (orig->w << XY_FIXED_SHIFT) / new_w;
+
+  f_orig_w = orig->w << XY_FIXED_SHIFT;
+  f_orig_h = orig->h << XY_FIXED_SHIFT;
+
+  s = SDL_CreateRGBSurface(orig->flags,	/* SDL_SWSURFACE, */
+			   new_w, new_h,
+			   orig->format->BitsPerPixel,
+			   orig->format->Rmask,
+			   orig->format->Gmask,
+			   orig->format->Bmask,
+			   orig->format->Amask);
+  /* FIXME: Check for errors */
+
+  for (y = 0; y < new_h; y++)
+  {
+    for (x = 0; x < new_w; x++)
+    {
+      tr = 0;
+      tg = 0;
+      tb = 0;
+      ta = 0;
+
+      tmp = 0;
+
+      for (src_y = y * yscale; src_y < y * yscale + yscale &&
+	   src_y < f_orig_h; src_y += XY_FIXED_ONE)
+      {
+	for (src_x = x * xscale; src_x < x * xscale + xscale &&
+	     src_x < f_orig_w; src_x += XY_FIXED_ONE)
+	{
+          /* FIXME: Which getpixel do we need to use? */
+	  SDL_GetRGBA(getpixel(orig, src_x >> XY_FIXED_SHIFT, src_y >> XY_FIXED_SHIFT),
+		      orig->format, &r, &g, &b, &a);
+
+	  tr = tr + r;
+	  tb = tb + b;
+	  tg = tg + g;
+	  ta = ta + a;
+
+	  tmp++;
+	}
+      }
+
+      if (tmp != 0)
+      {
+	tr = tr / tmp;
+	tb = tb / tmp;
+	tg = tg / tmp;
+	ta = ta / tmp;
+
+	putpixel(s, x, y, SDL_MapRGBA(s->format,
+					(Uint8) tr,
+					(Uint8) tg,
+					(Uint8) tb,
+					(Uint8) ta));
+      }
+    }
+  }
+
+  return(s);
 }
 
 XY_color XY_setcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
@@ -511,6 +605,92 @@ void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel)
       return;
 
     *(Uint32 *)p = pixel;
+}
+
+/* Get a pixel: */
+Uint32 getpixel_16(SDL_Surface * surface, int x, int y)
+{
+  Uint8 *p;
+
+  /* get the X/Y values within the bounds of this surface */
+  if ((unsigned) x > (unsigned) surface->w - 1u)
+    x = (x < 0) ? 0 : surface->w - 1;
+  if ((unsigned) y > (unsigned) surface->h - 1u)
+    y = (y < 0) ? 0 : surface->h - 1;
+
+  /* Set a pointer to the exact location in memory of the pixel
+     in question: */
+
+  p = (Uint8 *) (((Uint8 *) surface->pixels) +	/* Start at top of RAM */
+		 (y * surface->pitch) +	/* Go down Y lines */
+		 (x * 2));	/* Go in X pixels */
+
+
+  /* Return the correctly-sized piece of data containing the
+   * pixel's value (an 8-bit palette value, or a 16-, 24- or 32-bit
+   * RGB value) */
+
+  return (*(Uint16 *) p);
+}
+
+/* Get a pixel: */
+Uint32 getpixel_24(SDL_Surface * surface, int x, int y)
+{
+  Uint8 *p;
+  Uint32 pixel;
+
+  /* get the X/Y values within the bounds of this surface */
+  if ((unsigned) x > (unsigned) surface->w - 1u)
+    x = (x < 0) ? 0 : surface->w - 1;
+  if ((unsigned) y > (unsigned) surface->h - 1u)
+    y = (y < 0) ? 0 : surface->h - 1;
+
+  /* Set a pointer to the exact location in memory of the pixel
+     in question: */
+
+  p = (Uint8 *) (((Uint8 *) surface->pixels) +	/* Start at top of RAM */
+		 (y * surface->pitch) +	/* Go down Y lines */
+		 (x * 3));	/* Go in X pixels */
+
+
+  /* Return the correctly-sized piece of data containing the
+   * pixel's value (an 8-bit palette value, or a 16-, 24- or 32-bit
+   * RGB value) */
+
+  /* Depending on the byte-order, it could be stored RGB or BGR! */
+
+  if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+    pixel = p[0] << 16 | p[1] << 8 | p[2];
+  else
+    pixel = p[0] | p[1] << 8 | p[2] << 16;
+
+  return pixel;
+}
+
+/* Get a pixel: */
+Uint32 getpixel_32(SDL_Surface * surface, int x, int y)
+{
+  Uint8 *p;
+
+  /* get the X/Y values within the bounds of this surface */
+  if ((unsigned) x > (unsigned) surface->w - 1u)
+    x = (x < 0) ? 0 : surface->w - 1;
+  if ((unsigned) y > (unsigned) surface->h - 1u)
+    y = (y < 0) ? 0 : surface->h - 1;
+
+  /* Set a pointer to the exact location in memory of the pixel
+     in question: */
+
+  p = (Uint8 *) (((Uint8 *) surface->pixels) +	/* Start at top of RAM */
+		 (y * surface->pitch) +	/* Go down Y lines */
+		 (x * 4));	/* Go in X pixels */
+
+
+  /* Return the correctly-sized piece of data containing the
+   * pixel's value (an 8-bit palette value, or a 16-, 24- or 32-bit
+   * RGB value) */
+
+  return *(Uint32 *) p;		// 32-bit display
 }
 
 /* FIXME: Implement Xiaolin Wu's antialiased line algorithm

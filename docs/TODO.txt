@@ -3,7 +3,7 @@ TODO for libcrtxy (CRT X-Y Library)
 http://www.sf.net/projects/libcrtxy/
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: July 31, 2008
+Last modified: August 1, 2008
 
 * Installation docs
 * API docs
@@ -16,13 +16,13 @@ Last modified: July 31, 2008
 * XY_init() set error
 * XY_init() pay attention to options
 * XY_load_bitmap() set error
-* XY_set_background() scale bitmap
 * Create a line clip routine
 * Add support for line wrap-around (a la Asteroids)
 * Implement alpha-blending in aliased lines (Bresenham) - against pixels
 * Implement alpha-blending in aliased lines (Bresenham) - against bkgd color
 * Implement anti-aliased lines (Xiaolin Wu) - against pixels
 * Implement anti-aliased lines (Xiaolin Wu) - against bkgd color
+* Fix broken scale_surf() routine
 * Do blur effect
 * Additive effect
 * Lock/Unlock SDL surfaces!!!
