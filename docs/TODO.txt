@@ -1,0 +1,30 @@
+TODO for libcrtxy (CRT X-Y Library)
+
+http://www.sf.net/projects/libcrtxy/
+by Bill Kendrick <bill@newbreedsoftware.com>
+
+Last modified: July 31, 2008
+
+* Installation docs
+* API docs
+* XY_parse_options() to parse command-line arguments (argc/argv)
+* Check for env. variables
+* Check for global option file
+* Check for local option file
+* XY_errstr() to dump errors
+* XY_print_options() to dump options
+* XY_init() set error
+* XY_init() pay attention to options
+* XY_load_bitmap() set error
+* Implement XY_load_bitmap_from_buffer()
+* XY_set_background() scale bitmap
+* XY_set_background() pay attention to positioning flags
+* Create a line clip routine
+* Add support for line wrap-around (a la Asteroids)
+* Implement alpha-blending in aliased lines (Bresenham) - against pixels
+* Implement alpha-blending in aliased lines (Bresenham) - against bkgd color
+* Implement anti-aliased lines (Xiaolin Wu) - against pixels
+* Implement anti-aliased lines (Xiaolin Wu) - against bkgd color
+* Do blur effect
+* Additive effect
+* Implement OpenGL for everything we will have done manually in SDL
