@@ -16,6 +16,7 @@ int main(int argc, char * argv[])
   XY_options opts;
   XY_color black, color;
   XY_bool done;
+  XY_bitmap * bkgd;
   SDL_Event event;
 
 
@@ -31,7 +32,10 @@ int main(int argc, char * argv[])
 
   black = XY_setcolor(0x00, 0x00, 0x00, 0x00);
 
-  XY_set_background(black, NULL, 0, 0, 0, 0);
+//  bkgd = XY_load_bitmap("/usr/share/icons/gnome/48x48/mimetypes/openofficeorg24-text.png");
+  bkgd = NULL;
+
+  XY_set_background(black, bkgd, 0, 0, XY_POS_RIGHT | XY_POS_BOTTOM, 0);
 
   n = 3;
   done = XY_FALSE;

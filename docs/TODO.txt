@@ -17,7 +17,6 @@ Last modified: July 31, 2008
 * XY_init() pay attention to options
 * XY_load_bitmap() set error
 * XY_set_background() scale bitmap
-* XY_set_background() pay attention to positioning flags
 * Create a line clip routine
 * Add support for line wrap-around (a la Asteroids)
 * Implement alpha-blending in aliased lines (Bresenham) - against pixels
@@ -26,4 +25,5 @@ Last modified: July 31, 2008
 * Implement anti-aliased lines (Xiaolin Wu) - against bkgd color
 * Do blur effect
 * Additive effect
+* Lock/Unlock SDL surfaces!!!
 * Implement OpenGL for everything we will have done manually in SDL

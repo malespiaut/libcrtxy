@@ -202,6 +202,9 @@ void XY_free_bitmap(XY_bitmap * bitmap)
 void XY_set_background(XY_color color, XY_bitmap * bitmap,
                        XY_fixed x, XY_fixed y, int posflags, int scaling)
 {
+  int w, h;
+  int posx, posy;
+
   XY_background_color = SDL_MapRGB(XY_screen->format,
 				   (color >> 24) & 0xFF,
 				   (color >> 16) & 0xFF,
@@ -211,9 +214,30 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
   XY_background_bitmap = bitmap;
   XY_background_bitmap_enabled = XY_TRUE;
 
-  /* FIXME: Deal with posflags and scaling */
-  XY_background_dest.x = x;
-  XY_background_dest.y = y;
+  if (bitmap != NULL)
+  {
+    w = bitmap->surf->w;
+    h = bitmap->surf->h;
+
+    /* Position */
+    if (posflags & XY_POS_HCENTER)
+      posx = (XY_screen->w - w) / 2;
+    else if (posflags & XY_POS_RIGHT)
+      posx = XY_screen->w - w;
+    else
+      posx = 0;
+
+    if (posflags & XY_POS_VCENTER)
+      posy = (XY_screen->h - h) / 2;
+    else if (posflags & XY_POS_BOTTOM)
+      posy = XY_screen->h - h;
+    else
+      posy = 0;
+
+    /* Nudge */
+    XY_background_dest.x = posx + x;
+    XY_background_dest.y = posy + y;
+  }
 }
 
 XY_color XY_setcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
