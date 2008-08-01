@@ -28,6 +28,10 @@ Rendering implementations
 * Implement anti-aliased lines (Xiaolin Wu) - alpha against pixels
 * Implement anti-aliased lines (Xiaolin Wu) - alpha against bkgd color
 * Implement OpenGL for everything we will have done manually in SDL
+* Support a background color map (like plastic overlays in games like
+  Star Castle).  Background would hint those colors, and line-drawing
+  would pick them up.  (Some special mode, alternative drawing functions,
+  or a special XY_color value.)
 
 Effects and features
 * Add support for line wrap-around (a la Asteroids)
