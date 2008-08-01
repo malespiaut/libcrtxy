@@ -210,14 +210,47 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
 				   (color >> 16) & 0xFF,
 				   (color >> 8) & 0xFF);
 
-  /* FIXME: Scale bitmap */
-  XY_background_bitmap = bitmap;
-  XY_background_bitmap_enabled = XY_TRUE;
+  /* FIXME: Adhere to bitmap option setting! */
 
-  if (bitmap != NULL)
+  if (XY_background_bitmap != NULL)
+    XY_free_bitmap(XY_background_bitmap);
+
+  if (bitmap != NULL && bitmap->surf != NULL)
   {
     w = bitmap->surf->w;
     h = bitmap->surf->h;
+
+    XY_background_bitmap_enabled = XY_TRUE;
+    XY_background_bitmap = malloc(sizeof(XY_bitmap));
+    /* FIXME: check for errors */
+
+    if (scaling == XY_SCALE_STRETCH)
+    {
+      w = XY_screen->w;
+      h = XY_screen->h;
+    }
+    else if (scaling == XY_SCALE_KEEP_ASPECT_WIDE)
+    {
+      h = (((h << XY_FIXED_SHIFT) / w) * XY_screen->w) >> XY_FIXED_SHIFT;
+      w = XY_screen->w;
+    }
+    else if (scaling == XY_SCALE_KEEP_ASPECT_TALL)
+    {
+      w = (((w << XY_FIXED_SHIFT) / h) * XY_screen->h) >> XY_FIXED_SHIFT;
+      h = XY_screen->h;
+    }
+
+
+    if (w != bitmap->surf->w || h != bitmap->surf->h)
+    {
+      /* What we calculated is different from what we have; scale it! */
+      XY_background_bitmap->surf = NULL; /* FIXME: Do it! */
+    }
+    else
+    {
+      XY_background_bitmap->surf = SDL_DisplayFormatAlpha(bitmap->surf);
+      /* FIXME: check for errors */
+    }
 
     /* Position */
     if (posflags & XY_POS_HCENTER)
@@ -237,6 +270,12 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
     /* Nudge */
     XY_background_dest.x = posx + x;
     XY_background_dest.y = posy + y;
+  }
+  else
+  {
+    /* No bitmap being used */
+    XY_background_bitmap_enabled = XY_FALSE;
+    XY_background_bitmap = NULL;
   }
 }
 

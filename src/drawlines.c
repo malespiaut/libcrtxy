@@ -32,10 +32,10 @@ int main(int argc, char * argv[])
 
   black = XY_setcolor(0x00, 0x00, 0x00, 0x00);
 
-//  bkgd = XY_load_bitmap("/usr/share/icons/gnome/48x48/mimetypes/openofficeorg24-text.png");
-  bkgd = NULL;
+  bkgd = XY_load_bitmap("/usr/share/icons/gnome/48x48/mimetypes/openofficeorg24-text.png");
+//  bkgd = NULL;
 
-  XY_set_background(black, bkgd, 0, 0, XY_POS_RIGHT | XY_POS_BOTTOM, 0);
+  XY_set_background(black, bkgd, 0, 0, XY_POS_RIGHT | XY_POS_BOTTOM, XY_SCALE_KEEP_ASPECT_TALL);
 
   n = 3;
   done = XY_FALSE;
