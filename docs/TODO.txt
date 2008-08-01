@@ -15,11 +15,9 @@ Options
 * Check for local option file
 
 Errors
-* XY_errstr() to dump errors
-* XY_print_options() to dump options
 * XY_init() set error
-* XY_init() pay attention to options
 * XY_load_bitmap() set error
+* More error codes & strings.
 
 Optimizations
 * Create a line clip routine
@@ -36,3 +34,7 @@ Effects and features
 * Support repeating background patterns.
 * Do blur effect
 * Additive effect
+
+Exposure
+* Expose error code
+* Expose SDL surface?
