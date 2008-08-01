@@ -2,10 +2,11 @@
   drawlines.c
 
   Test app for CRT X-Y library (libcrtxy)
+  http://libcrtxy.sf.net/
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - July 31, 2008
+  July 29, 2008 - August 1, 2008
 */
 
 #include <crtxy.h>
@@ -18,15 +19,24 @@ int main(int argc, char * argv[])
   XY_bool done;
   XY_bitmap * bkgd;
   SDL_Event event;
+  int ret;
 
+  XY_default_options(&opts);
+  ret = XY_parse_options(&argc, argv, &opts);
 
-  /* XY_parse_options(argc, argv, &opts); */
+  if (ret != 0)
+  {
+    fprintf(stderr, "Error setting libcrtxy options: %s\n", XY_errstr());
+    fprintf(stderr, "Failed on %s\n", argv[ret]);
+    return(1);
+  }
+
+  /* FIXME: Parse our own command-line stuff, with what's left of argc/argv */
 
   if (XY_init(&opts, 32<<XY_FIXED_SHIFT, 24<<XY_FIXED_SHIFT) < 0)
   {
-    fprintf(stderr, "Error initializing XY_init()\n");
-    /* XY_errstr() */
-    /* XY_print_options(stderr, opts); */
+    fprintf(stderr, "Error initializing libcrtxy: %s\n", XY_errstr());
+    XY_print_options(stderr, opts);
     return(1);
   }
 
@@ -34,7 +44,8 @@ int main(int argc, char * argv[])
 
   bkgd = XY_load_bitmap("./testdata/test-bkgd2.png");
 
-  XY_set_background(black, bkgd, 0, 0, XY_POS_RIGHT | XY_POS_BOTTOM, XY_SCALE_KEEP_ASPECT_TALL);
+  XY_set_background(black, bkgd, 0, 0,
+                    XY_POS_LEFT | XY_POS_TOP, XY_SCALE_STRETCH);
 
   n = 3;
   done = XY_FALSE;
@@ -67,6 +78,11 @@ int main(int argc, char * argv[])
     {
       if (event.type == SDL_QUIT)
         done = XY_TRUE;
+      else if (event.type == SDL_KEYDOWN)
+      {
+        if (event.key.keysym.sym == SDLK_ESCAPE)
+          done = XY_TRUE;
+      }
     }
 
     n++;

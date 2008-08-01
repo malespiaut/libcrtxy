@@ -1,9 +1,9 @@
                      README for libcrtxy (CRT X-Y Library)
 
-                      http://www.sf.net/projects/libcrtxy/
+                            http://libcrtxy.sf.net/
                   by Bill Kendrick <bill@newbreedsoftware.com>
 
-                         July 29, 2008 - July 31, 2008
+                         July 29, 2008 - August 1, 2008
                                  Version: 0.0.1
 
      ----------------------------------------------------------------------

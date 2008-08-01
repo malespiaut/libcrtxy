@@ -2,6 +2,7 @@
   crtxy.c
 
   CRT X-Y library (libcrtxy)
+  http://libcrtxy.sf.net/
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
@@ -16,13 +17,16 @@ XY_fixed XY_canvasw, XY_canvash;
 Uint32 XY_background_color;
 Uint8 XY_background_r, XY_background_g, XY_background_b;
 XY_bitmap * XY_background_bitmap;
+XY_bool XY_background_bitmap_possible;
 XY_bool XY_background_bitmap_enabled;
 SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
+int XY_err_code;
 
 /* FIXME: Always putting to XY_screen, so we can simplify further... */
 void (*putpixel) (SDL_Surface *, int, int, Uint32, Uint8 alph);
 Uint32 (*getpixel) (SDL_Surface * surface, int x, int y);
+SDL_Surface * (*scale_surf) (SDL_Surface * orig, int new_w, int new_h);
 
 int XY_trig[91] = {
   65536,  65526,  65496,  65446,  65376,
@@ -44,6 +48,19 @@ int XY_trig[91] = {
   11380,  10252,   9121,   7987,   6850,
    5712,   4572,   3430,   2287,   1144,
       0
+};
+
+enum {
+  XY_ERR_NONE,
+  XY_ERR_OPTION_BAD,
+  XY_ERR_OPTION_UNKNOWN,
+  NUM_XY_ERRS
+};
+
+char * XY_errstr_txt[NUM_XY_ERRS] = {
+  "",
+  "Bad argument to option",
+  "Unknown option"
 };
 
 
@@ -70,14 +87,257 @@ Uint32 getpixel_32(SDL_Surface * surface, int x, int y);
                                        ((color) >> 16) & 0xFF, \
                                        ((color) >> 8) & 0xFF)
 
-SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h);
+SDL_Surface * scale_surf_best(SDL_Surface * orig, int new_w, int new_h);
+SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h);
 
 
 /* Public functions: */
 
+void XY_default_options(XY_options * opts)
+{
+  opts->displayw = 320;
+  opts->displayh = 240;
+  opts->displaybpp = 16;
+  opts->fullscreen = XY_OPT_WINDOWED;
+  opts->alpha = XY_OPT_ALPHA_BLEND;
+  opts->antialias = XY_OPT_ANTIALIAS_OFF;
+  opts->blur = XY_FALSE;
+  opts->additive = XY_FALSE;
+  opts->backgrounds = XY_TRUE;
+  opts->scaling = XY_OPT_SCALE_BEST;
+}
+
+int XY_parse_options(int * argc, char * argv[], XY_options * opts)
+{
+  int i, j, eat, err_arg;
+  int nextint;
+  char * nextstr;
+
+  XY_err_code = XY_ERR_NONE;
+  err_arg = 0;
+
+  for (i = 0; i < *argc && XY_err_code == XY_ERR_NONE; i++)
+  {
+    eat = 0;
+
+    if (strcmp(argv[i], "--") == 0)
+    {
+      /* Double-dash says "end of options", so break out */
+      i = *argc;
+    }
+    else
+    {
+      if (i < (*argc - 1))
+      {
+        nextint = atoi(argv[i + 1]);
+        nextstr = argv[i + 1];
+      }
+      else
+      {
+        nextint = 0;
+        nextstr = "";
+      }
+
+      if (strcmp(argv[i], "--crtxy-width") == 0)
+      {
+        if (nextint != 0)
+        {
+          opts->displayw = nextint;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-height") == 0)
+      {
+        if (nextint != 0)
+        {
+          opts->displayh = nextint;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-bpp") == 0)
+      {
+        if (nextint == 16 || nextint == 24 || nextint == 32)
+        {
+          opts->displaybpp = nextint;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "any") == 0)
+        {
+          opts->displaybpp = 0;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-fullscreen") == 0)
+      {
+        opts->fullscreen = XY_OPT_FULLSCREEN_REQUIRED;
+        eat = 1;
+      }
+      else if (strcmp(argv[i], "--crtxy-fullscreen-or-window") == 0)
+      {
+        opts->fullscreen = XY_OPT_FULLSCREEN_REQUEST;
+        eat = 1;
+      }
+      else if (strcmp(argv[i], "--crtxy-windowed") == 0)
+      {
+        opts->fullscreen = XY_OPT_WINDOWED;
+        eat = 1;
+      }
+      else if (strcmp(argv[i], "--crtxy-alpha") == 0)
+      {
+        if (strcmp(nextstr, "on") == 0)
+        {
+          opts->alpha = XY_OPT_ALPHA_BLEND;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "fake") == 0)
+        {
+          opts->alpha = XY_OPT_ALPHA_FAKE;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "off") == 0)
+        {
+          opts->alpha = XY_OPT_ALPHA_OFF;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-antialias") == 0)
+      {
+        if (strcmp(nextstr, "on") == 0)
+        {
+          opts->antialias = XY_OPT_ANTIALIAS_BLEND;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "fake") == 0)
+        {
+          opts->antialias = XY_OPT_ANTIALIAS_FAKE;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "off") == 0)
+        {
+          opts->antialias = XY_OPT_ANTIALIAS_OFF;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-blur") == 0)
+      {
+        if (strcmp(nextstr, "on") == 0)
+        {
+          opts->blur = XY_TRUE;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "off") == 0)
+        {
+          opts->blur = XY_FALSE;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-additive") == 0)
+      {
+        if (strcmp(nextstr, "on") == 0)
+        {
+          opts->additive = XY_TRUE;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "off") == 0)
+        {
+          opts->additive = XY_FALSE;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-backgrounds") == 0)
+      {
+        if (strcmp(nextstr, "on") == 0)
+        {
+          opts->backgrounds = XY_TRUE;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "off") == 0)
+        {
+          opts->backgrounds = XY_FALSE;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-scaling") == 0)
+      {
+        if (strcmp(nextstr, "best") == 0)
+        {
+          opts->scaling = XY_OPT_SCALE_BEST;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "fast") == 0)
+        {
+          opts->scaling = XY_OPT_SCALE_FAST;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strstr(argv[i], "--crtxy") == argv[i])
+      {
+        XY_err_code = XY_ERR_OPTION_UNKNOWN;
+        err_arg = i;
+      }
+    }
+
+    if (eat > 0 && XY_err_code == XY_ERR_NONE)
+    {
+      for (j = i; j + eat < *argc; j++)
+        argv[j] = argv[j + eat];
+
+      *argc -= eat;
+      i--;
+    }
+  }
+
+  return(err_arg);
+}
+
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
-  int bpp, Bpp;
+  int Bpp;
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
@@ -89,11 +349,28 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   XY_canvasw = canvasw;
   XY_canvash = canvash;
 
-  bpp = 16;
-
   /* FIXME: Add possibility of using SDL_ListModes to determine a suitable mode */
   /* FIXME: Options */
-  XY_screen = SDL_SetVideoMode(320, 240, bpp, SDL_SWSURFACE);
+  if (opts->fullscreen == XY_OPT_WINDOWED)
+  {
+    XY_screen = SDL_SetVideoMode(opts->displayw, opts->displayh,
+                                 opts->displaybpp, SDL_SWSURFACE);
+  }
+  else
+  {
+    XY_screen = SDL_SetVideoMode(opts->displayw, opts->displayh,
+                                 opts->displaybpp,
+                                 SDL_SWSURFACE | SDL_FULLSCREEN);
+
+    if (XY_screen == NULL)
+    {
+      if (opts->fullscreen == XY_OPT_FULLSCREEN_REQUEST)
+      {
+        XY_screen = SDL_SetVideoMode(opts->displayw, opts->displayh,
+                                     opts->displaybpp, SDL_SWSURFACE);
+      }
+    }
+  }
 
   if (XY_screen == NULL)
   {
@@ -110,6 +387,8 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   XY_background_bitmap_enabled = XY_FALSE;
   XY_background_dest.x = 0;
   XY_background_dest.y = 0;
+
+  XY_background_bitmap_possible = opts->backgrounds;
 
   /* Determine which functions to use, based on display we actually got,
      and rendering options: */
@@ -129,50 +408,90 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
     return(-1);
   }
 
-  
-  if (0) /* FIXME */
+ 
+  if (opts->antialias == XY_OPT_ANTIALIAS_BLEND)
   {
-    /* Fake alpha blending (blend with background color) */
-    if (Bpp == 4)
-      putpixel = putpixel_fakea_32;
-    else if (Bpp == 3)
-      putpixel = putpixel_fakea_24;
-    else if (Bpp == 2)
-      putpixel = putpixel_fakea_16;
+    printf("aa unsupported\n");
+    return(-1);
   }
-  else if (1) /* FIXME */
+  else if (opts->antialias == XY_OPT_ANTIALIAS_FAKE)
   {
-    /* Real alpha blending (blend with current pixel) */
-    if (Bpp == 4)
-      putpixel = putpixel_reala_32;
-    else if (Bpp == 3)
-      putpixel = putpixel_reala_24;
-    else if (Bpp == 2)
-      putpixel = putpixel_reala_16;
+    printf("aa unsupported\n");
+    return(-1);
   }
   else
-  {
-    /* No alpha blending */
-    if (Bpp == 4)
-      putpixel = putpixel_32;
-    else if (Bpp == 3)
-      putpixel = putpixel_24;
-    else if (Bpp == 2)
-      putpixel = putpixel_16;
+  { 
+    if (opts->alpha == XY_OPT_ALPHA_FAKE)
+    {
+      /* Fake alpha blending (blend with background color) */
+      if (Bpp == 4) putpixel = putpixel_fakea_32;
+      else if (Bpp == 3) putpixel = putpixel_fakea_24;
+      else if (Bpp == 2) putpixel = putpixel_fakea_16;
+    }
+    else if (opts->alpha == XY_OPT_ALPHA_BLEND)
+    {
+      /* Real alpha blending (blend with current pixel) */
+      if (Bpp == 4) putpixel = putpixel_reala_32;
+      else if (Bpp == 3) putpixel = putpixel_reala_24;
+      else if (Bpp == 2) putpixel = putpixel_reala_16;
+    }
+    else
+    {
+      /* No alpha blending */
+      if (Bpp == 4) putpixel = putpixel_32;
+      else if (Bpp == 3) putpixel = putpixel_24;
+      else if (Bpp == 2) putpixel = putpixel_16;
+    }
   }
+
+  if (opts->scaling == XY_OPT_SCALE_BEST)
+    scale_surf = scale_surf_best;
+  else
+    scale_surf = scale_surf_fast;
 
   return(0);
 }
 
 void XY_quit(void)
 {
-  /* FIXME: Use SDL_QuitSubSystem(SDL_INIT_VIDEO) instead? */
   if (XY_background_bitmap != NULL)
     XY_free_bitmap(XY_background_bitmap);
 
+  /* FIXME: Use SDL_QuitSubSystem(SDL_INIT_VIDEO) instead? */
   SDL_Quit();
 }
 
+char * XY_errstr(void)
+{
+  return(XY_errstr_txt[XY_err_code]);
+}
+
+void XY_print_options(FILE * fi, XY_options opts)
+{
+  fprintf(fi, "Screen size: %d x %d pixels\n", opts.displayw, opts.displayh);
+  fprintf(fi, "Screen depth: %d bpp\n", opts.displaybpp);
+  fprintf(fi, "Fullscreen: %s\n",
+    (opts.fullscreen == XY_OPT_WINDOWED ? "no" :
+     (opts.fullscreen == XY_OPT_FULLSCREEN_REQUEST ? "requested" :
+      "required")));
+  fprintf(fi, "Alpha-blending: %s\n",
+    (opts.alpha == XY_OPT_ALPHA_BLEND ? "real" :
+     (opts.alpha == XY_OPT_ALPHA_FAKE ? "fake" :
+      "off")));
+  fprintf(fi, "Antialiasing: %s\n",
+    (opts.antialias == XY_OPT_ANTIALIAS_BLEND ? "real" :
+     (opts.antialias == XY_OPT_ANTIALIAS_FAKE ? "fake" :
+      "off")));
+  fprintf(fi, "Blurring: %s\n",
+    (opts.blur ? "on" : "off"));
+  fprintf(fi, "Additive effect: %s\n",
+    (opts.additive ? "on" : "off"));
+  fprintf(fi, "Background bitmaps: %s\n",
+    (opts.backgrounds ? "on" : "off"));
+  fprintf(fi, "Scaling: %s\n",
+    (opts.scaling == XY_OPT_SCALE_BEST ? "best" :
+     "fast"));
+}
 
 XY_bitmap * XY_load_bitmap(char * filename)
 {
@@ -268,7 +587,7 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
   if (XY_background_bitmap != NULL)
     XY_free_bitmap(XY_background_bitmap);
 
-  if (bitmap != NULL && bitmap->surf != NULL)
+  if (bitmap != NULL && bitmap->surf != NULL && XY_background_bitmap_possible)
   {
     w = bitmap->surf->w;
     h = bitmap->surf->h;
@@ -299,16 +618,24 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
       /* What we calculated is different from what we have; scale it! */
       SDL_Surface * scaled_surf = scale_surf(bitmap->surf, w, h);
       if (scaled_surf == NULL)
-        ; /* FIXME: Check for errors */
+      {
+        free(XY_background_bitmap);
+        XY_background_bitmap = NULL;
+        return; /* FIXME: Report errors */
+      }
       XY_background_bitmap->surf = SDL_DisplayFormatAlpha(scaled_surf);
-      if (XY_background_bitmap->surf == NULL)
-        ; /* FIXME: Check for errors */
       SDL_FreeSurface(scaled_surf);
     }
     else
     {
       XY_background_bitmap->surf = SDL_DisplayFormatAlpha(bitmap->surf);
-      /* FIXME: check for errors */
+    }
+
+    if (XY_background_bitmap->surf == NULL)
+    {
+      free(XY_background_bitmap);
+      XY_background_bitmap = NULL;
+      return; /* FIXME: Report errors */
     }
 
     /* Position */
@@ -338,7 +665,12 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
   }
 }
 
-SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h)
+SDL_Surface * scale_surf_best(SDL_Surface * orig, int new_w, int new_h)
+{
+  return(NULL);
+}
+
+SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
 {
   SDL_Surface * s;
   int x, y;

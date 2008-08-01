@@ -1,7 +1,7 @@
 INSTALL for libcrtxy (CRT X-Y Library)
+http://libcrtxy.sf.net/
 
-Bill Kendrick
-bill@newbreedsoftware.com
+Bill Kendrick <bill@newbreedsoftware.com>
 
 TBD
 

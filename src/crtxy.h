@@ -2,10 +2,11 @@
   crtxy.h
 
   CRT X-Y library (libcrtxy)
+  http://libcrtxy.sf.net/
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - July 31, 2008
+  July 29, 2008 - August 1, 2008
 */
 
 #ifndef _CRTXY_H
@@ -113,9 +114,17 @@ typedef struct XY_options_s {
 
 /* --- Public function prototypes --- */
 
+/* Options: */
+void XY_default_options(XY_options * opts);
+int XY_parse_options(int * argc, char * argv[], XY_options * opts);
+
 /* Init and quit: */
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash);
 void XY_quit(void);
+
+/* Errors: */
+char * XY_errstr(void);
+void XY_print_options(FILE * fi, XY_options opts);
 
 /* Load and free bitmap: */
 XY_bitmap * XY_load_bitmap(char * filename);

@@ -1,6 +1,6 @@
 TODO for libcrtxy (CRT X-Y Library)
+http://libcrtxy.sf.net/
 
-http://www.sf.net/projects/libcrtxy/
 by Bill Kendrick <bill@newbreedsoftware.com>
 
 Last modified: August 1, 2008
@@ -10,7 +10,6 @@ Documentation
 * API docs
 
 Options
-* XY_parse_options() to parse command-line arguments (argc/argv)
 * Check for env. variables
 * Check for global option file
 * Check for local option file
