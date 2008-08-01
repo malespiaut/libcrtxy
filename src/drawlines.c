@@ -32,8 +32,7 @@ int main(int argc, char * argv[])
 
   black = XY_setcolor(0x00, 0x00, 0x00, 0x00);
 
-  bkgd = XY_load_bitmap("/usr/share/icons/gnome/48x48/mimetypes/openofficeorg24-text.png");
-//  bkgd = NULL;
+  bkgd = XY_load_bitmap("./testdata/test-bkgd2.png");
 
   XY_set_background(black, bkgd, 0, 0, XY_POS_RIGHT | XY_POS_BOTTOM, XY_SCALE_KEEP_ASPECT_TALL);
 
@@ -44,15 +43,7 @@ int main(int argc, char * argv[])
   {
     XY_start_frame(10);
 
-    for (i = 0; i < 255; i++)
-    {
-      color = XY_setcolor(0xff, 0x00, 0x00, i);
-      XY_draw_line(((i * 32) / 255) << XY_FIXED_SHIFT, 0, 
-                   (((i + 1) * 32) / 255) << XY_FIXED_SHIFT, 24 << XY_FIXED_SHIFT,
-                   color);
-    }
-
-    for (i = 0; i < 16; i = i + 2)
+    for (i = 0; i < 16; i++)
     {
       for (a = 0; a < 360; a = a + (360 / n))
       {
