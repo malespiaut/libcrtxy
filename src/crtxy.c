@@ -5,7 +5,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - July 31, 2008
+  July 29, 2008 - August 1, 2008
 */
 
 #include "crtxy.h"
@@ -14,12 +14,14 @@
 SDL_Surface * XY_screen;
 XY_fixed XY_canvasw, XY_canvash;
 Uint32 XY_background_color;
+Uint8 XY_background_r, XY_background_g, XY_background_b;
 XY_bitmap * XY_background_bitmap;
 XY_bool XY_background_bitmap_enabled;
 SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
 
-void (*putpixel) (SDL_Surface *, int, int, Uint32);
+/* FIXME: Always putting to XY_screen, so we can simplify further... */
+void (*putpixel) (SDL_Surface *, int, int, Uint32, Uint8 alph);
 Uint32 (*getpixel) (SDL_Surface * surface, int x, int y);
 
 int XY_trig[91] = {
@@ -47,19 +49,26 @@ int XY_trig[91] = {
 
 /* Private functions and macros: */
 
-void putpixel_16(SDL_Surface * surface, int x, int y, Uint32 pixel);
-void putpixel_24(SDL_Surface * surface, int x, int y, Uint32 pixel);
-void putpixel_32(SDL_Surface * surface, int x, int y, Uint32 pixel);
+void putpixel_16(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_24(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_32(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+
+void putpixel_fakea_16(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_fakea_24(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_fakea_32(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+
+void putpixel_reala_16(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_reala_24(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_reala_32(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
 
 Uint32 getpixel_16(SDL_Surface * surface, int x, int y);
 Uint32 getpixel_24(SDL_Surface * surface, int x, int y);
 Uint32 getpixel_32(SDL_Surface * surface, int x, int y);
 
-#define XY_color_to_sdl_color(color) SDL_MapRGBA(XY_screen->format, \
+#define XY_color_to_sdl_color(color) SDL_MapRGB(XY_screen->format, \
                                        ((color) >> 24) & 0xFF, \
                                        ((color) >> 16) & 0xFF, \
-                                       ((color) >> 8) & 0xFF, \
-                                       (color) & 0xFF)
+                                       ((color) >> 8) & 0xFF)
 
 SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h);
 
@@ -80,7 +89,7 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   XY_canvasw = canvasw;
   XY_canvash = canvash;
 
-  bpp = 24;
+  bpp = 16;
 
   /* FIXME: Add possibility of using SDL_ListModes to determine a suitable mode */
   /* FIXME: Options */
@@ -94,6 +103,9 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   }
 
   XY_background_color = SDL_MapRGB(XY_screen->format, 0x00, 0x00, 0x00);
+  XY_background_r = 0;
+  XY_background_g = 0;
+  XY_background_b = 0;
   XY_background_bitmap = NULL;
   XY_background_bitmap_enabled = XY_FALSE;
   XY_background_dest.x = 0;
@@ -105,25 +117,48 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   Bpp= XY_screen->format->BytesPerPixel;
 
   if (Bpp == 4)
-  {
-    putpixel = putpixel_32;
     getpixel = getpixel_32;
-  }
   else if (Bpp == 3)
-  {
-    putpixel = putpixel_24;
     getpixel = getpixel_24;
-  }
   else if (Bpp == 2)
-  {
-    putpixel = putpixel_16;
     getpixel = getpixel_16;
-  }
   else
   {
     /* Unsupported depth */
     /* FIXME: Set error */
     return(-1);
+  }
+
+  
+  if (0) /* FIXME */
+  {
+    /* Fake alpha blending (blend with background color) */
+    if (Bpp == 4)
+      putpixel = putpixel_fakea_32;
+    else if (Bpp == 3)
+      putpixel = putpixel_fakea_24;
+    else if (Bpp == 2)
+      putpixel = putpixel_fakea_16;
+  }
+  else if (1) /* FIXME */
+  {
+    /* Real alpha blending (blend with current pixel) */
+    if (Bpp == 4)
+      putpixel = putpixel_reala_32;
+    else if (Bpp == 3)
+      putpixel = putpixel_reala_24;
+    else if (Bpp == 2)
+      putpixel = putpixel_reala_16;
+  }
+  else
+  {
+    /* No alpha blending */
+    if (Bpp == 4)
+      putpixel = putpixel_32;
+    else if (Bpp == 3)
+      putpixel = putpixel_24;
+    else if (Bpp == 2)
+      putpixel = putpixel_16;
   }
 
   return(0);
@@ -220,10 +255,13 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
   int w, h;
   int posx, posy;
 
+  XY_background_r = (color >> 24) & 0xFF;
+  XY_background_g = (color >> 16) & 0xFF;
+  XY_background_b = (color >> 8) & 0xFF;
   XY_background_color = SDL_MapRGB(XY_screen->format,
-				   (color >> 24) & 0xFF,
-				   (color >> 16) & 0xFF,
-				   (color >> 8) & 0xFF);
+                                   XY_background_r,
+                                   XY_background_g,
+                                   XY_background_b);
 
   /* FIXME: Adhere to bitmap option setting! */
 
@@ -308,6 +346,8 @@ SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h)
   Uint8 r, g, b, a;
   int tmp;
   XY_fixed src_x, src_y, xscale, yscale, f_orig_w, f_orig_h;
+  void (*pp) (SDL_Surface *, int, int, Uint32, Uint8 alph);
+  Uint32 (*gp) (SDL_Surface * surface, int x, int y);
 
   yscale = (orig->h << XY_FIXED_SHIFT) / new_h;
   xscale = (orig->w << XY_FIXED_SHIFT) / new_w;
@@ -323,6 +363,20 @@ SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h)
 			   orig->format->Bmask,
 			   orig->format->Amask);
   /* FIXME: Check for errors */
+
+  if (orig->format->BytesPerPixel == 2)
+    gp = getpixel_16;
+  else if (orig->format->BytesPerPixel == 3)
+    gp = getpixel_24;
+  else if (orig->format->BytesPerPixel == 4)
+    gp = getpixel_32;
+
+  if (s->format->BytesPerPixel == 2)
+    pp = putpixel_16;
+  else if (s->format->BytesPerPixel == 3)
+    pp = putpixel_24;
+  else if (s->format->BytesPerPixel == 4)
+    pp = putpixel_32;
 
   for (y = 0; y < new_h; y++)
   {
@@ -341,8 +395,7 @@ SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h)
 	for (src_x = x * xscale; src_x < x * xscale + xscale &&
 	     src_x < f_orig_w; src_x += XY_FIXED_ONE)
 	{
-          /* FIXME: Which getpixel do we need to use? */
-	  SDL_GetRGBA(getpixel(orig, src_x >> XY_FIXED_SHIFT, src_y >> XY_FIXED_SHIFT),
+	  SDL_GetRGBA(gp(orig, src_x >> XY_FIXED_SHIFT, src_y >> XY_FIXED_SHIFT),
 		      orig->format, &r, &g, &b, &a);
 
 	  tr = tr + r;
@@ -361,11 +414,11 @@ SDL_Surface * scale_surf(SDL_Surface * orig, int new_w, int new_h)
 	tg = tg / tmp;
 	ta = ta / tmp;
 
-	putpixel(s, x, y, SDL_MapRGBA(s->format,
-					(Uint8) tr,
-					(Uint8) tg,
-					(Uint8) tb,
-					(Uint8) ta));
+	pp(s, x, y, SDL_MapRGB(s->format,
+				(Uint8) tr,
+				(Uint8) tg,
+				(Uint8) tb),
+	  (Uint8) ta);
       }
     }
   }
@@ -430,8 +483,12 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
   int y;
   XY_fixed fsx1, fsy1, fsx2, fsy2;
   Uint32 sdlcolor = XY_color_to_sdl_color(color);
+  Uint8 alph = (color & 0xff);
   XY_fixed dx, dy;
   XY_fixed m, b;
+
+  if ((color & 0xff) == 0)
+    return; /* Fully transparent! */
 
   XY_canvas_to_screen(x1, y1, &sx1, &sy1);
   XY_canvas_to_screen(x2, y2, &sx2, &sy2);
@@ -465,12 +522,12 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
         if (fsy2 > fsy1)
         {
           for (y = fsy1 >> XY_FIXED_SHIFT; y <= fsy2 >> XY_FIXED_SHIFT; y++)
-            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor);
+            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
         }
         else
         {
           for (y = fsy2 >> XY_FIXED_SHIFT; y <= fsy1 >> XY_FIXED_SHIFT; y++)
-            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor);
+            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
         }
 
         fsx1 = fsx1 + dx;
@@ -481,12 +538,12 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
       if (sy2 > sy1)
       {
         for (y = sy1; y <= sy2; y++)
-          putpixel(XY_screen, sx1, y, sdlcolor);
+          putpixel(XY_screen, sx1, y, sdlcolor, alph);
       }
       else
       {
         for (y = sy2; y <= sy1; y++)
-          putpixel(XY_screen, sx1, y, sdlcolor);
+          putpixel(XY_screen, sx1, y, sdlcolor, alph);
       }
     }
   }
@@ -496,10 +553,11 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color)
 {
   int sx, sy;
   Uint32 sdlcolor = XY_color_to_sdl_color(color);
+  Uint8 alph = (color & 0xff);
 
   XY_canvas_to_screen(x, y, &sx, &sy);
 
-  putpixel(XY_screen, sx, sy, sdlcolor);
+  putpixel(XY_screen, sx, sy, sdlcolor, alph);
 }
 
 XY_fixed XY_cos(int degrees)
@@ -569,21 +627,21 @@ int XY_get_screenh(void)
      (unless it's 0!)
 */
 
-void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel)
+void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
 {
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
 
-    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
       return;
 
     *(Uint16 *)p = pixel;
 }
 
-void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel)
+void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
 {
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
 
-    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
       return;
 
     if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
@@ -597,14 +655,214 @@ void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel)
     }
 }
 
-void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel)
+void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
 {
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
 
-    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
       return;
 
     *(Uint32 *)p = pixel;
+}
+
+void putpixel_fakea_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+{
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
+  Uint8 antialph;
+  Uint8 r1, g1, b1;
+  Uint8 r, g, b;
+
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    return;
+
+  if (alph == 0)
+    return;
+  else if (alph < 255)
+  {
+    antialph = 255 - alph;
+
+    SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
+
+    r = ((int) (r1 * alph) + (int) (XY_background_r * antialph)) / 256;
+    g = ((int) (g1 * alph) + (int) (XY_background_g * antialph)) / 256;
+    b = ((int) (b1 * alph) + (int) (XY_background_b * antialph)) / 256;
+
+    pixel = SDL_MapRGB(surface->format, r, g, b);
+  }
+
+  *(Uint16 *)p = pixel;
+}
+
+void putpixel_fakea_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+{
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
+  Uint8 antialph;
+  Uint8 r1, g1, b1;
+  Uint8 r, g, b;
+
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    return;
+
+  if (alph == 0)
+    return;
+  else if (alph < 255)
+  {
+    antialph = 255 - alph;
+
+    SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
+
+    r = ((int) (r1 * alph) + (int) (XY_background_r * antialph)) / 256;
+    g = ((int) (g1 * alph) + (int) (XY_background_g * antialph)) / 256;
+    b = ((int) (b1 * alph) + (int) (XY_background_b * antialph)) / 256;
+
+    pixel = SDL_MapRGB(surface->format, r, g, b);
+  }
+
+  if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+    p[0] = (pixel >> 16) & 0xff;
+    p[1] = (pixel >> 8) & 0xff;
+    p[2] = pixel & 0xff;
+  } else {
+    p[0] = pixel & 0xff;
+    p[1] = (pixel >> 8) & 0xff;
+    p[2] = (pixel >> 16) & 0xff;
+  }
+}
+
+void putpixel_fakea_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+{
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
+  Uint8 antialph;
+  Uint8 r1, g1, b1;
+  Uint8 r, g, b;
+
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    return;
+
+  if (alph == 0)
+    return;
+  else if (alph < 255)
+  {
+    antialph = 255 - alph;
+
+    SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
+
+    r = ((int) (r1 * alph) + (int) (XY_background_r * antialph)) / 256;
+    g = ((int) (g1 * alph) + (int) (XY_background_g * antialph)) / 256;
+    b = ((int) (b1 * alph) + (int) (XY_background_b * antialph)) / 256;
+
+    pixel = SDL_MapRGB(surface->format, r, g, b);
+  }
+
+  *(Uint32 *)p = pixel;
+}
+
+void putpixel_reala_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+{
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
+  Uint8 antialph;
+  Uint8 r1, g1, b1, r2, g2, b2;
+  Uint32 oldpixel;
+  Uint8 r, g, b;
+
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    return;
+
+  if (alph == 0)
+    return;
+  else if (alph < 255)
+  {
+    antialph = 255 - alph;
+
+    oldpixel = *(Uint16 *)p;
+
+    SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
+    SDL_GetRGB(oldpixel, surface->format, &r2, &g2, &b2);
+
+    r = ((int) (r1 * alph) + (int) (r2 * antialph)) / 256;
+    g = ((int) (g1 * alph) + (int) (g2 * antialph)) / 256;
+    b = ((int) (b1 * alph) + (int) (b2 * antialph)) / 256;
+
+    pixel = SDL_MapRGB(surface->format, r, g, b);
+  }
+
+  *(Uint16 *)p = pixel;
+}
+
+void putpixel_reala_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+{
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
+  Uint8 antialph;
+  Uint8 r1, g1, b1, r2, g2, b2;
+  Uint32 oldpixel;
+  Uint8 r, g, b;
+
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    return;
+
+  if (alph == 0)
+    return;
+  else if (alph < 255)
+  {
+    antialph = 255 - alph;
+
+    if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+      oldpixel = (p[0] << 16) | (p[1] << 8) | p[2];
+    } else {
+      oldpixel = (p[2] << 16) | (p[1] << 8) | p[0];
+    }
+
+    SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
+    SDL_GetRGB(oldpixel, surface->format, &r2, &g2, &b2);
+
+    r = ((int) (r1 * alph) + (int) (r2 * antialph)) / 256;
+    g = ((int) (g1 * alph) + (int) (g2 * antialph)) / 256;
+    b = ((int) (b1 * alph) + (int) (b2 * antialph)) / 256;
+
+    pixel = SDL_MapRGB(surface->format, r, g, b);
+  }
+
+  if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+    p[0] = (pixel >> 16) & 0xff;
+    p[1] = (pixel >> 8) & 0xff;
+    p[2] = pixel & 0xff;
+  } else {
+    p[0] = pixel & 0xff;
+    p[1] = (pixel >> 8) & 0xff;
+    p[2] = (pixel >> 16) & 0xff;
+  }
+}
+
+void putpixel_reala_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+{
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
+  Uint8 antialph;
+  Uint8 r1, g1, b1, r2, g2, b2;
+  Uint8 r, g, b;
+  Uint32 oldpixel;
+
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h)
+    return;
+
+  if (alph == 0)
+    return;
+  else if (alph < 255)
+  {
+    antialph = 255 - alph;
+
+    oldpixel = *(Uint32 *)p;
+
+    SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
+    SDL_GetRGB(oldpixel, surface->format, &r2, &g2, &b2);
+
+    r = ((int) (r1 * alph) + (int) (r2 * antialph)) / 256;
+    g = ((int) (g1 * alph) + (int) (g2 * antialph)) / 256;
+    b = ((int) (b1 * alph) + (int) (b2 * antialph)) / 256;
+
+    pixel = SDL_MapRGB(surface->format, r, g, b);
+  }
+
+  *(Uint32 *)p = pixel;
 }
 
 /* Get a pixel: */

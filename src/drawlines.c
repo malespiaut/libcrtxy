@@ -44,6 +44,14 @@ int main(int argc, char * argv[])
   {
     XY_start_frame(10);
 
+    for (i = 0; i < 255; i++)
+    {
+      color = XY_setcolor(0xff, 0x00, 0x00, i);
+      XY_draw_line(((i * 32) / 255) << XY_FIXED_SHIFT, 0, 
+                   (((i + 1) * 32) / 255) << XY_FIXED_SHIFT, 24 << XY_FIXED_SHIFT,
+                   color);
+    }
+
     for (i = 0; i < 16; i = i + 2)
     {
       for (a = 0; a < 360; a = a + (360 / n))
@@ -56,7 +64,7 @@ int main(int argc, char * argv[])
         color = XY_setcolor((a * 255) / 360,
                             0xff,
                             255 - ((a * 255) / 720),
-                            255 - (i * 16));
+                            i * 16);
 
         XY_draw_line(x1, y1, x2, y2, color);
       }
