@@ -5,23 +5,35 @@ by Bill Kendrick <bill@newbreedsoftware.com>
 
 Last modified: August 1, 2008
 
+Documentation
 * Installation docs
 * API docs
+
+Options
 * XY_parse_options() to parse command-line arguments (argc/argv)
 * Check for env. variables
 * Check for global option file
 * Check for local option file
+
+Errors
 * XY_errstr() to dump errors
 * XY_print_options() to dump options
 * XY_init() set error
 * XY_init() pay attention to options
 * XY_load_bitmap() set error
+
+Optimizations
 * Create a line clip routine
-* Add support for line wrap-around (a la Asteroids)
+* Lock/Unlock SDL surfaces!!!
+
+Rendering implementations
 * Implement anti-aliased lines (Xiaolin Wu)
 * Implement anti-aliased lines (Xiaolin Wu) - alpha against pixels
 * Implement anti-aliased lines (Xiaolin Wu) - alpha against bkgd color
+* Implement OpenGL for everything we will have done manually in SDL
+
+Effects and features
+* Add support for line wrap-around (a la Asteroids)
+* Support repeating background patterns.
 * Do blur effect
 * Additive effect
-* Lock/Unlock SDL surfaces!!!
-* Implement OpenGL for everything we will have done manually in SDL
