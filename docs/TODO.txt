@@ -13,6 +13,7 @@ Options
 * Check for env. variables
 * Check for global option file
 * Check for local option file
+* Allow native screen resolution (for fullscreen mode), a la Tux Paint.
 
 Errors
 * XY_init() set error
