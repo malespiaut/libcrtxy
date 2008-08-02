@@ -65,4 +65,29 @@ Options:
    is based around a virtual canvas size, and line positions are given using
    fixed-point values.
 
-   FIXME - Write the rest...
+   The options that can be set at runtime include:
+     * Display settings:
+          * Screen width & height
+          * Screen depth (16bpp, 24bpp or 32bpp)
+          * Window or fullscreen (requested or required)
+     * Rendering quality:
+          * Alpha blending (on, off, or "fake")
+          * Anti-aliasing
+          * Backgrounds
+          * Bitmap scaling (fast or best)
+     * Special effects:
+          * Blurring
+          * Additive effect
+
+   The options that get used are determined by the following, and in this
+   order:
+    1. Hard-coded defaults (set at the time libcrtxy is compiled)
+    2. System-wide "libcrtxy" configuration file (e.g.,
+       "/etc/libcrtxy/libcrtxy.conf")
+    3. User's own "libcrtxy" configuration file (e.g., "~/.libcrtxyrc")
+    4. Environment variables (e.g., "CRTXY_SCALE=FAST")
+    5. System-wide configuration file for the application (e.g.,
+       "/etc/some_game/some_game.conf")
+    6. User's own configuration file for the application (e.g.,
+       "~/.some_gamerc")
+    7. Command-line arguments (e.g., "some_game --crtxy-bpp 32")

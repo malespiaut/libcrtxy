@@ -144,7 +144,29 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts)
         nextstr = "";
       }
 
-      if (strcmp(argv[i], "--crtxy-width") == 0)
+      if (strcmp(argv[i], "--help-crtxy") == 0)
+      {
+        printf("\n");
+        printf("%s [options] ...\n", argv[0]);
+        printf("\n");
+        printf("Options specific to libcrtxy drawing library:\n");
+        printf("  --crtxy-width WIDTH         Set screen width (pixels)\n");
+        printf("  --crtxy-height HEIGHT       Set screen height (pixels)\n");
+        printf("  --crtxy-bpp [16|24|32|any]  Set depth (bits per pixel)\n");
+        printf("  --crtxy-fullscreen          Fullscreen mode required\n");
+        printf("  --crtxy-fullscreen-or-window  Fullscreen mode; fallback to windowed\n");
+        printf("  --crtxy-windowed            Windowed mode\n");
+        printf("  --crtxy-alpha [on|off|fake] Alpha-blending ('fake' is against bgkd color\n");
+        printf("  --crtxy-antialias [on|off]  Anti-aliased (smoother) lines\n");
+        printf("  --crtxy-blur [on|off]       Blur all lines effect\n");
+        printf("  --crtxy-additive [on|off]   Brighten lines that cross\n");
+        printf("  --crtxy-backgrounds [on|off]  Enable or disable background bitmaps\n");
+        printf("  --crtxy-scaling [best|fast] Set bitmap scaling quality\n");
+        printf("\n");
+        
+        exit(0);
+      }
+      else if (strcmp(argv[i], "--crtxy-width") == 0)
       {
         if (nextint != 0)
         {

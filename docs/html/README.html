@@ -81,7 +81,46 @@ or person packaging your software for a particular target, as well.
 Your game logic is based around a virtual canvas size, and line
 positions are given using fixed-point values.</p>
 
-<p>FIXME - Write the rest...</p>
+<p>The options that can be set at runtime include:
+<ul>
+<li><b>Display settings:</b>
+  <ul>
+  <li>Screen width &amp; height
+  <li>Screen depth (16bpp, 24bpp or 32bpp)
+  <li>Window or fullscreen (requested or required)
+  </ul>
+<li><b>Rendering quality:</b>
+  <ul>
+  <li>Alpha blending (on, off, or "fake")
+  <li>Anti-aliasing
+  <li>Backgrounds
+  <li>Bitmap scaling (fast or best)
+  </ul>
+<li><b>Special effects:</b>
+  <ul>
+  <li>Blurring
+  <li>Additive effect
+  </ul>
+</ul>
+</p>
+
+<p>The options that get used are determined by the following, and in this
+order:
+<ol>
+<li>Hard-coded defaults (set at the time libcrtxy is compiled)
+<li>System-wide "libcrtxy" configuration file (e.g.,
+  "<code>/etc/libcrtxy/libcrtxy.conf</code>")
+<li>User's own "libcrtxy" configuration file (e.g.,
+  "<code>~/.libcrtxyrc</code>")
+<li>Environment variables (e.g., "<code>CRTXY_SCALE=FAST</code>")
+<li>System-wide configuration file for the application (e.g.,
+  "<code>/etc/some_game/some_game.conf</code>")
+<li>User's own configuration file for the application (e.g.,
+  "<code>~/.some_gamerc</code>")
+<li>Command-line arguments (e.g.,
+  "<code>some_game&nbsp;--crtxy-bpp&nbsp;32</code>")
+</ol>
+</p>
 
 </body></html>
 

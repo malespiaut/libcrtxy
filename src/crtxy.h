@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 1, 2008
+  July 29, 2008 - August 2, 2008
 */
 
 #ifndef _CRTXY_H
@@ -85,8 +85,8 @@ typedef struct XY_options_s {
 
 /* Where system-wide (global) and user's (local) config files live: */
 /* FIXME: Set during build!!! */
-#define XY_INIT_LIB_CONFIG_FILE_GLOBAL "/usr/local/share/libcrtxy/libcrtxy.conf"
-#define XY_INIT_LIB_CONFIG_FILE_LOCAL "~/.libcrtxyrc"
+#define XY_INIT_LIB_CONFIG_FILE_GLOBAL PREFIX "/libcrtxy/libcrtxy.conf"
+#define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc"
 
 
 /* --- Runtime flags and options --- */
