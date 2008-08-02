@@ -378,9 +378,140 @@ int XY_load_options(XY_options * opts)
 int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_unknowns)
 {
   FILE * fi;
+  char line[256];
+  int i, err;
+  int nextint, nexton;
+  char * nextstr;
 
-  printf("Want to open: %s\n", fname);
-  return(XY_ERR_NONE);
+  fi = fopen(fname, "r");
+  if (fi == NULL)
+    return(XY_ERR_FILE_CANT_OPEN);
+
+  err = XY_ERR_NONE;;
+
+  i = 0;
+  while (!feof(fi) && err == XY_ERR_NONE)
+  {
+    fgets(line, sizeof(line), fi);
+    if (feof(fi))
+      break;
+    if (strlen(line) > 0)
+      line[strlen(line) - 1] = '\0';
+    i++;
+
+    if (strchr(line, '=') != NULL)
+    {
+      nextstr = (char *) (strchr(line, '=') + 1);
+      nextint = atoi(nextstr);
+      if (strcmp(nextstr, "on") == 0)
+        nexton = 1;
+      else if (strcmp(nextstr, "off") == 0)
+        nexton = 0;
+      else
+        nexton = -1;
+    }
+    else
+    {
+      nextint = 0;
+      nextstr = "";
+    }
+
+
+    if (line[0] == '#' || line[0] == '\0')
+      ; /* Comment or blank; ignore this line */
+    else if (strstr(line, "crtxy-width=") == line)
+    {
+      if (nextint != 0)
+        opts->displayw = nextint;
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strstr(line, "crtxy-height=") == line)
+    {
+      if (nextint != 0)
+        opts->displayh = nextint;
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strstr(line, "crtxy-bpp=") == line)
+    {
+      if (nextint == 16 || nextint == 24 || nextint == 32)
+        opts->displaybpp = nextint;
+      else if (strcmp(nextstr, "any") == 0)
+        opts->displaybpp = 0;
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strcmp(line, "crtxy-windowed") == 0)
+    {
+      opts->fullscreen = XY_OPT_WINDOWED;
+    }
+    else if (strcmp(line, "crtxy-fullscreen") == 0)
+    {
+      opts->fullscreen = XY_OPT_FULLSCREEN_REQUIRED;
+    }
+    else if (strcmp(line, "crtxy-fullscreen-or-window") == 0)
+    {
+      opts->fullscreen = XY_OPT_FULLSCREEN_REQUEST;
+    }
+    else if (strstr(line, "crtxy-alpha=") == line)
+    {
+      if (nexton != -1)
+        opts->alpha = (nexton ? XY_OPT_ALPHA_BLEND : XY_OPT_ALPHA_OFF);
+      else if (strcmp(nextstr, "fake") == 0)
+        opts->alpha = XY_OPT_ALPHA_FAKE;
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strstr(line, "crtxy-antialias=") == line)
+    {
+      if (nexton != -1)
+        opts->antialias = (nexton == 1);
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strstr(line, "crtxy-blur=") == line)
+    {
+      if (nexton != -1)
+        opts->blur = (nexton == 1);
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strstr(line, "crtxy-additive=") == line)
+    {
+      if (nexton != -1)
+        opts->additive = (nexton == 1);
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strstr(line, "crtxy-backgrounds=") == line)
+    {
+      if (nexton != -1)
+        opts->backgrounds = (nexton == 1);
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else if (strstr(line, "crtxy-scaling=") == line)
+    {
+      if (strcmp(nextstr, "best") == 0)
+        opts->scaling = XY_OPT_SCALE_BEST;
+      else if (strcmp(nextstr, "fast") == 0)
+        opts->scaling = XY_OPT_SCALE_FAST;
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
+    else
+    {
+      if (ignore_unknowns == XY_FALSE)
+      {
+        fprintf(stderr, "Error: Unknown libcrtxy option, %s line %d: %s\n", fname, i, line);
+        err = XY_ERR_OPTION_UNKNOWN;
+      }
+    }
+  }
+  fclose(fi);
+
+  return(err);
 }
 
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)

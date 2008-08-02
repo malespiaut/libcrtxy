@@ -22,9 +22,20 @@ int main(int argc, char * argv[])
   int ret;
 
   XY_default_options(&opts);
-  XY_load_options(&opts);
-  ret = XY_parse_options(&argc, argv, &opts);
 
+  printf("\nDefault options:\n");
+  XY_print_options(stdout, opts);
+
+
+  ret = XY_load_options(&opts);
+  if (ret != XY_ERR_NONE)
+    return(1);
+
+  printf("\nAfter loading options:\n");
+  XY_print_options(stdout, opts);
+
+
+  ret = XY_parse_options(&argc, argv, &opts);
   if (ret != 0)
   {
     fprintf(stderr, "Error setting libcrtxy options: %s\n", XY_errstr());
@@ -32,7 +43,9 @@ int main(int argc, char * argv[])
     return(1);
   }
 
-  /* FIXME: Parse our own command-line stuff, with what's left of argc/argv */
+  printf("\nAfter parsing options:\n");
+  XY_print_options(stdout, opts);
+
 
   if (XY_init(&opts, 32<<XY_FIXED_SHIFT, 24<<XY_FIXED_SHIFT) < 0)
   {
@@ -41,7 +54,7 @@ int main(int argc, char * argv[])
     return(1);
   }
 
-  black = XY_setcolor(0xff, 0x00, 0x00, 0x00);
+  black = XY_setcolor(0x00, 0x00, 0x00, 0x00);
 
   bkgd = XY_load_bitmap("./testdata/test-bkgd2.png");
 

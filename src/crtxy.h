@@ -50,11 +50,6 @@ typedef Sint32 XY_fixed;
 
 /* --- Initialization and options flags and settings --- */
 
-/* Flags for initialization override options: */
-/* NOTE: Can be OR'ed together */
-#define XY_INIT_IGNORE_ENVVARS 0x1 /* Ignore environment variables */
-#define XY_INIT_IGNORE_LIB_CONFIG_FILES 0x2 /* Ignore settings file(s) */
-
 /* Display settings */
 /* (options.fullscreen) */
 #define XY_OPT_WINDOWED 0 /* Display in a window */
