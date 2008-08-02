@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 1, 2008
+  July 29, 2008 - August 2, 2008
 */
 
 #include "crtxy.h"
@@ -17,7 +17,7 @@ XY_fixed XY_canvasw, XY_canvash;
 Uint32 XY_background_color;
 Uint8 XY_background_r, XY_background_g, XY_background_b;
 XY_bitmap * XY_background_bitmap;
-XY_bool XY_background_bitmap_possible;
+XY_bool XY_background_bitmap_possible, XY_antialias;
 XY_bool XY_background_bitmap_enabled;
 SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
@@ -90,6 +90,12 @@ Uint32 getpixel_32(SDL_Surface * surface, int x, int y);
 SDL_Surface * scale_surf_best(SDL_Surface * orig, int new_w, int new_h);
 SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h);
 
+void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
+                            XY_fixed fsx2, XY_fixed fsy2,
+                            XY_color color);
+void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
+                            XY_fixed fsx2, XY_fixed fsy2,
+                            XY_color);
 
 /* Public functions: */
 
@@ -100,11 +106,11 @@ void XY_default_options(XY_options * opts)
   opts->displaybpp = 16;
   opts->fullscreen = XY_OPT_WINDOWED;
   opts->alpha = XY_OPT_ALPHA_BLEND;
-  opts->antialias = XY_OPT_ANTIALIAS_OFF;
+  opts->antialias = XY_TRUE;
   opts->blur = XY_FALSE;
   opts->additive = XY_FALSE;
   opts->backgrounds = XY_TRUE;
-  opts->scaling = XY_OPT_SCALE_BEST;
+  opts->scaling = XY_OPT_SCALE_FAST;
 }
 
 int XY_parse_options(int * argc, char * argv[], XY_options * opts)
@@ -224,17 +230,12 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts)
       {
         if (strcmp(nextstr, "on") == 0)
         {
-          opts->antialias = XY_OPT_ANTIALIAS_BLEND;
-          eat = 2;
-        }
-        else if (strcmp(nextstr, "fake") == 0)
-        {
-          opts->antialias = XY_OPT_ANTIALIAS_FAKE;
+          opts->antialias = XY_TRUE;
           eat = 2;
         }
         else if (strcmp(nextstr, "off") == 0)
         {
-          opts->antialias = XY_OPT_ANTIALIAS_OFF;
+          opts->antialias = XY_FALSE;
           eat = 2;
         }
         else
@@ -409,39 +410,28 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   }
 
  
-  if (opts->antialias == XY_OPT_ANTIALIAS_BLEND)
+  XY_antialias = opts->antialias;
+
+  if (opts->alpha == XY_OPT_ALPHA_FAKE)
   {
-    printf("aa unsupported\n");
-    return(-1);
+    /* Fake alpha blending (blend with background color) */
+    if (Bpp == 4) putpixel = putpixel_fakea_32;
+    else if (Bpp == 3) putpixel = putpixel_fakea_24;
+    else if (Bpp == 2) putpixel = putpixel_fakea_16;
   }
-  else if (opts->antialias == XY_OPT_ANTIALIAS_FAKE)
+  else if (opts->alpha == XY_OPT_ALPHA_BLEND)
   {
-    printf("aa unsupported\n");
-    return(-1);
+    /* Real alpha blending (blend with current pixel) */
+    if (Bpp == 4) putpixel = putpixel_reala_32;
+    else if (Bpp == 3) putpixel = putpixel_reala_24;
+    else if (Bpp == 2) putpixel = putpixel_reala_16;
   }
   else
-  { 
-    if (opts->alpha == XY_OPT_ALPHA_FAKE)
-    {
-      /* Fake alpha blending (blend with background color) */
-      if (Bpp == 4) putpixel = putpixel_fakea_32;
-      else if (Bpp == 3) putpixel = putpixel_fakea_24;
-      else if (Bpp == 2) putpixel = putpixel_fakea_16;
-    }
-    else if (opts->alpha == XY_OPT_ALPHA_BLEND)
-    {
-      /* Real alpha blending (blend with current pixel) */
-      if (Bpp == 4) putpixel = putpixel_reala_32;
-      else if (Bpp == 3) putpixel = putpixel_reala_24;
-      else if (Bpp == 2) putpixel = putpixel_reala_16;
-    }
-    else
-    {
-      /* No alpha blending */
-      if (Bpp == 4) putpixel = putpixel_32;
-      else if (Bpp == 3) putpixel = putpixel_24;
-      else if (Bpp == 2) putpixel = putpixel_16;
-    }
+  {
+    /* No alpha blending */
+    if (Bpp == 4) putpixel = putpixel_32;
+    else if (Bpp == 3) putpixel = putpixel_24;
+    else if (Bpp == 2) putpixel = putpixel_16;
   }
 
   if (opts->scaling == XY_OPT_SCALE_BEST)
@@ -479,9 +469,7 @@ void XY_print_options(FILE * fi, XY_options opts)
      (opts.alpha == XY_OPT_ALPHA_FAKE ? "fake" :
       "off")));
   fprintf(fi, "Antialiasing: %s\n",
-    (opts.antialias == XY_OPT_ANTIALIAS_BLEND ? "real" :
-     (opts.antialias == XY_OPT_ANTIALIAS_FAKE ? "fake" :
-      "off")));
+    (opts.antialias ? "on" : "off"));
   fprintf(fi, "Blurring: %s\n",
     (opts.blur ? "on" : "off"));
   fprintf(fi, "Additive effect: %s\n",
@@ -812,12 +800,7 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color)
 {
   int sx1, sy1, sx2, sy2;
-  int y;
   XY_fixed fsx1, fsy1, fsx2, fsy2;
-  Uint32 sdlcolor = XY_color_to_sdl_color(color);
-  Uint8 alph = (color & 0xff);
-  XY_fixed dx, dy;
-  XY_fixed m, b;
 
   if ((color & 0xff) == 0)
     return; /* Fully transparent! */
@@ -829,6 +812,167 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
   fsy1 = sy1 << XY_FIXED_SHIFT;
   fsx2 = sx2 << XY_FIXED_SHIFT;
   fsy2 = sy2 << XY_FIXED_SHIFT;
+
+  if (XY_antialias)
+    XY_draw_line_xiaolinwu(fsx1, fsy1, fsx2, fsy2, color);
+  else
+    XY_draw_line_bresenham(fsx1, fsy1, fsx2, fsy2, color);
+}
+
+void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
+                            XY_fixed fsx2, XY_fixed fsy2,
+                            XY_color color)
+{
+  Uint32 sdlcolor = XY_color_to_sdl_color(color);
+  XY_fixed dx, dy, ftmp, gradient;
+  XY_fixed xend, yend, xgap, ygap, xpxl1, ypxl1, xpxl2, ypxl2, interx, intery;
+  XY_fixed brightness1, brightness2, x, y;
+  Uint8 alph;
+
+  alph = (color & 0xff);
+
+  dx = fsx2 - fsx1;
+  dy = fsy2 - fsy1;
+
+  if (abs(dx) > abs(dy))
+  {
+    /* "Horizontal" lines */
+    if (fsx2 < fsx1)
+    {
+      ftmp = fsx1;
+      fsx1 = fsx2;
+      fsx2 = ftmp;
+
+      ftmp = fsy1;
+      fsy1 = fsy2;
+      fsy2 = ftmp;
+    }
+
+    gradient = XY_div(dy, dx);
+
+    /* First endpoint */
+    xend = XY_round(fsx1);
+
+    yend = fsy1 + XY_mult(gradient, (xend - fsx1));
+    xgap = XY_rfpart(fsx1 + XY_FIXED_HALF);
+    xpxl1 = xend >> XY_FIXED_SHIFT;
+    ypxl1 = XY_ipart(yend) >> XY_FIXED_SHIFT;
+   
+    brightness1 = (XY_mult(XY_rfpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
+    brightness2 = (XY_mult(XY_fpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
+  
+    putpixel(XY_screen, xpxl1, ypxl1,
+             sdlcolor, (brightness1 * alph) / 255);
+    putpixel(XY_screen, xpxl1, ypxl1 + 1,
+             sdlcolor, (brightness2 * alph) / 255);
+  
+    intery = yend + gradient;
+  
+    /* Second endpoint */
+    xend = XY_round(fsx2);
+  
+    yend = fsy2 + XY_mult(gradient, (xend - fsx2));
+    xgap = XY_fpart(fsx2 + XY_FIXED_HALF);
+    xpxl2 = xend >> XY_FIXED_SHIFT;
+    ypxl2 = XY_ipart(yend) >> XY_FIXED_SHIFT;
+  
+    brightness1 = (XY_mult(XY_rfpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
+    brightness2 = (XY_mult(XY_fpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
+  
+    putpixel(XY_screen, xpxl2, ypxl2,
+             sdlcolor, (brightness1 * alph) / 255);
+    putpixel(XY_screen, xpxl2, ypxl2 + 1,
+             sdlcolor, (brightness2 * alph) / 255);
+  
+    /* Main loop */
+    for (x = xpxl1 + 1; x < xpxl2; x++)
+    {
+      brightness1 = (XY_rfpart(intery) * 255) >> XY_FIXED_SHIFT;
+      brightness2 = (XY_fpart(intery) * 255) >> XY_FIXED_SHIFT;
+  
+      putpixel(XY_screen, x, XY_ipart(intery) >> XY_FIXED_SHIFT,
+               sdlcolor, (brightness1 * alph) / 255);
+      putpixel(XY_screen, x, (XY_ipart(intery) >> XY_FIXED_SHIFT) + 1,
+               sdlcolor, (brightness2 * alph) / 255);
+  
+      intery += gradient;
+    }
+  }
+  else
+  {
+    /* "Vertical" lines */
+    if (fsy2 < fsy1)
+    {
+      ftmp = fsx1;
+      fsx1 = fsx2;
+      fsx2 = ftmp;
+
+      ftmp = fsy1;
+      fsy1 = fsy2;
+      fsy2 = ftmp;
+    }
+
+    gradient = XY_div(dx, dy);
+
+    /* First endpoint */
+    yend = XY_round(fsy1);
+
+    xend = fsx1 + XY_mult(gradient, (yend - fsy1));
+    ygap = XY_rfpart(fsy1 + XY_FIXED_HALF);
+    xpxl1 = XY_ipart(xend) >> XY_FIXED_SHIFT;
+    ypxl1 = yend >> XY_FIXED_SHIFT;
+   
+    brightness1 = (XY_mult(XY_rfpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
+    brightness2 = (XY_mult(XY_fpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
+  
+    putpixel(XY_screen, xpxl1, ypxl1,
+             sdlcolor, (brightness1 * alph) / 255);
+    putpixel(XY_screen, xpxl1 + 1, ypxl1,
+             sdlcolor, (brightness2 * alph) / 255);
+  
+    interx = xend + gradient;
+  
+    /* Second endpoint */
+    yend = XY_round(fsy2);
+  
+    xend = fsx2 + XY_mult(gradient, (yend - fsy2));
+    ygap = XY_fpart(fsy2 + XY_FIXED_HALF);
+    xpxl2 = XY_ipart(xend) >> XY_FIXED_SHIFT;
+    ypxl2 = yend >> XY_FIXED_SHIFT;
+  
+    brightness1 = (XY_mult(XY_rfpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
+    brightness2 = (XY_mult(XY_fpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
+  
+    putpixel(XY_screen, xpxl2, ypxl2,
+             sdlcolor, (brightness1 * alph) / 255);
+    putpixel(XY_screen, xpxl2 + 1, ypxl2,
+             sdlcolor, (brightness2 * alph) / 255);
+  
+    /* Main loop */
+    for (y = ypxl1 + 1; y < ypxl2; y++)
+    {
+      brightness1 = (XY_rfpart(interx) * 255) >> XY_FIXED_SHIFT;
+      brightness2 = (XY_fpart(interx) * 255) >> XY_FIXED_SHIFT;
+  
+      putpixel(XY_screen, XY_ipart(interx) >> XY_FIXED_SHIFT, y,
+               sdlcolor, (brightness1 * alph) / 255);
+      putpixel(XY_screen, (XY_ipart(interx) >> XY_FIXED_SHIFT) + 1, y,
+               sdlcolor, (brightness2 * alph) / 255);
+  
+      interx += gradient;
+    }
+  }
+}
+
+void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
+                            XY_fixed fsx2, XY_fixed fsy2,
+                            XY_color color)
+{
+  Uint32 sdlcolor = XY_color_to_sdl_color(color);
+  Uint8 alph = (color & 0xff);
+  XY_fixed dx, dy;
+  XY_fixed m, b;
+  int y;
 
   /* FIXME: clip!  if (XY_clip(&sx1, &sy1, &sx2, &sy2)) */
   {
@@ -867,15 +1011,15 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
     }
     else
     {
-      if (sy2 > sy1)
+      if (fsy2 > fsy1)
       {
-        for (y = sy1; y <= sy2; y++)
-          putpixel(XY_screen, sx1, y, sdlcolor, alph);
+        for (y = fsy1 >> XY_FIXED_SHIFT; y <= fsy2 >> XY_FIXED_SHIFT; y++)
+          putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
       }
       else
       {
-        for (y = sy2; y <= sy1; y++)
-          putpixel(XY_screen, sx1, y, sdlcolor, alph);
+        for (y = fsy2 >> XY_FIXED_SHIFT; y <= fsy1 >> XY_FIXED_SHIFT; y++)
+          putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
       }
     }
   }

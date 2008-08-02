@@ -40,6 +40,7 @@ typedef Sint32 XY_fixed;
 #define XY_FIXED_SHIFT 16 /* How much to shift ints to get a fixed-point val */
 #define XY_FIXED_SHIFT_HALF 8 /* For half-shift during mult & divide macros */
 #define XY_FIXED_ONE (1 << XY_FIXED_SHIFT) /* Quick way to get '1' in fixed */
+#define XY_FIXED_HALF (1 << (XY_FIXED_SHIFT - 1)) /* Quick way to get '0.5' */
 
 /* Limits for fixed-point values */
 #define XY_FIXED_MAX (0x7FFFFF << XY_FIXED_SHIFT)
@@ -66,12 +67,6 @@ typedef Sint32 XY_fixed;
 #define XY_OPT_ALPHA_FAKE 1 /* Combine background color with new pixel */
 #define XY_OPT_ALPHA_OFF 2 /* Just draw new pixel */
 
-/* Kinds of anti-aliasing we want: */
-/* (options.antialias) */
-#define XY_OPT_ANTIALIAS_BLEND 0 /* Combine current pixel with aa'd pixel */
-#define XY_OPT_ANTIALIAS_FAKE 1 /* Combine background color with aa'd pixel */
-#define XY_OPT_ANTIALIAS_OFF 2 /* No anti-aliasing */
-
 /* Quality settings for scaling bitmaps */
 #define XY_OPT_SCALE_BEST 0 /* Blend to smooth any stretching */
 #define XY_OPT_SCALE_FAST 1 /* Stretch pixels with no blending */
@@ -81,7 +76,7 @@ typedef struct XY_options_s {
   int displaybpp; // Display depth (16bpp, 24bpp, 32bpp)
   int fullscreen; // Window, Want Fullscreen or Require Fullscreen?
   int alpha;  // Alpha-blend, fake it, or none at all (just on/off)?
-  int antialias;  // Anti-alias lines, fake it, or no antialiasing?
+  XY_bool antialias;  // Anti-alias lines (Xiaolin Wu) or not (Bresenham)?
   XY_bool blur;  // Add blur effect?
   XY_bool additive;  // Additive pixel effect?
   XY_bool backgrounds;  // Support fullscreen background
@@ -165,6 +160,11 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color);
 		       ((b) >> XY_FIXED_SHIFT_HALF)) \
                       << XY_FIXED_SHIFT_HALF)
 #define XY_div(a,b) ((b) == 0 ? XY_FIXED_NAN : XY_qdiv((a),(b)))
+
+#define XY_fpart(a) ((a) & (XY_FIXED_ONE - 1))
+#define XY_ipart(a) ((a) - XY_fpart(a))
+#define XY_rfpart(a) (XY_FIXED_ONE - XY_fpart(a))
+#define XY_round(a) (XY_ipart((a) + (1 << (XY_FIXED_SHIFT - 1))))
 
 XY_fixed XY_cos(int degrees);
 #define XY_sin(degrees) (XY_cos(90 - (degrees)))

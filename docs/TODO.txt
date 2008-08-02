@@ -25,9 +25,6 @@ Optimizations
 * Lock/Unlock SDL surfaces!!!
 
 Rendering implementations
-* Implement anti-aliased lines (Xiaolin Wu)
-* Implement anti-aliased lines (Xiaolin Wu) - alpha against pixels
-* Implement anti-aliased lines (Xiaolin Wu) - alpha against bkgd color
 * Implement OpenGL for everything we will have done manually in SDL
 * Support a background color map (like plastic overlays in games like
   Star Castle).  Background would hint those colors, and line-drawing

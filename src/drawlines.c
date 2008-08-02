@@ -40,7 +40,7 @@ int main(int argc, char * argv[])
     return(1);
   }
 
-  black = XY_setcolor(0x00, 0x00, 0x00, 0x00);
+  black = XY_setcolor(0xff, 0x00, 0x00, 0x00);
 
   bkgd = XY_load_bitmap("./testdata/test-bkgd2.png");
 
