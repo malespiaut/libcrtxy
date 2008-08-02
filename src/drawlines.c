@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 1, 2008
+  July 29, 2008 - August 2, 2008
 */
 
 #include <crtxy.h>
@@ -22,6 +22,7 @@ int main(int argc, char * argv[])
   int ret;
 
   XY_default_options(&opts);
+  XY_load_options(&opts);
   ret = XY_parse_options(&argc, argv, &opts);
 
   if (ret != 0)

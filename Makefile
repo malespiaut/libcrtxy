@@ -2,14 +2,22 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - July 28, 2008
+# July 28, 2008 - August 2, 2008
+
+PREFIX=/usr/local
+
+# 'System-wide' Config file:
+ifeq ($(PREFIX),/usr)
+  CONFDIR:=$(DESTDIR)/etc/libcrtxy
+else
+  CONFDIR:=$(DESTDIR)$(PREFIX)/etc/libcrtxy
+endif
 
 SDL_CFLAGS=$(shell sdl-config --cflags)
-CFLAGS=-g -Wall -DVERSION="$(VERSION)" $(SDL_CFLAGS)
+CFLAGS=-g -Wall -DVERSION="$(VERSION)" $(SDL_CFLAGS) -DPREFIX=\"$(PREFIX)\" -DCONFDIR=\"$(CONFDIR)\"
 LIBDIR=$(PREFIX)/lib
 INCDIR=$(PREFIX)/include
 BINDIR=$(PREFIX)/bin
-PREFIX=/usr/local
 
 VER_MAJOR=0
 VER_MINOR=0
@@ -43,6 +51,8 @@ install:
 	install -m 644 src/crtxy.h $(INCDIR)/
 	install -d $(BINDIR)
 	install crtxy-config $(BINDIR)
+	install -d $(CONFDIR)
+	install -m 644 src/libcrtxy.conf-max $(CONFDIR)/libcrtxy.conf
 
 libcrtxy.so:	$(OBJ)
 	$(CC) $(CFLAGS) -shared $^ -o libcrtxy.so

@@ -1,0 +1,13 @@
+# libcrtxy configuration file; maximum settings
+
+crtxy-width=1024
+crtxy-height=768
+crtxy-bpp=32
+crtxy-windowed
+crtxy-alpha=on
+crtxy-antialias=on
+crtxy-blur=on
+crtxy-additive=on
+crtxy-backgrounds=on
+# FIXME: Set to best -bjk 2008.08.02
+crtxy-scaling=fast

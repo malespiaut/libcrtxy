@@ -50,17 +50,12 @@ int XY_trig[91] = {
       0
 };
 
-enum {
-  XY_ERR_NONE,
-  XY_ERR_OPTION_BAD,
-  XY_ERR_OPTION_UNKNOWN,
-  NUM_XY_ERRS
-};
-
 char * XY_errstr_txt[NUM_XY_ERRS] = {
   "",
   "Bad argument to option",
-  "Unknown option"
+  "Unknown option",
+  "Can't open file",
+  "Can't allocate memory"
 };
 
 
@@ -356,6 +351,36 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts)
   }
 
   return(err_arg);
+}
+
+int XY_load_options(XY_options * opts)
+{
+  int res;
+  char * fname;
+
+  res = XY_load_options_from_file(XY_INIT_LIB_CONFIG_FILE_GLOBAL, opts, XY_FALSE);
+  if (res != XY_ERR_NONE && res != XY_ERR_FILE_CANT_OPEN)
+    return(res);
+
+  if (getenv("HOME") != NULL)
+  {
+    fname = (char *) malloc(strlen(getenv("HOME")) + strlen(XY_INIT_LIB_CONFIG_FILE_LOCAL) + 2);
+    if (fname == NULL)
+      return(XY_ERR_MEM_CANT_ALLOC);
+
+    sprintf(fname, "%s/%s", getenv("HOME"), XY_INIT_LIB_CONFIG_FILE_LOCAL);
+    res = XY_load_options_from_file(fname, opts, XY_FALSE);
+  }
+
+  return(XY_ERR_NONE);
+}
+
+int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_unknowns)
+{
+  FILE * fi;
+
+  printf("Want to open: %s\n", fname);
+  return(XY_ERR_NONE);
 }
 
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)

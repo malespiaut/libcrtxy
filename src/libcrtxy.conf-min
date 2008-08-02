@@ -1,0 +1,12 @@
+# libcrtxy configuration file; minimum settings
+
+crtxy-width=320
+crtxy-height=240
+crtxy-bpp=16
+crtxy-windowed
+crtxy-alpha=off
+crtxy-antialias=off
+crtxy-blur=off
+crtxy-additive=off
+crtxy-backgrounds=off
+crtxy-scaling=best

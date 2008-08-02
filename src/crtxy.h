@@ -85,8 +85,18 @@ typedef struct XY_options_s {
 
 /* Where system-wide (global) and user's (local) config files live: */
 /* FIXME: Set during build!!! */
-#define XY_INIT_LIB_CONFIG_FILE_GLOBAL PREFIX "/libcrtxy/libcrtxy.conf"
+#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf"
 #define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc"
+
+/* Error constants: */
+enum {
+  XY_ERR_NONE,
+  XY_ERR_OPTION_BAD,
+  XY_ERR_OPTION_UNKNOWN,
+  XY_ERR_FILE_CANT_OPEN,
+  XY_ERR_MEM_CANT_ALLOC,
+  NUM_XY_ERRS
+};
 
 
 /* --- Runtime flags and options --- */
@@ -111,6 +121,8 @@ typedef struct XY_options_s {
 
 /* Options: */
 void XY_default_options(XY_options * opts);
+int XY_load_options(XY_options * opts);
+int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_unknowns);
 int XY_parse_options(int * argc, char * argv[], XY_options * opts);
 
 /* Init and quit: */
