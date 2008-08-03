@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 2, 2008
+  July 29, 2008 - August 3, 2008
 */
 
 #ifndef _CRTXY_H
@@ -177,6 +177,15 @@ void XY_free_bitmap(XY_bitmap * bitmap);
 
 /* Set the background color, and optional bitmap, its position, and
    options for scaling it to the screen size.  Enables background bitmap. */
+/* For posflags, combine (by or'ing together with the "|" operator), one
+   horizontal choice (XY_POS_LEFT, XY_POS_HCENTER or XY_POS_RIGHT) with one
+   vertical choice (XY_POS_TOP, XY_POS_VCENTER or XY_POS_BOTTOM).
+   A value of 0 also represents top-left. */
+/* x,y determine how far, in terms of canvas virtual world units (fixed point),
+   to nudge the image after it's been positoned */
+/* For scaling, use one of the following:
+   XY_SCALE_NONE, XY_SCALE_STRETCH, XY_SCALE_KEEP_ASPECT_WIDE or
+   XY_SCALE_KEEP_ASPECT_TALL */
 XY_bool XY_set_background(XY_color color, XY_bitmap * bitmap,
                           XY_fixed x, XY_fixed y, int posflags, int scaling);
 
@@ -201,7 +210,7 @@ void XY_start_frame(int fps);
 
 /* Mark the end of a frame. Screen backbuffer is made visible.
    Optionally, pause until (1000/fps) miliseconds have passed since
-   XY_start_frame() was called. */
+   XY_start_frame() was called. (If 'throttle' is set to XY_TRUE.) */
 int XY_end_frame(XY_bool throttle);
 
 
@@ -239,8 +248,8 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color);
 /* Rounds 'a' up to the nearest integer (whole). */
 #define XY_round(a) (XY_ipart((a) + (1 << (XY_FIXED_SHIFT - 1))))
 
-/* Returns cosin() and sine() of 'degrees'. ('degrees' is a non-fixed-point
-   value, in degrees.  Values outside 0-359 are accounted for. */
+/* Returns cosine() and sine() of 'degrees'. ('degrees' is a non-fixed-point
+   value, in degrees.  Values outside 0-359 are accounted for.) */
 XY_fixed XY_cos(int degrees);
 #define XY_sin(degrees) (XY_cos(90 - (degrees)))
 
