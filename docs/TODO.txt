@@ -40,6 +40,8 @@ Effects and features
 * Additive effect
 * Allow loading bitmaps from pixel data
 * Allow 'loading' bitmaps from an SDL_Surface...?
+* Add option for XY_load_options_from_fil() to call a callback with
+  unknown lines, so app-specific config files only need to get read once.
 
 Exposure
 * Expose SDL surface?
