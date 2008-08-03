@@ -119,6 +119,7 @@ void XY_default_options(XY_options * opts);
 int XY_load_options(XY_options * opts);
 int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_unknowns);
 int XY_parse_options(int * argc, char * argv[], XY_options * opts);
+int XY_parse_envvars(XY_options * opts);
 
 /* Init and quit: */
 int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash);

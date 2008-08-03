@@ -35,6 +35,14 @@ int main(int argc, char * argv[])
   XY_print_options(stdout, opts);
 
 
+  ret = XY_parse_envvars(&opts);
+  if (ret != XY_ERR_NONE)
+    return(1);
+
+  printf("\nAfter parsing enviornment variables:\n");
+  XY_print_options(stdout, opts);
+
+
   ret = XY_parse_options(&argc, argv, &opts);
   if (ret != 0)
   {

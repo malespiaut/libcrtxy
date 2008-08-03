@@ -92,6 +92,10 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
                             XY_fixed fsx2, XY_fixed fsy2,
                             XY_color);
 
+int XY_grab_envvar(char * v, int * i, int * o, char * s);
+int XY_complain_envvar(char * v, char * okay);
+
+
 /* Public functions: */
 
 void XY_default_options(XY_options * opts)
@@ -106,6 +110,130 @@ void XY_default_options(XY_options * opts)
   opts->additive = XY_FALSE;
   opts->backgrounds = XY_TRUE;
   opts->scaling = XY_OPT_SCALE_FAST;
+}
+
+int XY_grab_envvar(char * v, int * i, int * o, char * s)
+{
+  if (getenv(v) != NULL)
+  {
+    s = getenv(v);
+    *i = atoi(s);
+    if (strcmp(s, "ON") == 0 || strcmp(s, "on") == 0)
+      *o = 1;
+    else if (strcmp(s, "OFF") == 0 || strcmp(s, "off") == 0)
+      *o = 0;
+    else
+      *o = -1;
+
+    return(1);
+  }
+  else
+  {
+    s = "";
+    *i = 0;
+    *o = -1;
+
+    return(0);
+  }
+}
+
+int XY_complain_envvar(char * v, char * okay)
+{
+  fprintf(stderr, "Error: Bad libcrtxy environment variable setting: %s=%s\n", v, getenv(v));
+  if (okay != NULL)
+    fprintf(stderr, "  %s must be one of: %s\n", v, okay);
+  return(XY_ERR_OPTION_BAD);
+}
+
+
+int XY_parse_envvars(XY_options * opts)
+{
+  int nextint, nexton;
+  char * nextstr;
+
+  if (XY_grab_envvar("CRTXY_WIDTH", &nextint, &nexton, nextstr))
+  {
+    if (nextint != 0)
+      opts->displayw = nextint;
+    else
+      return(XY_complain_envvar("CRTXY_WIDTH", NULL));
+  }
+
+  if (XY_grab_envvar("CRTXY_HEIGHT", &nextint, &nexton, nextstr))
+  {
+    if (nextint != 0)
+      opts->displayh = nextint;
+    else
+      return(XY_complain_envvar("CRTXY_HEIGHT", NULL));
+  }
+
+  if (XY_grab_envvar("CRTXY_BPP", &nextint, &nexton, nextstr))
+  {
+    if (nextint == 16 || nextint == 24 || nextint == 32)
+      opts->displaybpp = nextint;
+    else if (strcmp(nextstr, "ANY") == 0 || strcmp(nextstr, "any") == 0)
+      opts->displaybpp = 0;
+    else
+      return(XY_complain_envvar("CRTXY_BPP", "16|24|32|ANY"));
+  }
+  
+  /* FIXME: Get fullscreen/window env. var */
+
+  if (XY_grab_envvar("CRTXY_ALPHA", &nextint, &nexton, nextstr))
+  {
+    if (strcmp(nextstr, "ON") == 0 || strcmp(nextstr, "on") == 0)
+      opts->alpha = XY_OPT_ALPHA_BLEND;
+    else if (strcmp(nextstr, "FAKE") == 0 || strcmp(nextstr, "fake") == 0)
+      opts->alpha = XY_OPT_ALPHA_FAKE;
+    else if (strcmp(nextstr, "OFF") == 0 || strcmp(nextstr, "off") == 0)
+      opts->alpha = XY_OPT_ALPHA_OFF;
+    else
+      return(XY_complain_envvar("CRTXY_ALPHA", "ON|FAKE|OFF"));
+  }
+
+  if (XY_grab_envvar("CRTXY_ANTIALIAS", &nextint, &nexton, nextstr))
+  {
+    if (nexton != -1)
+      opts->antialias = (nexton == 1);
+    else
+      return(XY_complain_envvar("CRTXY_ANTIALIAS", "ON|OFF"));
+  }
+
+  if (XY_grab_envvar("CRTXY_BLUR", &nextint, &nexton, nextstr))
+  {
+    if (nexton != -1)
+      opts->blur = (nexton == 1);
+    else
+      return(XY_complain_envvar("CRTXY_BLUR", "ON|OFF"));
+  }
+
+  if (XY_grab_envvar("CRTXY_ADDITIVE", &nextint, &nexton, nextstr))
+  {
+    if (nexton != -1)
+      opts->additive = (nexton == 1);
+    else
+      return(XY_complain_envvar("CRTXY_ADDITIVE", "ON|OFF"));
+  }
+
+  if (XY_grab_envvar("CRTXY_BACKGROUNDS", &nextint, &nexton, nextstr))
+  {
+    if (nexton != -1)
+      opts->backgrounds = (nexton == 1);
+    else
+      return(XY_complain_envvar("CRTXY_BACKGROUNDS", "ON|OFF"));
+  }
+
+  if (XY_grab_envvar("CRTXY_SCALING", &nextint, &nexton, nextstr))
+  {
+    if (strcmp(nextstr, "BEST") == 0 || strcmp(nextstr, "best") == 0)
+      opts->scaling = XY_OPT_SCALE_BEST;
+    else if (strcmp(nextstr, "FAST") == 0 || strcmp(nextstr, "fast") == 0)
+      opts->scaling = XY_OPT_SCALE_FAST;
+    else
+      return(XY_complain_envvar("CRTXY_SCALING", "BEST|FAST"));
+  }
+
+  return(XY_ERR_NONE);
 }
 
 int XY_parse_options(int * argc, char * argv[], XY_options * opts)

@@ -3,16 +3,13 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 1, 2008
+Last modified: August 2, 2008
 
 Documentation
 * Installation docs
 * API docs
 
 Options
-* Check for env. variables
-* Check for global option file
-* Check for local option file
 * Allow native screen resolution (for fullscreen mode), a la Tux Paint.
 
 Errors
@@ -38,5 +35,4 @@ Effects and features
 * Additive effect
 
 Exposure
-* Expose error code
 * Expose SDL surface?
