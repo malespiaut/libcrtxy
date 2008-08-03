@@ -38,6 +38,8 @@ Effects and features
 * Support repeating background patterns.
 * Do blur effect
 * Additive effect
+* Allow loading bitmaps from pixel data
+* Allow 'loading' bitmaps from an SDL_Surface...?
 
 Exposure
 * Expose SDL surface?

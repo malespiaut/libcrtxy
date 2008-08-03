@@ -1,0 +1,251 @@
+                       API for libcrtxy (CRT X-Y Library)
+
+                            http://libcrtxy.sf.net/
+                  by Bill Kendrick <bill@newbreedsoftware.com>
+
+                        August 3, 2008 - August 3, 2008
+                                 Version: 0.0.1
+
+     ----------------------------------------------------------------------
+
+Compiling with libcrtxy
+
+     Use the "crtxy-config" command to get the options necessary to compile
+     and link an application against libcrtxy.
+
+     crtxy-config --cflags
+             This outputs compiler flags necessary to compile a C or C++
+             program with libcrtxy.
+             Example: gcc game.c -c `crtxy-config --cflags`
+
+     crtxy-config --libs
+             This outputs compiler flags necessary to link a program against
+             libcrtxy as a shared library.
+             Example: gcc -o game game.o other.o `crtxy-config --libs`
+
+     crtxy-config --static-libs
+             This outputs compiler flags necessary to link a program against
+             libcrtxy as a static library.
+             Example: gcc -o game game.o other.o `crtxy-config --static-libs`
+
+     crtxy-config --version
+             This outputs the version of libcrtxy that is installed. It's
+             useful for automated checking of whether the installed version
+             of libcrtxy is compatible with what your application expects.
+
+     Note: Since libcrtxy depends on libSDL, the output of crtxy-config
+     includes the output of libSDL's sdl-config for --cflags, --libs and
+     --static-libs.
+
+Including libcrtxy header
+
+     crtxy-config --cflags should have told your compiler where to find
+     libcrtxy's headers, so you should include the main header like this:
+
+       #include "crtxy.h"
+
+     Note: libcrtxy depends on libSDL, so its SDL.h is included
+     automatically. SDL_image library's SDL_image.h may also have been
+     included. However, no harm is done by including them in your own source.
+
+Using libcrtxy
+
+  Basic Types
+
+       XY_bool
+               A boolean; either XY_TRUE or XY_FALSE.
+
+       XY_bitmap
+               A bitmap. libcrtxy lets you load images, and returns a pointer
+               to a new XY_bitmap structure.
+
+       XY_fixed
+               Since libcrtxy is meant to help you target even very low-end
+               systems, fixed-point math is used, rather than floating-point.
+               Floating-point calculations are generally slower than
+               fixed-point, and low-end systems often lack an FPU.
+
+    Basic Types Constants
+
+         XY_TRUE and XY_FALSE
+                 These represent true/success and false/failure,
+                 respectively.
+
+         XY_FIXED_ONE and XY_FIXED_HALF
+                 These represent 1 and 0.5 in libcrtxy's fixed-point.
+
+         XY_FIXED_MIN and XY_FIXED_MAX
+                 These represent the smallest number (a very large negative
+                 value) and largest number (a very large positive value) that
+                 can be represented in libcrtxy's fixed-point.
+
+         XY_FIXED_NAN
+                 Not-a-number, returned if you try to divide a fixed-point
+                 value by 0. (It happens to also be equal to XY_FIXED_MAX.)
+
+         XY_FIXED_SHIFT
+                 How much shifting ("<<" and ">>") is done when converting
+                 between integers and libcrtxy's fixed-point. For example,
+                 XY_FIXED_ONE (1.0 in fixed-point) is equal to
+                 "1 << XY_FIXED_SHIFT", and XY_FIXED_HALF (0.5 in
+                 fixed-point) is equal to "1 << (XY_FIXED_SHIFT - 1)".
+
+  Errors in libcrtxy
+
+       When calls to libcrtxy functions fail, they typically return a value
+       that you should test for. (Some functions return an XY_bool of
+       XY_FALSE, others return a NULL pointer, etc.) They also set an error
+       code which you can access:
+
+       int XY_errcode(void)
+               Returns the current error code. (See below.)
+
+       const char * XY_errstr(void)
+               Returns a human-readable string representing the current error
+               code.
+
+    Error codes
+
+         * XY_ERR_NONE - No error occured.
+         * XY_ERR_OPTION_BAD - Invalid value for an option.
+         * XY_ERR_OPTION_UNKNOWN - Unknown option.
+         * XY_ERR_FILE_CANT_OPEN - Unable to open a file.
+         * XY_ERR_MEM_CANT_ALLOC - Ran out of memory.
+         * XY_ERR_INIT_VIDEO - Unable to initialize video subsystem.
+         * XY_ERR_INIT_DISPLAY - Unable to open the display.
+         * XY_ERR_INIT_UNSUPPORTED_BPP - Color depth not supported.
+         * XY_ERR_BITMAP_CANT_DECODE - Unable to decode an image file.
+         * XY_ERR_BITMAP_CANT_CONVERT - Unable to convert a bitmap.
+         * XY_ERR_BITMAP_CANT_SCALE - Unable to scale a bitmap.
+
+  Gathering libcrtxy options
+
+       One of libcrtxy's main goals is to separate gameplay from rendering.
+       Your game should play the same on a 320x240 screen on a system with a
+       slow CPU as it does on a 1280x1024 screen on a high-end system. How
+       good things can look depends on the capabilities of the system your
+       game is running on. The end-user is given the ability to change
+       libcrtxy's options to help get your game to run well on their system.
+
+       libcrtxy provides a number of functions that determine what settings
+       the user wants for libcrtxy's options, and places them in an
+       "XY_options" structure:
+
+       void XY_default_options(XY_options * opts)
+               You must call this.
+               This fills the contents of "opts" with the default libcrtxy
+               settings (determined when libcrtxy itself was compiled.)
+
+       XY_bool XY_load_options(XY_options * opts)
+               You are encouraged to call this.
+               This opens and reads the contents of two files: a system-wide
+               (global) configuration file for libcrtxy, and a user-specific
+               (local) configuration file for libcrtxy. Neither file is
+               required, but if there are any errors reading from it (a bad
+               value to an option, or an unknown option), this function
+               returns XY_FALSE and sets the error code to XY_ERR_OPTION_BAD
+               or XY_ERR_OPTION_UNKNOWN, respectively.
+
+       XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
+       XY_bool ignore_unknowns)
+               This is useful for letting end-users place libcrtxy settings
+               in your game's config. file.
+               This opens and reads the contents of the specified file
+               ('fname') and looks for libcrtxy option settings. If the file
+               is not found or cannot be opened, this function returns
+               XY_FALSE and sets the error code to XY_ERR_FILE_CANT_OPEN. If
+               'ignore_unknowns' is set to XY_TRUE, it will ignore any lines
+               in the file that don't seem to have libcrtxy-related settings,
+               otherwise it will stop reading the file, set the error code to
+               XY_ERR_OPTION_UNKNOWN, and return XY_FALSE. If it comes across
+               any bad values for an option, it will stop reading the file,
+               set the error code to XY_ERR_OPTION_BAD and return XY_FALSE.
+
+       int XY_parse_options(int * argc, char * argv[], XY_options * opts)
+               You are encouraged to call this, then check command-line
+               arguments for your game's own settings.
+               This checks your program's command-line arguments for any
+               libcrtxy-related option settings. It 'consumes' any arguments
+               that it recognizes, by removing them from 'argv', and reducing
+               the value of 'argc'. If it comes across any bad values for an
+               option, it will stop parsing the arguments, set the error code
+               to XY_ERR_OPTION_BAD and return an index into 'argv' for the
+               questionable option. If it comes across any arguments that
+               begin with "--crtxy-" that it doesn't recognize, it will stop
+               parsing, set the error code to XY_ERR_OPTION_UNKNOWN and
+               return an index into 'argv' for that argument. If it parses
+               the command-line with no error, it returns 0 to denote
+               success. If the user supplies an argument of "--help-crtxy",
+               the available libcrtxy-related options will be displayed to
+               stdout, and the program will terminate.
+
+       XY_bool XY_parse_envvars(XY_options * opts)
+               You are encouraged to call this.
+               This checks the enviroment (via getenv()) for various
+               variables which are used to set libcrtxy options. If it comes
+               across any bad values for an option, it will stop checking
+               environment variables, set the error code to XY_ERR_OPTION_BAD
+               and return XY_FALSE.
+
+       Generally, if any of the functions return an error (non-0 from
+       XY_parse_options or XY_FALSE from any of the others), you should
+       terminate your program.
+
+       If you want to show a human-readable list of the settings inside of an
+       XY_options structure, you can use:
+
+       void XY_print_options(FILE * fi, XY_options opts)
+               'fi' is a writable file stream (e.g., a logfile opened for
+               write, stderr or stdout).
+
+    Example
+
+         #include "crtxy.h"
+
+         int main(int argc, char * argv[])
+         {
+           XY_options opts;
+           int ret;
+
+           XY_default_options(&opts);
+           if (XY_load_options(&opts) == XY_FALSE)
+           {
+             fprintf(stderr, "Error loading options: %s\n", XY_errstr());
+             return(1);
+           }
+           if (XY_parse_envvars(&opts) == XY_FALSE)
+           {
+             fprintf(stderr, "Error with env. vars.: %s\n", XY_errstr());
+             return(1);
+           }
+           ret = XY_parse_options(&argc, argv, &opts);
+           if (ret != 0)
+           {
+             fprintf(stderr, "Error with arg %s: %s\n", argv[ret],
+         XY_errstr());
+             return(1);
+           }
+           ... etc.
+
+  Available libcrtxy options:
+
+       The options libcrtxy supports are listed below, along with how they
+       should be presented in configuration files, on the command-line, and
+       as environment variables:
+
+         * FIXME: List them...
+
+ --crtxy-width WIDTH       
+ --crtxy-height HEIGHT     
+ --crtxy-bpp [16|24|32|any]
+ --crtxy-fullscreen        
+ --crtxy-fullscreen-or-windo
+ --crtxy-windowed          
+ --crtxy-alpha [on|off|fake]
+ --crtxy-antialias [on|off]
+ --crtxy-blur [on|off]     
+ --crtxy-additive [on|off] 
+ --crtxy-backgrounds [on|off
+ --crtxy-scaling [best|fast]
+
+     FIXME: More Using... content

@@ -808,6 +808,11 @@ void XY_quit(void)
   SDL_Quit();
 }
 
+int XY_errcode(void)
+{
+  return(XY_err_code);
+}
+
 const char * XY_errstr(void)
 {
   return(XY_errstr_txt[XY_err_code]);

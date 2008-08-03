@@ -3,7 +3,7 @@
                             http://libcrtxy.sf.net/
                   by Bill Kendrick <bill@newbreedsoftware.com>
 
-                         July 29, 2008 - August 1, 2008
+                         July 29, 2008 - August 3, 2008
                                  Version: 0.0.1
 
      ----------------------------------------------------------------------
@@ -79,8 +79,8 @@ Options:
           * Blurring
           * Additive effect
 
-   The options that get used are determined by the following, and in this
-   order:
+   The options that get used are determined by the following, and should
+   occur in this order:
     1. Hard-coded defaults (set at the time libcrtxy is compiled)
     2. System-wide "libcrtxy" configuration file (e.g.,
        "/etc/libcrtxy/libcrtxy.conf")
