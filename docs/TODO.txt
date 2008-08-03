@@ -8,6 +8,8 @@ Last modified: August 2, 2008
 Documentation
 * Installation docs
 * API docs
+* Comments in header file
+* Man page
 
 Options
 * Allow native screen resolution (for fullscreen mode), a la Tux Paint.
