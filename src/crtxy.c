@@ -23,12 +23,11 @@ SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
 int XY_err_code;
 
-/* FIXME: Always putting to XY_screen, so we can simplify further... */
 void (*putpixel) (SDL_Surface *, int, int, Uint32, Uint8 alph);
 Uint32 (*getpixel) (SDL_Surface * surface, int x, int y);
 SDL_Surface * (*scale_surf) (SDL_Surface * orig, int new_w, int new_h);
 
-int XY_trig[91] = {
+const int XY_trig[91] = {
   65536,  65526,  65496,  65446,  65376,
   65287,  65177,  65048,  64898,  64729,
   64540,  64332,  64104,  63856,  63589,
@@ -50,12 +49,18 @@ int XY_trig[91] = {
       0
 };
 
-char * XY_errstr_txt[NUM_XY_ERRS] = {
+const char * XY_errstr_txt[NUM_XY_ERRS] = {
   "",
   "Bad argument to option",
   "Unknown option",
   "Can't open file",
-  "Can't allocate memory"
+  "Can't allocate memory",
+  "Can't initialize SDL video",
+  "Can't open display",
+  "Unsupported display depth (bpp)",
+  "Can't decode bitmap",
+  "Can't convert surface",
+  "Can't scale surface"
 };
 
 
@@ -93,7 +98,7 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
                             XY_color);
 
 int XY_grab_envvar(char * v, int * i, int * o, char * s);
-int XY_complain_envvar(char * v, char * okay);
+void XY_complain_envvar(char * v, char * okay);
 
 
 /* Public functions: */
@@ -137,26 +142,34 @@ int XY_grab_envvar(char * v, int * i, int * o, char * s)
   }
 }
 
-int XY_complain_envvar(char * v, char * okay)
+void XY_complain_envvar(char * v, char * okay)
 {
-  fprintf(stderr, "Error: Bad libcrtxy environment variable setting: %s=%s\n", v, getenv(v));
+  fprintf(stderr, "Error: Bad libcrtxy environment variable setting: %s=%s\n",
+          v, getenv(v));
+
   if (okay != NULL)
     fprintf(stderr, "  %s must be one of: %s\n", v, okay);
-  return(XY_ERR_OPTION_BAD);
+
+  XY_err_code = XY_ERR_OPTION_BAD;
 }
 
 
-int XY_parse_envvars(XY_options * opts)
+XY_bool XY_parse_envvars(XY_options * opts)
 {
   int nextint, nexton;
-  char * nextstr;
+  char * nextstr = "";
+
+  XY_err_code = XY_ERR_NONE;
 
   if (XY_grab_envvar("CRTXY_WIDTH", &nextint, &nexton, nextstr))
   {
     if (nextint != 0)
       opts->displayw = nextint;
     else
-      return(XY_complain_envvar("CRTXY_WIDTH", NULL));
+    {
+      XY_complain_envvar("CRTXY_WIDTH", NULL);
+      return(XY_FALSE);
+    }
   }
 
   if (XY_grab_envvar("CRTXY_HEIGHT", &nextint, &nexton, nextstr))
@@ -164,7 +177,10 @@ int XY_parse_envvars(XY_options * opts)
     if (nextint != 0)
       opts->displayh = nextint;
     else
-      return(XY_complain_envvar("CRTXY_HEIGHT", NULL));
+    {
+      XY_complain_envvar("CRTXY_HEIGHT", NULL);
+      return(XY_FALSE);
+    }
   }
 
   if (XY_grab_envvar("CRTXY_BPP", &nextint, &nexton, nextstr))
@@ -174,7 +190,10 @@ int XY_parse_envvars(XY_options * opts)
     else if (strcmp(nextstr, "ANY") == 0 || strcmp(nextstr, "any") == 0)
       opts->displaybpp = 0;
     else
-      return(XY_complain_envvar("CRTXY_BPP", "16|24|32|ANY"));
+    {
+      XY_complain_envvar("CRTXY_BPP", "16|24|32|ANY");
+      return(XY_FALSE);
+    }
   }
   
   /* FIXME: Get fullscreen/window env. var */
@@ -188,7 +207,10 @@ int XY_parse_envvars(XY_options * opts)
     else if (strcmp(nextstr, "OFF") == 0 || strcmp(nextstr, "off") == 0)
       opts->alpha = XY_OPT_ALPHA_OFF;
     else
-      return(XY_complain_envvar("CRTXY_ALPHA", "ON|FAKE|OFF"));
+    {
+      XY_complain_envvar("CRTXY_ALPHA", "ON|FAKE|OFF");
+      return(XY_FALSE);
+    }
   }
 
   if (XY_grab_envvar("CRTXY_ANTIALIAS", &nextint, &nexton, nextstr))
@@ -196,7 +218,10 @@ int XY_parse_envvars(XY_options * opts)
     if (nexton != -1)
       opts->antialias = (nexton == 1);
     else
-      return(XY_complain_envvar("CRTXY_ANTIALIAS", "ON|OFF"));
+    {
+      XY_complain_envvar("CRTXY_ANTIALIAS", "ON|OFF");
+      return(XY_FALSE);
+    }
   }
 
   if (XY_grab_envvar("CRTXY_BLUR", &nextint, &nexton, nextstr))
@@ -204,7 +229,10 @@ int XY_parse_envvars(XY_options * opts)
     if (nexton != -1)
       opts->blur = (nexton == 1);
     else
-      return(XY_complain_envvar("CRTXY_BLUR", "ON|OFF"));
+    {
+      XY_complain_envvar("CRTXY_BLUR", "ON|OFF");
+      return(XY_FALSE);
+    }
   }
 
   if (XY_grab_envvar("CRTXY_ADDITIVE", &nextint, &nexton, nextstr))
@@ -212,7 +240,10 @@ int XY_parse_envvars(XY_options * opts)
     if (nexton != -1)
       opts->additive = (nexton == 1);
     else
-      return(XY_complain_envvar("CRTXY_ADDITIVE", "ON|OFF"));
+    {
+      XY_complain_envvar("CRTXY_ADDITIVE", "ON|OFF");
+      return(XY_FALSE);
+    }
   }
 
   if (XY_grab_envvar("CRTXY_BACKGROUNDS", &nextint, &nexton, nextstr))
@@ -220,7 +251,10 @@ int XY_parse_envvars(XY_options * opts)
     if (nexton != -1)
       opts->backgrounds = (nexton == 1);
     else
-      return(XY_complain_envvar("CRTXY_BACKGROUNDS", "ON|OFF"));
+    {
+      XY_complain_envvar("CRTXY_BACKGROUNDS", "ON|OFF");
+      return(XY_FALSE);
+    }
   }
 
   if (XY_grab_envvar("CRTXY_SCALING", &nextint, &nexton, nextstr))
@@ -230,10 +264,13 @@ int XY_parse_envvars(XY_options * opts)
     else if (strcmp(nextstr, "FAST") == 0 || strcmp(nextstr, "fast") == 0)
       opts->scaling = XY_OPT_SCALE_FAST;
     else
-      return(XY_complain_envvar("CRTXY_SCALING", "BEST|FAST"));
+    {
+      XY_complain_envvar("CRTXY_SCALING", "BEST|FAST");
+      return(XY_FALSE);
+    }
   }
 
-  return(XY_ERR_NONE);
+  return(XY_TRUE);
 }
 
 int XY_parse_options(int * argc, char * argv[], XY_options * opts)
@@ -481,29 +518,38 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts)
   return(err_arg);
 }
 
-int XY_load_options(XY_options * opts)
+XY_bool XY_load_options(XY_options * opts)
 {
-  int res;
+  XY_bool res;
   char * fname;
 
-  res = XY_load_options_from_file(XY_INIT_LIB_CONFIG_FILE_GLOBAL, opts, XY_FALSE);
-  if (res != XY_ERR_NONE && res != XY_ERR_FILE_CANT_OPEN)
-    return(res);
+  res = XY_load_options_from_file(XY_INIT_LIB_CONFIG_FILE_GLOBAL,
+                                  opts, XY_FALSE);
+  if (res == XY_FALSE && XY_err_code != XY_ERR_FILE_CANT_OPEN)
+    return(XY_FALSE);
 
   if (getenv("HOME") != NULL)
   {
-    fname = (char *) malloc(strlen(getenv("HOME")) + strlen(XY_INIT_LIB_CONFIG_FILE_LOCAL) + 2);
+    fname = (char *) malloc(strlen(getenv("HOME")) +
+                            strlen(XY_INIT_LIB_CONFIG_FILE_LOCAL) + 2);
     if (fname == NULL)
-      return(XY_ERR_MEM_CANT_ALLOC);
+    {
+      XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+      return(XY_FALSE);
+    }
 
     sprintf(fname, "%s/%s", getenv("HOME"), XY_INIT_LIB_CONFIG_FILE_LOCAL);
+
     res = XY_load_options_from_file(fname, opts, XY_FALSE);
+    if (res == XY_FALSE && XY_err_code != XY_ERR_FILE_CANT_OPEN)
+      return(XY_FALSE);
   }
 
-  return(XY_ERR_NONE);
+  return(XY_TRUE);
 }
 
-int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_unknowns)
+XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
+                                  XY_bool ignore_unknowns)
 {
   FILE * fi;
   char line[256];
@@ -511,11 +557,14 @@ int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_un
   int nextint, nexton;
   char * nextstr;
 
+  XY_err_code = XY_ERR_NONE;
+
   fi = fopen(fname, "r");
   if (fi == NULL)
-    return(XY_ERR_FILE_CANT_OPEN);
-
-  err = XY_ERR_NONE;;
+  {
+    XY_err_code = XY_ERR_FILE_CANT_OPEN;
+    return(XY_FALSE);
+  }
 
   i = 0;
   while (!feof(fi) && err == XY_ERR_NONE)
@@ -639,25 +688,27 @@ int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_un
   }
   fclose(fi);
 
-  return(err);
+  return(XY_err_code == XY_ERR_NONE);
 }
 
-int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
+XY_bool XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 {
   int Bpp;
 
+  XY_err_code = XY_ERR_NONE;
+
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
-    /* FIXME: Set error */
     /* FIXME: Call SDL_QuitSubSystem(SDL_INIT_VIDEO) here? */
-    return(-1);
+    XY_err_code = XY_ERR_INIT_VIDEO;
+    return(XY_FALSE);
   }
 
   XY_canvasw = canvasw;
   XY_canvash = canvash;
 
   /* FIXME: Add possibility of using SDL_ListModes to determine a suitable mode */
-  /* FIXME: Options */
+
   if (opts->fullscreen == XY_OPT_WINDOWED)
   {
     XY_screen = SDL_SetVideoMode(opts->displayw, opts->displayh,
@@ -681,9 +732,9 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 
   if (XY_screen == NULL)
   {
-    /* FIXME: Set error */
     SDL_Quit();
-    return(-1);
+    XY_err_code = XY_ERR_INIT_DISPLAY;
+    return(XY_FALSE);
   }
 
   XY_background_color = SDL_MapRGB(XY_screen->format, 0x00, 0x00, 0x00);
@@ -711,8 +762,8 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   else
   {
     /* Unsupported depth */
-    /* FIXME: Set error */
-    return(-1);
+    XY_err_code = XY_ERR_INIT_UNSUPPORTED_BPP;
+    return(XY_FALSE);
   }
 
  
@@ -745,7 +796,7 @@ int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   else
     scale_surf = scale_surf_fast;
 
-  return(0);
+  return(XY_TRUE);
 }
 
 void XY_quit(void)
@@ -757,7 +808,7 @@ void XY_quit(void)
   SDL_Quit();
 }
 
-char * XY_errstr(void)
+const char * XY_errstr(void)
 {
   return(XY_errstr_txt[XY_err_code]);
 }
@@ -792,15 +843,21 @@ XY_bitmap * XY_load_bitmap(char * filename)
   SDL_Surface * surf, * dispsurf;
   XY_bitmap * xyb;
 
+  XY_err_code = XY_ERR_NONE;
+
   xyb = (XY_bitmap *) malloc(sizeof(XY_bitmap));
   if (xyb == NULL)
-    return(NULL); /* FIXME: Set error */
+  {
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    return(NULL);
+  }
 
   surf = IMG_Load(filename);
   if (surf == NULL)
   {
     free(xyb);
-    return(NULL); /* FIXME: Set error */
+    XY_err_code = XY_ERR_BITMAP_CANT_DECODE;
+    return(NULL);
   }
 
   dispsurf = SDL_DisplayFormatAlpha(surf);
@@ -808,7 +865,8 @@ XY_bitmap * XY_load_bitmap(char * filename)
   if (dispsurf == NULL)
   {
     free(xyb);
-    return(NULL); /* FIXME: Set error */
+    XY_err_code = XY_ERR_BITMAP_CANT_CONVERT;
+    return(NULL);
   }
 
   xyb->surf = dispsurf;
@@ -822,12 +880,20 @@ XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer, int size)
   SDL_Surface * surf, * dispsurf;
   XY_bitmap * xyb;
 
+  XY_err_code = XY_ERR_NONE;
+
   if (buffer == NULL || size == 0)
-    return(NULL); /* FIXME: Set error */
+  {
+    XY_err_code = XY_ERR_BITMAP_CANT_DECODE;
+    return(NULL);
+  }
 
   xyb = (XY_bitmap *) malloc(sizeof(XY_bitmap));
   if (xyb == NULL)
-    return(NULL); /* FIXME: Set error */
+  {
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    return(NULL);
+  }
 
   rw = SDL_RWFromMem((void *) buffer, size);
 
@@ -835,7 +901,8 @@ XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer, int size)
   if (surf == NULL)
   {
     free(xyb);
-    return(NULL); /* FIXME: Set error */
+    XY_err_code = XY_ERR_BITMAP_CANT_DECODE;
+    return(NULL);
   }
 
   dispsurf = SDL_DisplayFormatAlpha(surf);
@@ -843,7 +910,8 @@ XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer, int size)
   if (dispsurf == NULL)
   {
     free(xyb);
-    return(NULL); /* FIXME: Set error */
+    XY_err_code = XY_ERR_BITMAP_CANT_CONVERT;
+    return(NULL);
   }
 
   xyb->surf = dispsurf;
@@ -862,11 +930,13 @@ void XY_free_bitmap(XY_bitmap * bitmap)
   }
 }
 
-void XY_set_background(XY_color color, XY_bitmap * bitmap,
-                       XY_fixed x, XY_fixed y, int posflags, int scaling)
+XY_bool XY_set_background(XY_color color, XY_bitmap * bitmap,
+                          XY_fixed x, XY_fixed y, int posflags, int scaling)
 {
   int w, h;
   int posx, posy;
+
+  XY_err_code = XY_ERR_NONE;
 
   XY_background_r = (color >> 24) & 0xFF;
   XY_background_g = (color >> 16) & 0xFF;
@@ -875,8 +945,6 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
                                    XY_background_r,
                                    XY_background_g,
                                    XY_background_b);
-
-  /* FIXME: Adhere to bitmap option setting! */
 
   if (XY_background_bitmap != NULL)
     XY_free_bitmap(XY_background_bitmap);
@@ -888,7 +956,11 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
 
     XY_background_bitmap_enabled = XY_TRUE;
     XY_background_bitmap = malloc(sizeof(XY_bitmap));
-    /* FIXME: check for errors */
+    if (XY_background_bitmap == NULL)
+    {
+      XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+      return(XY_FALSE);
+    }
 
     if (scaling == XY_SCALE_STRETCH)
     {
@@ -915,7 +987,8 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
       {
         free(XY_background_bitmap);
         XY_background_bitmap = NULL;
-        return; /* FIXME: Report errors */
+        XY_err_code = XY_ERR_BITMAP_CANT_SCALE;
+        return(XY_FALSE);
       }
       XY_background_bitmap->surf = SDL_DisplayFormatAlpha(scaled_surf);
       SDL_FreeSurface(scaled_surf);
@@ -929,7 +1002,8 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
     {
       free(XY_background_bitmap);
       XY_background_bitmap = NULL;
-      return; /* FIXME: Report errors */
+      XY_err_code = XY_ERR_BITMAP_CANT_CONVERT;
+      return(XY_FALSE);
     }
 
     /* Position */
@@ -957,11 +1031,14 @@ void XY_set_background(XY_color color, XY_bitmap * bitmap,
     XY_background_bitmap_enabled = XY_FALSE;
     XY_background_bitmap = NULL;
   }
+
+  return(XY_TRUE);
 }
 
 SDL_Surface * scale_surf_best(SDL_Surface * orig, int new_w, int new_h)
 {
-  return(NULL);
+  /* FIXME: Implement it! */
+  return(scale_surf_fast(orig, new_w, new_h));
 }
 
 SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
@@ -988,20 +1065,21 @@ SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
 			   orig->format->Gmask,
 			   orig->format->Bmask,
 			   orig->format->Amask);
-  /* FIXME: Check for errors */
+  if (s == NULL)
+    return(NULL);
 
   if (orig->format->BytesPerPixel == 2)
     gp = getpixel_16;
   else if (orig->format->BytesPerPixel == 3)
     gp = getpixel_24;
-  else if (orig->format->BytesPerPixel == 4)
+  else /* if (orig->format->BytesPerPixel == 4) */
     gp = getpixel_32;
 
   if (s->format->BytesPerPixel == 2)
     pp = putpixel_16;
   else if (s->format->BytesPerPixel == 3)
     pp = putpixel_24;
-  else if (s->format->BytesPerPixel == 4)
+  else /* if (s->format->BytesPerPixel == 4) */
     pp = putpixel_32;
 
   for (y = 0; y < new_h; y++)
@@ -1402,49 +1480,42 @@ int XY_get_screenh(void)
   return(XY_screen->h);
 }
 
-/* FIXME: Handle alpha value if alpha option is enabled;
-   For 'dumb' mode (XY_ALPHA_FAKE), always just blend with background color;
-   For 'real' mode (XY_ALPHA_BLEND), blend with the current pixel;
-   For 'off' mode (XY_ALPHA_NONE), just use the RBG value, ignore Alpha
-     (unless it's 0!)
-*/
-
 void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
 {
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
 
-    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
-      return;
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
+    return;
 
-    *(Uint16 *)p = pixel;
+  *(Uint16 *)p = pixel;
 }
 
 void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
 {
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
 
-    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
-      return;
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
+    return;
 
-    if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-        p[0] = (pixel >> 16) & 0xff;
-        p[1] = (pixel >> 8) & 0xff;
-        p[2] = pixel & 0xff;
-    } else {
-        p[0] = pixel & 0xff;
-        p[1] = (pixel >> 8) & 0xff;
-        p[2] = (pixel >> 16) & 0xff;
-    }
+  if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+      p[0] = (pixel >> 16) & 0xff;
+      p[1] = (pixel >> 8) & 0xff;
+      p[2] = pixel & 0xff;
+  } else {
+      p[0] = pixel & 0xff;
+      p[1] = (pixel >> 8) & 0xff;
+      p[2] = (pixel >> 16) & 0xff;
+  }
 }
 
 void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
 {
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
+  Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
 
-    if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
-      return;
+  if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
+    return;
 
-    *(Uint32 *)p = pixel;
+  *(Uint32 *)p = pixel;
 }
 
 void putpixel_fakea_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
@@ -1732,7 +1803,3 @@ Uint32 getpixel_32(SDL_Surface * surface, int x, int y)
 
   return *(Uint32 *) p;		// 32-bit display
 }
-
-/* FIXME: Implement Xiaolin Wu's antialiased line algorithm
-   ( http://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm ) */
-

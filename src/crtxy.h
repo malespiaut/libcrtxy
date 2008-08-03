@@ -90,6 +90,12 @@ enum {
   XY_ERR_OPTION_UNKNOWN,
   XY_ERR_FILE_CANT_OPEN,
   XY_ERR_MEM_CANT_ALLOC,
+  XY_ERR_INIT_VIDEO,
+  XY_ERR_INIT_DISPLAY,
+  XY_ERR_INIT_UNSUPPORTED_BPP,
+  XY_ERR_BITMAP_CANT_DECODE,
+  XY_ERR_BITMAP_CANT_CONVERT,
+  XY_ERR_BITMAP_CANT_SCALE,
   NUM_XY_ERRS
 };
 
@@ -116,17 +122,18 @@ enum {
 
 /* Options: */
 void XY_default_options(XY_options * opts);
-int XY_load_options(XY_options * opts);
-int XY_load_options_from_file(char * fname, XY_options * opts, XY_bool ignore_unknowns);
+XY_bool XY_load_options(XY_options * opts);
+XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
+                                  XY_bool ignore_unknowns);
 int XY_parse_options(int * argc, char * argv[], XY_options * opts);
-int XY_parse_envvars(XY_options * opts);
+XY_bool XY_parse_envvars(XY_options * opts);
 
 /* Init and quit: */
-int XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash);
+XY_bool XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash);
 void XY_quit(void);
 
 /* Errors: */
-char * XY_errstr(void);
+const char * XY_errstr(void);
 void XY_print_options(FILE * fi, XY_options opts);
 
 /* Load and free bitmap: */
@@ -136,8 +143,8 @@ void XY_free_bitmap(XY_bitmap * bitmap);
 
 /* Setting background: */
 
-void XY_set_background(XY_color color, XY_bitmap * bitmap,
-                       XY_fixed x, XY_fixed y, int posflags, int scaling);
+XY_bool XY_set_background(XY_color color, XY_bitmap * bitmap,
+                          XY_fixed x, XY_fixed y, int posflags, int scaling);
 void XY_enable_background(XY_bool enable);
 
 

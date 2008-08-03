@@ -14,7 +14,10 @@ else
 endif
 
 SDL_CFLAGS=$(shell sdl-config --cflags)
-CFLAGS=-g -Wall -DVERSION="$(VERSION)" $(SDL_CFLAGS) -DPREFIX=\"$(PREFIX)\" -DCONFDIR=\"$(CONFDIR)\"
+CFLAGS=-O2 -g -Wall \
+  $(SDL_CFLAGS) \
+  -DPREFIX=\"$(PREFIX)\" -DCONFDIR=\"$(CONFDIR)\" \
+  -DVERSION="$(VERSION)"
 LIBDIR=$(PREFIX)/lib
 INCDIR=$(PREFIX)/include
 BINDIR=$(PREFIX)/bin
@@ -71,7 +74,7 @@ crtxy-config:	src/crtxy-config.sh.in
 	chmod a+x $@
 
 drawlines.o:	src/drawlines.c src/crtxy.h crtxy-config
-	$(CC) $(shell ./crtxy-config --cflags) $< -c -o $@
+	$(CC) -O2 -g -Wall $(shell ./crtxy-config --cflags) $< -c -o $@
 
 drawlines:	drawlines.o
 	$(CC) $< -o $@ $(shell ./crtxy-config --libs)

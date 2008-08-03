@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
 
 
   ret = XY_load_options(&opts);
-  if (ret != XY_ERR_NONE)
+  if (!ret)
     return(1);
 
   printf("\nAfter loading options:\n");
@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
 
 
   ret = XY_parse_envvars(&opts);
-  if (ret != XY_ERR_NONE)
+  if (!ret)
     return(1);
 
   printf("\nAfter parsing enviornment variables:\n");

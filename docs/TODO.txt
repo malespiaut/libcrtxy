@@ -13,17 +13,20 @@ Documentation
 
 Options
 * Allow native screen resolution (for fullscreen mode), a la Tux Paint.
-
-Errors
-* XY_init() set error
-* XY_load_bitmap() set error
-* More error codes & strings.
+* Fullscreen/window not controlled by env. vars. yet.
+* Look into SDL_ListModes
 
 Optimizations
 * Create a line clip routine
 * Lock/Unlock SDL surfaces!!!
+* Dirty rectangles
+
+Code cleanup
+* Split code into modules
+* SDL_QuitSubSystem() instead of SDL_Quit()?
 
 Rendering implementations
+* "Best" bitmap scaling mode
 * Implement OpenGL for everything we will have done manually in SDL
 * Support a background color map (like plastic overlays in games like
   Star Castle).  Background would hint those colors, and line-drawing
