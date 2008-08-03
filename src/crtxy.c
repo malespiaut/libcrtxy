@@ -1801,5 +1801,5 @@ Uint32 getpixel_32(SDL_Surface * surface, int x, int y)
    * pixel's value (an 8-bit palette value, or a 16-, 24- or 32-bit
    * RGB value) */
 
-  return *(Uint32 *) p;		// 32-bit display
+  return *(Uint32 *) p;		/* 32-bit display */
 }

@@ -67,15 +67,15 @@ typedef Sint32 XY_fixed;
 #define XY_OPT_SCALE_FAST 1 /* Stretch pixels with no blending */
 
 typedef struct XY_options_s {
-  int displayw, displayh;  // Size of window or fullscreen display
-  int displaybpp; // Display depth (16bpp, 24bpp, 32bpp)
-  int fullscreen; // Window, Want Fullscreen or Require Fullscreen?
-  int alpha;  // Alpha-blend, fake it, or none at all (just on/off)?
-  XY_bool antialias;  // Anti-alias lines (Xiaolin Wu) or not (Bresenham)?
-  XY_bool blur;  // Add blur effect?
-  XY_bool additive;  // Additive pixel effect?
-  XY_bool backgrounds;  // Support fullscreen background
-  int scaling;  // Fast or Best scaling?
+  int displayw, displayh;  /* Size of window or fullscreen display */
+  int displaybpp; /* Display depth (16bpp, 24bpp, 32bpp) */
+  int fullscreen; /* Window, Want Fullscreen or Require Fullscreen? */
+  int alpha;  /* Alpha-blend, fake it, or none at all (just on/off)? */
+  XY_bool antialias;  /* Anti-alias lines (Xiaolin Wu) or not (Bresenham)? */
+  XY_bool blur;  /* Add blur effect? */
+  XY_bool additive;  /* Additive pixel effect? */
+  XY_bool backgrounds;  /* Support fullscreen background */
+  int scaling;  /* Fast or Best scaling? */
 } XY_options;
 
 /* Where system-wide (global) and user's (local) config files live: */
