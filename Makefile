@@ -32,15 +32,15 @@ OBJ=crtxy.o
 
 all:	libcrtxy.so libcrtxy.a crtxy-config
 
-tests:	drawlines
+tests:	drawlines rockdodge
 
 clean:
 	-rm libcrtxy.so
 	-rm libcrtxy.a
 	-rm crtxy.o
 	-rm crtxy-config
-	-rm drawlines.o
-	-rm drawlines
+	-rm drawlines.o rockdodge.o
+	-rm drawlines rockdodge
 
 install:
 	install -d $(LIBDIR)
@@ -77,6 +77,12 @@ drawlines.o:	src/drawlines.c src/crtxy.h crtxy-config
 	$(CC) -O2 -g -Wall $(shell ./crtxy-config --cflags) $< -c -o $@
 
 drawlines:	drawlines.o
+	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
+
+rockdodge.o:	src/rockdodge.c src/crtxy.h crtxy-config
+	$(CC) -O2 -g -Wall $(shell ./crtxy-config --cflags) $< -c -o $@
+
+rockdodge:	rockdodge.o
 	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
 
 .PHONY: all clean install tests
