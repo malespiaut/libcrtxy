@@ -1461,12 +1461,12 @@ void XY_screen_to_canvas(int sx, int sy, XY_fixed * cx, XY_fixed * cy)
 
 int XY_canvasx_to_screenx(XY_fixed cx)
 {
-  return(cx * XY_screen->w) / XY_canvasw;
+  return(((cx >> XY_FIXED_SHIFT_HALF) * XY_screen->w) / (XY_canvasw >> XY_FIXED_SHIFT_HALF));
 }
 
 int XY_canvasy_to_screeny(XY_fixed cy)
 {
-  return(cy * XY_screen->h) / XY_canvash;
+  return(((cy >> XY_FIXED_SHIFT_HALF) * XY_screen->h) / (XY_canvash >> XY_FIXED_SHIFT_HALF));
 }
 
 void XY_canvas_to_screen(XY_fixed cx, XY_fixed cy, int * sx, int * sy)

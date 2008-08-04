@@ -38,7 +38,7 @@ int main(int argc, char * argv[])
   XY_bool done;
   SDL_Event event;
   int i, ret, c;
-  XY_fixed x, y, xm, ym, oldxm, oldym;
+  XY_fixed x, y, xm, ym;
   XY_fixed x1, y1, x2, y2, x3, y3, x4, y4, r;
   int angle;
   rock_t rocks[NUM_ROCKS];
