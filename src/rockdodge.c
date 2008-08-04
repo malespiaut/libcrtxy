@@ -69,6 +69,8 @@ int main(int argc, char * argv[])
     return(1);
   }
 
+  srand(SDL_GetTicks());
+
   black = XY_setcolor(0x00, 0x00, 0x00, 0xff);
   white = XY_setcolor(0xff, 0xff, 0xff, 0xff);
   for (i = 0; i < NUM_COLORS; i++)
