@@ -3,12 +3,12 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 3, 2008
+Last modified: August 5, 2008
 
 Documentation
-* Installation docs
-* API docs
-* Man page
+* Create installation docs
+* Finish API docs
+* Create man pages
 
 Options
 * Allow native screen resolution (for fullscreen mode), a la Tux Paint.
@@ -31,7 +31,8 @@ Rendering implementations
   Star Castle).  Background would hint those colors, and line-drawing
   would pick them up.  (Some special mode, alternative drawing functions,
   or a special XY_color value.)
-* Allow background bitmaps to be scaled, or set in terms of canvas units...?
+* Allow background bitmaps to be scaled (by percent, or set in terms of
+  canvas units)...?
 
 Effects and features
 * Add support for line wrap-around (a la Asteroids)
@@ -42,6 +43,4 @@ Effects and features
 * Allow 'loading' bitmaps from an SDL_Surface...?
 * Add option for XY_load_options_from_fil() to call a callback with
   unknown lines, so app-specific config files only need to get read once.
-
-Exposure
-* Expose SDL surface?
+* Add line intersection routine
