@@ -264,8 +264,8 @@ void XY_screen_to_canvas(int sx, int sy, XY_fixed * cx, XY_fixed * cy);
 
 /* Convert a canvas virtual world coordinate (fixed point) into the
    nearest screen coordinate (an integer) */
-int XY_canvasx_to_screenx(int cx);
-int XY_canvasy_to_screeny(int cy);
+XY_fixed XY_canvasx_to_screenx(int cx);
+XY_fixed XY_canvasy_to_screeny(int cy);
 void XY_canvas_to_screen(XY_fixed cx, XY_fixed cy, int * sx, int * sy);
 
 /* Returns the screen's width and height, in pixels (integer) */
