@@ -45,3 +45,8 @@ Effects and features
   unknown lines, so app-specific config files only need to get read once.
 * Add line intersection test routine (for collision detection).
 * Add fade-out / persistence of vision effect.
+
+Desktop interfacing
+* Support window icon
+* Support window title
+
