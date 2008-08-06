@@ -3,7 +3,7 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 5, 2008
+Last modified: August 6, 2008
 
 Documentation
 * Create installation docs
@@ -43,4 +43,5 @@ Effects and features
 * Allow 'loading' bitmaps from an SDL_Surface...?
 * Add option for XY_load_options_from_fil() to call a callback with
   unknown lines, so app-specific config files only need to get read once.
-* Add line intersection routine
+* Add line intersection test routine (for collision detection).
+* Add fade-out / persistence of vision effect.

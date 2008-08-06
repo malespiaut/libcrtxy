@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - August 2, 2008
+# July 28, 2008 - August 5, 2008
 
 PREFIX=/usr/local
 
@@ -41,6 +41,28 @@ clean:
 	-rm crtxy-config
 	-rm drawlines.o rockdodge.o
 	-rm drawlines rockdodge
+
+releaseclean:
+	-rm -rf build/libcrtxy-$(VERSION) build/libcrtxy-$(VERSION).tar.gz
+	-if [ -d build ] ; then rmdir build ; fi
+
+release:	releasedir
+	cd build ; \
+	    tar -czvf libcrtxy-$(VERSION).tar.gz libcrtxy-$(VERSION)
+
+releasedir:	build/libcrtxy-$(VERSION)
+
+build/libcrtxy-$(VERSION):
+	mkdir -p build/libcrtxy-$(VERSION)
+	find . -follow \
+	    \( -wholename '*/CVS' \
+	       -o -name .cvsignore \
+	       -o -name '*~' \
+	       -o -name 'build' \
+	       -o -name '.#*' \) \
+	    -prune -o \
+	    -type f \
+	    -exec cp --parents -vdp \{\} build/libcrtxy-$(VERSION)/ \;
 
 install:
 	install -d $(LIBDIR)
@@ -85,4 +107,4 @@ rockdodge.o:	src/rockdodge.c src/crtxy.h crtxy-config
 rockdodge:	rockdodge.o
 	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
 
-.PHONY: all clean install tests
+.PHONY: all clean install tests releaseclean releasedir release

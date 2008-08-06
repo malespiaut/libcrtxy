@@ -4,6 +4,15 @@ http://libcrtxy.sf.net/
 Bill Kendrick <bill@newbreedsoftware.com>
 
 
-2008.07.28 (0.0.1)
-* Created project.
+2008.08.05 (0.0.1)
+* Initial release:
+  + Options support via configuration files, command-line and env. vars.
+  + SDL anti-aliased lines.
+  + SDL non-anti-aliased lines.
+  + Alpha-blending support.
+  + SDL 'fast' bitmap scaling.
+  + Background bitmap support, with scaling and positioning options.
+  + Fixed-point sine() & cosine().
+  + Test applications: drawlines & rockdodge.
+  + Began API documentation (incomplete).
 
