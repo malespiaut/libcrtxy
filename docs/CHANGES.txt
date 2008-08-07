@@ -4,6 +4,10 @@ http://libcrtxy.sf.net/
 Bill Kendrick <bill@newbreedsoftware.com>
 
 
+2008.08.07 (0.0.2)
+* Optimizations
+  + Began dirty rectangle update implementation
+
 2008.08.05 (0.0.1)
 * Initial release:
   + Options support via configuration files, command-line and env. vars.

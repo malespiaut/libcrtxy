@@ -6,11 +6,13 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 2, 2008
+  July 29, 2008 - August 7, 2008
 */
 
 #include "crtxy.h"
 #include <SDL_image.h>
+
+#define XY_DIRTY_RECT_STEP 128
 
 SDL_Surface * XY_screen;
 XY_fixed XY_canvasw, XY_canvash;
@@ -22,6 +24,10 @@ XY_bool XY_background_bitmap_enabled;
 SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
 int XY_err_code;
+SDL_Rect * XY_dirty_rects, * XY_dirty_rects_erasure, * XY_dirty_rects_all;
+int XY_dirty_rect_count, XY_dirty_rect_erasure_count;
+int XY_dirty_rect_max;
+XY_bool XY_dirty_all;
 
 void (*putpixel) (SDL_Surface *, int, int, Uint32, Uint8 alph);
 Uint32 (*getpixel) (SDL_Surface * surface, int x, int y);
@@ -99,6 +105,11 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
 
 int XY_grab_envvar(char * v, int * i, int * o, char * s);
 void XY_complain_envvar(char * v, char * okay);
+
+void XY_add_dirty_rect(int x1, int y1, int x2, int y2);
+void XY_merge_dirty_rects(SDL_Rect * rects, int * cnt);
+XY_bool XY_rects_intersect(SDL_Rect * rects, int r1, int r2);
+void XY_rects_combine(SDL_Rect * rects, int r1, int r2);
 
 
 /* Public functions: */
@@ -707,6 +718,38 @@ XY_bool XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
   XY_canvasw = canvasw;
   XY_canvash = canvash;
 
+  XY_dirty_rect_count = 0;
+  XY_dirty_rect_max = XY_DIRTY_RECT_STEP;
+  XY_dirty_rects = (SDL_Rect *) malloc(sizeof(SDL_Rect) * XY_dirty_rect_max);
+  if (XY_dirty_rects == NULL)
+  {
+    SDL_Quit();
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    return(XY_FALSE);
+  }
+
+  XY_dirty_rects_erasure = (SDL_Rect *) malloc(sizeof(SDL_Rect) *
+                                               XY_dirty_rect_max);
+  if (XY_dirty_rects_erasure == NULL)
+  {
+    free(XY_dirty_rects);
+    SDL_Quit();
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    return(XY_FALSE);
+  }
+  
+  XY_dirty_rects_all = (SDL_Rect *) malloc(sizeof(SDL_Rect) *
+                                           XY_dirty_rect_max * 2);
+  if (XY_dirty_rects_all == NULL)
+  {
+    free(XY_dirty_rects);
+    free(XY_dirty_rects_erasure);
+    SDL_Quit();
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    return(XY_FALSE);
+  }
+  
+
   /* FIXME: Add possibility of using SDL_ListModes to determine a suitable mode */
 
   if (opts->fullscreen == XY_OPT_WINDOWED)
@@ -803,6 +846,13 @@ void XY_quit(void)
 {
   if (XY_background_bitmap != NULL)
     XY_free_bitmap(XY_background_bitmap);
+
+  if (XY_dirty_rects != NULL)
+    free(XY_dirty_rects);
+  if (XY_dirty_rects_erasure != NULL)
+    free(XY_dirty_rects_erasure);
+  if (XY_dirty_rects_all != NULL)
+    free(XY_dirty_rects_all);
 
   /* FIXME: Use SDL_QuitSubSystem(SDL_INIT_VIDEO) instead? */
   SDL_Quit();
@@ -942,6 +992,8 @@ XY_bool XY_set_background(XY_color color, XY_bitmap * bitmap,
   int posx, posy;
 
   XY_err_code = XY_ERR_NONE;
+
+  XY_dirty_all = XY_TRUE;
 
   XY_background_r = (color >> 24) & 0xFF;
   XY_background_g = (color >> 16) & 0xFF;
@@ -1150,17 +1202,60 @@ void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a)
 
 void XY_enable_background(XY_bool enable)
 {
+  if (XY_background_bitmap_enabled != enable)
+    XY_dirty_all = XY_TRUE;
+
   XY_background_bitmap_enabled = enable;
 }
 
 void XY_start_frame(int fps)
 {
-  /* FIXME: Dirty rects? */
-  SDL_FillRect(XY_screen, NULL, XY_background_color);
+  int i;
+  SDL_Rect src;
+  SDL_Rect * dest;
 
-  if (XY_background_bitmap != NULL && XY_background_bitmap_enabled == XY_TRUE)
-    SDL_BlitSurface(XY_background_bitmap->surf, NULL,
-                    XY_screen, &XY_background_dest);
+  if (XY_dirty_all || XY_dirty_rects == NULL)
+  {
+    SDL_FillRect(XY_screen, NULL, XY_background_color);
+
+    if (XY_background_bitmap != NULL && XY_background_bitmap_enabled == XY_TRUE)
+      SDL_BlitSurface(XY_background_bitmap->surf, NULL,
+                      XY_screen, &XY_background_dest);
+
+    XY_dirty_rect_erasure_count = 0;
+  }
+  else
+  {
+    memcpy(XY_dirty_rects_erasure, XY_dirty_rects,
+           sizeof(SDL_Rect) * XY_dirty_rect_count);
+    XY_dirty_rect_erasure_count = XY_dirty_rect_count;
+
+    for (i = 0; i < XY_dirty_rect_count; i++)
+    {
+      SDL_FillRect(XY_screen, &(XY_dirty_rects_erasure[i]),
+                   XY_background_color);
+
+      if (XY_background_bitmap != NULL &&
+          XY_background_bitmap_enabled == XY_TRUE)
+      {
+        dest = &(XY_dirty_rects_erasure[i]);
+        src.x = dest->x - XY_background_dest.x;
+        src.y = dest->y - XY_background_dest.y;
+        src.w = dest->w;
+        src.h = dest->h;
+
+        if (src.x >= 0 && src.y >= 0 &&
+            src.x < XY_background_bitmap->surf->w &&
+            src.y < XY_background_bitmap->surf->h)
+        {
+          SDL_BlitSurface(XY_background_bitmap->surf, &src,
+                          XY_screen, dest);
+        }
+      }
+    }
+  }
+
+  XY_dirty_rect_count = 0;
 
   XY_want_fps = (fps == 0 ? 1 : fps);
   XY_start_time = SDL_GetTicks();
@@ -1169,9 +1264,35 @@ void XY_start_frame(int fps)
 int XY_end_frame(XY_bool throttle)
 {
   Uint32 end_time;
+  int sz, sz2, n;
+  void * * ptr;
 
-  /* FIXME: Dirty rects? */
-  SDL_Flip(XY_screen);
+  if (XY_dirty_all || XY_dirty_rects == NULL)
+    SDL_Flip(XY_screen);
+  else
+  {
+    XY_merge_dirty_rects(XY_dirty_rects, &XY_dirty_rect_count);
+
+    sz = (sizeof(SDL_Rect) * XY_dirty_rect_count);
+    sz2 = (sizeof(SDL_Rect) * XY_dirty_rect_erasure_count);
+
+    ptr = (void*) XY_dirty_rects_all;
+
+    memset(ptr, 0, sz + sz2);
+    memcpy(ptr, XY_dirty_rects, sz);
+
+    ptr = (void *) ((int) ptr + sz);
+    memcpy(ptr, XY_dirty_rects_erasure, sz2);
+
+    n = XY_dirty_rect_count + XY_dirty_rect_erasure_count;
+
+    XY_merge_dirty_rects(XY_dirty_rects_all, &n);
+
+    SDL_UpdateRects(XY_screen, n, XY_dirty_rects_all);
+  }
+  
+  XY_dirty_all = XY_FALSE;
+  
   end_time = SDL_GetTicks();
 
   if (throttle)
@@ -1206,6 +1327,8 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
     XY_draw_line_xiaolinwu(fsx1, fsy1, fsx2, fsy2, color);
   else
     XY_draw_line_bresenham(fsx1, fsy1, fsx2, fsy2, color);
+
+  XY_add_dirty_rect(sx1, sy1, sx2 + 1, sy2 + 1);
 }
 
 void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
@@ -1808,3 +1931,156 @@ Uint32 getpixel_32(SDL_Surface * surface, int x, int y)
 
   return *(Uint32 *) p;		/* 32-bit display */
 }
+
+void XY_add_dirty_rect(int x1, int y1, int x2, int y2)
+{
+  int tmp;
+
+  if (XY_dirty_rects == NULL || XY_dirty_all)
+    return;
+
+  if (XY_dirty_rect_count >= XY_dirty_rect_max)
+  {
+    XY_dirty_rect_max += XY_DIRTY_RECT_STEP;
+    XY_dirty_rects = (SDL_Rect *) realloc(XY_dirty_rects,
+                       sizeof(SDL_Rect) * XY_dirty_rect_max);
+    XY_dirty_rects_erasure = (SDL_Rect *) realloc(XY_dirty_rects_erasure,
+                               sizeof(SDL_Rect) * XY_dirty_rect_max);
+    XY_dirty_rects_all = (SDL_Rect *) realloc(XY_dirty_rects_all,
+                           sizeof(SDL_Rect) * XY_dirty_rect_max * 2);
+
+    if (XY_dirty_rects == NULL || XY_dirty_rects_erasure == NULL ||
+        XY_dirty_rects_all == NULL)
+      return;
+  }
+
+  if (x1 <= x2)
+  {
+    x1 = x1 - 1;
+    x2 = x2 + 1;
+  }
+  else
+  {
+    tmp = x1;
+    x1 = x2 - 1;
+    x2 = tmp + 1;
+  }
+
+  if (y1 <= y2)
+  {
+    y1 = y1 - 1;
+    y2 = y2 + 1;
+  }
+  else
+  {
+    tmp = y1;
+    y1 = y2 - 1;
+    y2 = tmp + 1;
+  }
+
+  if (x1 < 0)
+    x1 = 0;
+  if (x1 >= XY_screen->w)
+    x1 = XY_screen->w - 1;
+  if (y1 < 0) 
+    y1 = 0;
+  if (y1 >= XY_screen->h)
+    y1 = XY_screen->h - 1;
+
+  if (x2 < 0)
+    x2 = 0;
+  if (x2 >= XY_screen->w)
+    x2 = XY_screen->w - 1;
+  if (y2 < 0)
+    y2 = 0;
+  if (y2 >= XY_screen->h)
+    y2 = XY_screen->h - 1;
+
+  if (x2 - x1 + 1 == 0 || y2 - y1 + 1 == 0)
+    return;
+
+  XY_dirty_rects[XY_dirty_rect_count].x = x1;
+  XY_dirty_rects[XY_dirty_rect_count].w = x2 - x1 + 1;
+
+  XY_dirty_rects[XY_dirty_rect_count].y = y1;
+  XY_dirty_rects[XY_dirty_rect_count].h = y2 - y1 + 1;
+
+  XY_dirty_rect_count++;
+}
+
+void XY_merge_dirty_rects(SDL_Rect * rects, int * cnt)
+{
+  int i, j;
+  XY_bool done;
+
+  /* FIXME: Make rect. merging work! */
+
+  return;
+
+  do
+  {
+    done = XY_TRUE;
+
+    for (i = 0; i < (*cnt) - 1; i++)
+    {
+      for (j = i + 1; j < *cnt; j++)
+      {
+        if (XY_rects_intersect(rects, i, j))
+        {
+          XY_rects_combine(rects, i, j);
+
+          if (j < (*cnt) - 1)
+          {
+            memcpy(&(rects[j]), &(rects[(*cnt) - 1]), sizeof(SDL_Rect));
+          }
+          *cnt = (*cnt) - 1;
+        }
+      }
+    }
+  }
+  while (!done);
+}
+
+XY_bool XY_rects_intersect(SDL_Rect * rects, int r1, int r2)
+{
+  int left1, right1, top1, bottom1;
+  int left2, right2, top2, bottom2;
+
+  left1 = rects[r1].x;
+  right1 = rects[r1].x + rects[r1].w - 1;
+  top1 = rects[r1].y;
+  bottom1 = rects[r1].y + rects[r1].h - 1;
+
+  left2 = rects[r2].x;
+  right2 = rects[r2].x + rects[r2].w - 1;
+  top2 = rects[r2].y;
+  bottom2 = rects[r2].y + rects[r2].h - 1;
+
+  return !(left1 > right2 || right1 < left2 ||
+           top1 > bottom2 || bottom1 < top2);
+}
+
+void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
+{
+  int right1, bottom1;
+  int right2, bottom2;
+
+  right1 = rects[r1].x + rects[r1].w - 1;
+  bottom1 = rects[r1].y + rects[r1].h - 1;
+
+  right2 = rects[r2].x + rects[r2].w - 1;
+  bottom2 = rects[r2].y + rects[r2].h - 1;
+
+  if (rects[r2].x < rects[r1].x)
+    rects[r1].x = rects[r2].x;
+
+  if (right2 > right1)
+    rects[r1].w = right2 - rects[r1].x + 1;
+
+  if (rects[r2].y < rects[r1].y)
+    rects[r1].y = rects[r2].y;
+
+  if (bottom2 > bottom1)
+    rects[r1].y = bottom2 - rects[r1].y + 1;
+}
+
