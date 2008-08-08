@@ -3,7 +3,7 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 7, 2008
+Last modified: August 8, 2008
 
 Documentation
 * Create installation docs
@@ -18,6 +18,8 @@ Options
 Optimizations
 * Create a line clip routine
 * Lock/Unlock SDL surfaces!!!
+* Subdivide dirty rectangles so they don't include as much unused area around
+  diagonal lines.
 
 Code cleanup
 * Split code into modules
