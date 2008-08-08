@@ -4,11 +4,13 @@ http://libcrtxy.sf.net/
 Bill Kendrick <bill@newbreedsoftware.com>
 
 
-2008.08.07 (0.0.2)
+2008.08.08 (0.0.2)
 * Optimizations
   + Began dirty rectangle update implementation
 * Options
   + Added fullscreen/window env. var. support.
+* Fixes
+  + XY_FIXED_MIN and _MAX didn't account for the fractional part. Fixed.
 
 2008.08.05 (0.0.1)
 * Initial release:

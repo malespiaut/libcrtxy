@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 3, 2008
+  July 29, 2008 - August 8, 2008
 */
 
 #ifndef _CRTXY_H
@@ -42,9 +42,9 @@ typedef Sint32 XY_fixed;
 #define XY_FIXED_ONE (1 << XY_FIXED_SHIFT) /* Quick way to get '1' in fixed */
 #define XY_FIXED_HALF (1 << (XY_FIXED_SHIFT - 1)) /* Quick way to get '0.5' */
 
-/* Limits for fixed-point values */
-#define XY_FIXED_MAX (0x7FFFFF << XY_FIXED_SHIFT)
-#define XY_FIXED_MIN ((-(XY_FIXED_MAX) - 1) << XY_FIXED_SHIFT)
+/* Limits for fixed-point values (for signed 32-bit ints) */
+#define XY_FIXED_MAX 0x7FFFFFFF
+#define XY_FIXED_MIN -(0x80000000)
 #define XY_FIXED_NAN XY_FIXED_MAX /* Not-a-number (when you divide by zero */
 
 
