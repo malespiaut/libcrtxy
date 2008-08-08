@@ -35,17 +35,23 @@ Rendering implementations
 * Allow background bitmaps to be scaled (by percent, or set in terms of
   canvas units)...?
 
-Effects and features
-* Add support for line wrap-around (a la Asteroids)
+Visual effects
 * Support repeating background patterns.
 * Do blur effect
 * Additive effect
+* Add fade-out / persistence of vision effect.
+
+Helper functions
+* Add support for line wrap-around (a la Asteroids)
+* Add line intersection test routine (for collision detection).
+* Add fast fixed-point distance calculator.
+* Other math things, as we think of them...
+
+Other features:
 * Allow loading bitmaps from pixel data
 * Allow 'loading' bitmaps from an SDL_Surface...?
-* Add option for XY_load_options_from_fil() to call a callback with
+* Add option for XY_load_options_from_file() to call a callback with
   unknown lines, so app-specific config files only need to get read once.
-* Add line intersection test routine (for collision detection).
-* Add fade-out / persistence of vision effect.
 
 Desktop interfacing
 * Support window icon
