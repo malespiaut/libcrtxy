@@ -27,7 +27,7 @@ int XY_err_code;
 SDL_Rect * XY_dirty_rects, * XY_dirty_rects_erasure, * XY_dirty_rects_all;
 int XY_dirty_rect_count, XY_dirty_rect_erasure_count;
 int XY_dirty_rect_max;
-XY_bool XY_dirty_all;
+XY_bool XY_background_change;
 
 void (*putpixel) (SDL_Surface *, int, int, Uint32, Uint8 alph);
 Uint32 (*getpixel) (SDL_Surface * surface, int x, int y);
@@ -207,7 +207,15 @@ XY_bool XY_parse_envvars(XY_options * opts)
     }
   }
   
-  /* FIXME: Get fullscreen/window env. var */
+  if (XY_grab_envvar("CRTXY_FULLSCREEN", &nextint, &nexton, nextstr))
+  {
+    if (strcmp(nextstr, "ON") == 0 || strcmp(nextstr, "on") == 0)
+      opts->fullscreen = XY_OPT_FULLSCREEN_REQUIRED;
+    else if (strcmp(nextstr, "OPTIONAL") == 0 || strcmp(nextstr, "optional") == 0)
+      opts->alpha = XY_OPT_FULLSCREEN_REQUEST;
+    else if (strcmp(nextstr, "OFF") == 0 || strcmp(nextstr, "off") == 0)
+      opts->alpha = XY_OPT_WINDOWED;
+  }
 
   if (XY_grab_envvar("CRTXY_ALPHA", &nextint, &nexton, nextstr))
   {
@@ -993,7 +1001,7 @@ XY_bool XY_set_background(XY_color color, XY_bitmap * bitmap,
 
   XY_err_code = XY_ERR_NONE;
 
-  XY_dirty_all = XY_TRUE;
+  XY_background_change = XY_TRUE;
 
   XY_background_r = (color >> 24) & 0xFF;
   XY_background_g = (color >> 16) & 0xFF;
@@ -1203,7 +1211,7 @@ void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a)
 void XY_enable_background(XY_bool enable)
 {
   if (XY_background_bitmap_enabled != enable)
-    XY_dirty_all = XY_TRUE;
+    XY_background_change = XY_TRUE;
 
   XY_background_bitmap_enabled = enable;
 }
@@ -1214,15 +1222,13 @@ void XY_start_frame(int fps)
   SDL_Rect src;
   SDL_Rect * dest;
 
-  if (XY_dirty_all || XY_dirty_rects == NULL)
+  if (XY_background_change)
   {
     SDL_FillRect(XY_screen, NULL, XY_background_color);
 
     if (XY_background_bitmap != NULL && XY_background_bitmap_enabled == XY_TRUE)
       SDL_BlitSurface(XY_background_bitmap->surf, NULL,
                       XY_screen, &XY_background_dest);
-
-    XY_dirty_rect_erasure_count = 0;
   }
   else
   {
@@ -1267,8 +1273,11 @@ int XY_end_frame(XY_bool throttle)
   int sz, sz2, n;
   void * * ptr;
 
-  if (XY_dirty_all || XY_dirty_rects == NULL)
+  if (XY_background_change)
+  {
     SDL_Flip(XY_screen);
+    XY_background_change = XY_FALSE;
+  }
   else
   {
     XY_merge_dirty_rects(XY_dirty_rects, &XY_dirty_rect_count);
@@ -1290,8 +1299,6 @@ int XY_end_frame(XY_bool throttle)
 
     SDL_UpdateRects(XY_screen, n, XY_dirty_rects_all);
   }
-  
-  XY_dirty_all = XY_FALSE;
   
   end_time = SDL_GetTicks();
 
@@ -1936,7 +1943,7 @@ void XY_add_dirty_rect(int x1, int y1, int x2, int y2)
 {
   int tmp;
 
-  if (XY_dirty_rects == NULL || XY_dirty_all)
+  if (XY_dirty_rects == NULL)
     return;
 
   if (XY_dirty_rect_count >= XY_dirty_rect_max)

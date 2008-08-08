@@ -16,7 +16,7 @@ int main(int argc, char * argv[])
   int n, i, a, x1, y1, x2, y2;
   XY_options opts;
   XY_color black, color;
-  XY_bool done;
+  XY_bool done, showbkgd;
   XY_bitmap * bkgd;
   SDL_Event event;
   int ret;
@@ -71,6 +71,7 @@ int main(int argc, char * argv[])
 
   n = 3;
   done = XY_FALSE;
+  showbkgd = XY_TRUE;
 
   do
   {
@@ -104,6 +105,11 @@ int main(int argc, char * argv[])
       {
         if (event.key.keysym.sym == SDLK_ESCAPE)
           done = XY_TRUE;
+        else if (event.key.keysym.sym == SDLK_b)
+        {
+          showbkgd = !showbkgd;
+          XY_enable_background(showbkgd);
+        }
       }
     }
 

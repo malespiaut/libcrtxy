@@ -7,6 +7,8 @@ Bill Kendrick <bill@newbreedsoftware.com>
 2008.08.07 (0.0.2)
 * Optimizations
   + Began dirty rectangle update implementation
+* Options
+  + Added fullscreen/window env. var. support.
 
 2008.08.05 (0.0.1)
 * Initial release:

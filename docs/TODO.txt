@@ -18,8 +18,6 @@ Options
 Optimizations
 * Create a line clip routine
 * Lock/Unlock SDL surfaces!!!
-* Merge dirty rectangles
-* FIXME: dirty_all messes up bitmap erasures
 
 Code cleanup
 * Split code into modules
@@ -50,4 +48,4 @@ Effects and features
 Desktop interfacing
 * Support window icon
 * Support window title
-
+* Allow window resizing
