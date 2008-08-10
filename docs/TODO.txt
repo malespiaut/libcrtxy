@@ -3,7 +3,7 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 8, 2008
+Last modified: August 9, 2008
 
 Documentation
 * Create installation docs
@@ -14,6 +14,7 @@ Options
 * Allow native screen resolution (for fullscreen mode), a la Tux Paint.
 * Fullscreen/window not controlled by env. vars. yet.
 * Look into SDL_ListModes
+* Allow different gamma correction settings
 
 Optimizations
 * Create a line clip routine
@@ -34,7 +35,6 @@ Rendering implementations
   or a special XY_color value.)
 * Allow background bitmaps to be scaled (by percent, or set in terms of
   canvas units)...?
-* Gamma correction when anti-aliasing
 
 Visual effects
 * Support repeating background patterns.
