@@ -1738,8 +1738,12 @@ void blend(Uint8 * dest_r, Uint8 * dest_g, Uint8 * dest_b,
   }
   else
   {
-    /* FIXME: Use gamma-correction look-up tables */
-    /* new_component = to_screen[(to_linear[old_component] * (ONE-alpha) + to_linear[line_color] * alpha) >> some_factor] */
+    *dest_r = gamma_l2s[(XY_mult(gamma_s2l[src2_r], antialpha) +
+                         XY_mult(gamma_s2l[src1_r], alpha))];
+    *dest_g = gamma_l2s[(XY_mult(gamma_s2l[src2_g], antialpha) +
+                         XY_mult(gamma_s2l[src1_g], alpha))];
+    *dest_b = gamma_l2s[(XY_mult(gamma_s2l[src2_b], antialpha) +
+                         XY_mult(gamma_s2l[src1_b], alpha))];
   }
 }
 
