@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 9, 2008
+  July 29, 2008 - August 10, 2008
 */
 
 #ifndef _CRTXY_H
@@ -46,6 +46,23 @@ typedef Sint32 XY_fixed;
 #define XY_FIXED_MAX 0x7FFFFFFF
 #define XY_FIXED_MIN -(0x80000000)
 #define XY_FIXED_NAN XY_FIXED_MAX /* Not-a-number (when you divide by zero */
+
+
+/* --- Geometry types: --- */
+
+/* Line type (struct): */
+typedef struct XY_line_s {
+  XY_fixed x1, y1;
+  XY_fixed x2, y2;
+  XY_color color;
+} XY_line;
+
+/* Multiple lines type (struct): */
+typedef struct XY_lines_s {
+  int count;
+  int max;
+  XY_line * lines;
+} XY_lines;
 
 
 /* --- Initialization and options flags and settings --- */
@@ -215,12 +232,32 @@ void XY_start_frame(int fps);
 int XY_end_frame(XY_bool throttle);
 
 
+/* - Line collection manipulation - */
+
+/* Create a collection: */
+XY_lines * XY_new_lines(void);
+
+/* Free a collection: */
+void XY_free_lines(XY_lines * lines);
+
+/* Start/reset a collection: */
+void XY_start_lines(XY_lines * lines);
+
+/* Add a new line: */
+XY_bool XY_add_line(XY_lines * lines,
+                    XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
+                    XY_color color);
+
+
 /* - Drawing primitives: - */
 
 /* Draw a line between (x1,y1) and (x2,y2) (in canvas virtual world units)
    in the specified color/alpha */
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color);
+
+/* Draw a collection of lines */
+void XY_draw_lines(XY_lines * lines);
 
 /* Draw a point at (x,y) (in canvas virtual world units)
    in the specified color/alpha */
@@ -272,5 +309,13 @@ void XY_canvas_to_screen(XY_fixed cx, XY_fixed cy, int * sx, int * sy);
 /* Returns the screen's width and height, in pixels (integer) */
 int XY_get_screenw(void);
 int XY_get_screenh(void);
+
+/* Returns whether two lines intersect; optionally (if not NULL),
+   return the (x,y) coordinates of the intersection (if possible), and
+   the intersection result (parallel, coincident, not intersecting,
+   intersecting) */
+XY_bool XY_lines_intersect(XY_line * lines1, XY_line * lines2,
+                           XY_fixed * intersect_x, XY_fixed * intersect_y,
+                           int * result);
 
 #endif /* _CRTXY_H */

@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 9, 2008
+  July 29, 2008 - August 10, 2008
 */
 
 #include "crtxy.h"
@@ -1364,6 +1364,97 @@ int XY_end_frame(XY_bool throttle)
   return(end_time - XY_start_time);
 }
 
+XY_lines * XY_new_lines(void)
+{
+  XY_lines * l;
+
+  l = (XY_lines *) malloc(sizeof(XY_lines));
+  if (l == NULL)
+  {
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    return(NULL);
+  }
+
+  l->count = 0;
+  l->max = 128;
+  l->lines = (XY_line *) malloc(sizeof(XY_line) * l->max);
+
+  if (l->lines == NULL)
+  {
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    free(l);
+    return(NULL);
+  }
+
+  return(l);
+}
+
+void XY_start_lines(XY_lines * lines)
+{
+  if (lines == NULL)
+    return; /* FIXME: Error code & return? */
+
+  lines->count = 0;
+}
+
+XY_bool XY_add_line(XY_lines * lines,
+                    XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
+                    XY_color color)
+{
+  if (lines == NULL)
+    return(XY_FALSE); /* FIXME: Set error code */
+
+  if (lines->count >= lines->max)
+  {
+    lines->max += 128;
+    lines->lines = (XY_line *) realloc(lines->lines,
+                                       sizeof(XY_line) * lines->max);
+
+    if (lines->lines == NULL)
+    {
+      XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+      return(XY_FALSE);
+    }
+  }
+
+  lines->lines[lines->count].x1 = x1;
+  lines->lines[lines->count].y1 = y1;
+  lines->lines[lines->count].x2 = x2;
+  lines->lines[lines->count].y2 = y2;
+  lines->lines[lines->count].color = color;
+
+  lines->count++;
+
+  return(XY_TRUE);
+}
+
+void XY_free_lines(XY_lines * lines)
+{
+  if (lines == NULL)
+    return; /* FIXME: Error code & return? */
+
+  lines->count = 0;
+  lines->max = 0;
+  if (lines->lines != NULL)
+  {
+    free(lines->lines);
+    lines->lines = NULL;
+  }
+}
+
+void XY_draw_lines(XY_lines * lines)
+{
+  int i;
+
+  if (lines == NULL || lines->lines == NULL)
+    return; /* FIXME: Set error code & return? */
+
+  for (i = 0; i < lines->count; i++)
+    XY_draw_line(lines->lines[i].x1, lines->lines[i].y1,
+                 lines->lines[i].x2, lines->lines[i].y2,
+                 lines->lines[i].color);
+}
+
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color)
 {
@@ -2165,5 +2256,14 @@ void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
 
   if (bottom2 > bottom1)
     rects[r1].y = bottom2 - rects[r1].y + 1;
+}
+
+XY_bool XY_lines_intersect(XY_line * lines1, XY_line * lines2,
+                           XY_fixed * intersect_x, XY_fixed * intersect_y,
+                           int * result)
+{
+  /* FIXME: Do it! */
+
+  return(XY_FALSE);
 }
 

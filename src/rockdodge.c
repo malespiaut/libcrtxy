@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  August 3, 2008 - August 3, 2008
+  August 3, 2008 - August 10, 2008
 */
 
 #include <crtxy.h>
@@ -43,6 +43,8 @@ int main(int argc, char * argv[])
   int angle;
   rock_t rocks[NUM_ROCKS];
   XY_bool key_ccw, key_cw, key_thrust;
+  XY_lines * ship_lines;
+  XY_lines * rock_lines;
 
   XY_default_options(&opts);
 
@@ -66,6 +68,20 @@ int main(int argc, char * argv[])
   {
     fprintf(stderr, "Error initializing libcrtxy: %s\n", XY_errstr());
     XY_print_options(stderr, opts);
+    return(1);
+  }
+
+  ship_lines = XY_new_lines();
+  if (ship_lines == NULL)
+  {
+    fprintf(stderr, "Error creating ship line collection: %s\n", XY_errstr());
+    return(1);
+  }
+
+  rock_lines = XY_new_lines();
+  if (rock_lines == NULL)
+  {
+    fprintf(stderr, "Error creating rock line collection: %s\n", XY_errstr());
     return(1);
   }
 
@@ -188,15 +204,6 @@ int main(int argc, char * argv[])
         rocks[i].angle += (360 << XY_FIXED_SHIFT);
       else if (rocks[i].angle >= (360 << XY_FIXED_SHIFT))
         rocks[i].angle -= (360 << XY_FIXED_SHIFT);
-
-      if (rocks[i].x - RADIUS <= x + RADIUS &&
-          rocks[i].x + RADIUS >= x - RADIUS &&
-          rocks[i].y - RADIUS <= y + RADIUS &&
-          rocks[i].y + RADIUS >= y - RADIUS)
-      {
-        bounce(&xm, XY_FIXED_ONE, &(rocks[i].xm), XY_FIXED_HALF);
-        bounce(&ym, XY_FIXED_ONE, &(rocks[i].ym), XY_FIXED_HALF);
-      }
     }
 
     x1 = x + XY_mult(XY_cos(angle - 135), RADIUS);
@@ -206,10 +213,12 @@ int main(int argc, char * argv[])
     x3 = x + XY_mult(XY_cos(angle + 135), RADIUS);
     y3 = y - XY_mult(XY_sin(angle + 135), RADIUS);
 
-    XY_draw_line(x1, y1, x2, y2, white);
-    XY_draw_line(x2, y2, x3, y3, white);
-    XY_draw_line(x3, y3, x, y, white);
-    XY_draw_line(x, y, x1, y1, white);
+    XY_start_lines(ship_lines);
+    XY_add_line(ship_lines, x1, y1, x2, y2, white);
+    XY_add_line(ship_lines, x2, y2, x3, y3, white);
+    XY_add_line(ship_lines, x3, y3, x, y, white);
+    XY_add_line(ship_lines, x, y, x1, y1, white);
+    XY_draw_lines(ship_lines);
 
     if (key_thrust)
     {
@@ -259,13 +268,28 @@ int main(int argc, char * argv[])
       y3 = rocks[i].y -
         XY_mult(XY_sin((rocks[i].angle >> XY_FIXED_SHIFT) + 240), RADIUS);
 
-      XY_draw_line(x1, y1, x2, y2, colors[rocks[i].color]);
-      XY_draw_line(x2, y2, x3, y3, colors[rocks[i].color]);
-      XY_draw_line(x3, y3, x1, y1, colors[rocks[i].color]);
+      XY_start_lines(rock_lines);
 
-      XY_draw_line(rocks[i].x, rocks[i].y, x1, y1, colors[rocks[i].color]);
-      XY_draw_line(rocks[i].x, rocks[i].y, x2, y2, colors[rocks[i].color]);
-      XY_draw_line(rocks[i].x, rocks[i].y, x3, y3, colors[rocks[i].color]);
+      XY_add_line(rock_lines, x1, y1, x2, y2, colors[rocks[i].color]);
+      XY_add_line(rock_lines, x2, y2, x3, y3, colors[rocks[i].color]);
+      XY_add_line(rock_lines, x3, y3, x1, y1, colors[rocks[i].color]);
+
+      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x1, y1,
+                  colors[rocks[i].color]);
+      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x2, y2,
+                  colors[rocks[i].color]);
+      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x3, y3,
+                  colors[rocks[i].color]);
+
+      XY_draw_lines(rock_lines);
+
+
+      if (XY_lines_intersect(ship_lines, rock_lines,
+                             NULL, NULL, NULL) == XY_TRUE)
+      {
+        bounce(&xm, XY_FIXED_ONE, &(rocks[i].xm), XY_FIXED_HALF);
+        bounce(&ym, XY_FIXED_ONE, &(rocks[i].ym), XY_FIXED_HALF);
+      }
     }
 
     XY_end_frame(XY_TRUE);
@@ -273,6 +297,9 @@ int main(int argc, char * argv[])
   }
   while (!done);
 
+  XY_free_lines(ship_lines);
+  XY_free_lines(rock_lines);
+ 
   XY_quit();
 
   return(0);
