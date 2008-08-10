@@ -1555,7 +1555,7 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
                             XY_color color)
 {
   Uint32 sdlcolor = XY_color_to_sdl_color(color);
-  Uint8 alph = ((color & 0xff) << XY_FIXED_SHIFT) / 255;
+  XY_fixed alph = ((color & 0xff) << XY_FIXED_SHIFT) / 255;
   XY_fixed dx, dy;
   XY_fixed m, b;
   int y;
@@ -1615,7 +1615,7 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color)
 {
   int sx, sy;
   Uint32 sdlcolor = XY_color_to_sdl_color(color);
-  Uint8 alph = ((color & 0xff) << XY_FIXED_SHIFT) / 255;
+  XY_fixed alph = ((color & 0xff) << XY_FIXED_SHIFT) / 255;
 
   XY_canvas_to_screen(x, y, &sx, &sy);
 
