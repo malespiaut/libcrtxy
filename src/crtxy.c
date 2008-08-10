@@ -6,11 +6,13 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 7, 2008
+  July 29, 2008 - August 9, 2008
 */
 
 #include "crtxy.h"
 #include <SDL_image.h>
+
+#include "gamma_2_2.h"
 
 #define XY_DIRTY_RECT_STEP 128
 
@@ -19,7 +21,7 @@ XY_fixed XY_canvasw, XY_canvash;
 Uint32 XY_background_color;
 Uint8 XY_background_r, XY_background_g, XY_background_b;
 XY_bitmap * XY_background_bitmap;
-XY_bool XY_background_bitmap_possible, XY_antialias;
+XY_bool XY_background_bitmap_possible, XY_antialias, XY_gamma_correction;
 XY_bool XY_background_bitmap_enabled;
 SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
@@ -29,7 +31,8 @@ int XY_dirty_rect_count, XY_dirty_rect_erasure_count;
 int XY_dirty_rect_max;
 XY_bool XY_background_change;
 
-void (*putpixel) (SDL_Surface *, int, int, Uint32, Uint8 alph);
+void (*putpixel) (SDL_Surface *, int, int, Uint32, XY_fixed alph,
+                  Uint16 * gamma_s2l, Uint8 * gamma_l2s);
 Uint32 (*getpixel) (SDL_Surface * surface, int x, int y);
 SDL_Surface * (*scale_surf) (SDL_Surface * orig, int new_w, int new_h);
 
@@ -72,17 +75,23 @@ const char * XY_errstr_txt[NUM_XY_ERRS] = {
 
 /* Private functions and macros: */
 
-void putpixel_16(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
-void putpixel_24(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
-void putpixel_32(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void blend(Uint8 * dest_r, Uint8 * dest_g, Uint8 * dest_b,
+           Uint8 src1_r, Uint8 src1_g, Uint8 src1_b,
+           Uint8 src2_r, Uint8 src2_g, Uint8 src2_b,
+           XY_fixed alpha,
+           Uint16 * gamma_s2l, Uint8 * gamma_l2s);
 
-void putpixel_fakea_16(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
-void putpixel_fakea_24(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
-void putpixel_fakea_32(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_16(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
+void putpixel_24(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
+void putpixel_32(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
 
-void putpixel_reala_16(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
-void putpixel_reala_24(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
-void putpixel_reala_32(SDL_Surface * surface, int x, int y, Uint32 pixel, Uint8 alph);
+void putpixel_fakea_16(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
+void putpixel_fakea_24(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
+void putpixel_fakea_32(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
+
+void putpixel_reala_16(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
+void putpixel_reala_24(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
+void putpixel_reala_32(SDL_Surface * surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
 
 Uint32 getpixel_16(SDL_Surface * surface, int x, int y);
 Uint32 getpixel_24(SDL_Surface * surface, int x, int y);
@@ -98,7 +107,8 @@ SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h);
 
 void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
                             XY_fixed fsx2, XY_fixed fsy2,
-                            XY_color color);
+                            XY_color color,
+                            Uint16 * gamma_s2l, Uint8 * gamma_l2s);
 void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
                             XY_fixed fsx2, XY_fixed fsy2,
                             XY_color);
@@ -122,6 +132,7 @@ void XY_default_options(XY_options * opts)
   opts->fullscreen = XY_OPT_WINDOWED;
   opts->alpha = XY_OPT_ALPHA_BLEND;
   opts->antialias = XY_TRUE;
+  opts->gamma_correction = XY_TRUE;
   opts->blur = XY_FALSE;
   opts->additive = XY_FALSE;
   opts->backgrounds = XY_TRUE;
@@ -232,6 +243,17 @@ XY_bool XY_parse_envvars(XY_options * opts)
     }
   }
 
+  if (XY_grab_envvar("CRTXY_GAMMA_CORRECTION", &nextint, &nexton, nextstr))
+  {
+    if (nexton != -1)
+      opts->gamma_correction = (nexton == 1);
+    else
+    {
+      XY_complain_envvar("CRTXY_GAMMA_CORRECTION", "ON|OFF");
+      return(XY_FALSE);
+    }
+  }
+
   if (XY_grab_envvar("CRTXY_ANTIALIAS", &nextint, &nexton, nextstr))
   {
     if (nexton != -1)
@@ -337,6 +359,7 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts)
         printf("  --crtxy-windowed            Windowed mode\n");
         printf("  --crtxy-alpha [on|off|fake] Alpha-blending ('fake' is against bgkd color\n");
         printf("  --crtxy-antialias [on|off]  Anti-aliased (smoother) lines\n");
+        printf("  --crtxy-gamma-correction [on|off]  Gamma-corrected anti-aliased lines\n");
         printf("  --crtxy-blur [on|off]       Blur all lines effect\n");
         printf("  --crtxy-additive [on|off]   Brighten lines that cross\n");
         printf("  --crtxy-backgrounds [on|off]  Enable or disable background bitmaps\n");
@@ -437,6 +460,24 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts)
         else if (strcmp(nextstr, "off") == 0)
         {
           opts->antialias = XY_FALSE;
+          eat = 2;
+        }
+        else
+        {
+          XY_err_code = XY_ERR_OPTION_BAD;
+          err_arg = i;
+        }
+      }
+      else if (strcmp(argv[i], "--crtxy-gamma-correction") == 0)
+      {
+        if (strcmp(nextstr, "on") == 0)
+        {
+          opts->gamma_correction = XY_TRUE;
+          eat = 2;
+        }
+        else if (strcmp(nextstr, "off") == 0)
+        {
+          opts->gamma_correction = XY_FALSE;
           eat = 2;
         }
         else
@@ -666,6 +707,13 @@ XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
       else
         XY_err_code = XY_ERR_OPTION_BAD;
     }
+    else if (strstr(line, "crtxy-gamma-correction=") == line)
+    {
+      if (nexton != -1)
+        opts->gamma_correction = (nexton == 1);
+      else
+        XY_err_code = XY_ERR_OPTION_BAD;
+    }
     else if (strstr(line, "crtxy-blur=") == line)
     {
       if (nexton != -1)
@@ -819,6 +867,7 @@ XY_bool XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 
  
   XY_antialias = opts->antialias;
+  XY_gamma_correction = opts->gamma_correction;
 
   if (opts->alpha == XY_OPT_ALPHA_FAKE)
   {
@@ -890,6 +939,8 @@ void XY_print_options(FILE * fi, XY_options opts)
       "off")));
   fprintf(fi, "Antialiasing: %s\n",
     (opts.antialias ? "on" : "off"));
+  fprintf(fi, "Gamma Correction: %s\n",
+    (opts.gamma_correction ? "on" : "off"));
   fprintf(fi, "Blurring: %s\n",
     (opts.blur ? "on" : "off"));
   fprintf(fi, "Additive effect: %s\n",
@@ -1114,7 +1165,7 @@ SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
   Uint8 r, g, b, a;
   int tmp;
   XY_fixed src_x, src_y, xscale, yscale, f_orig_w, f_orig_h;
-  void (*pp) (SDL_Surface *, int, int, Uint32, Uint8 alph);
+  void (*pp) (SDL_Surface *, int, int, Uint32, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
   Uint32 (*gp) (SDL_Surface * surface, int x, int y);
 
   yscale = (orig->h << XY_FIXED_SHIFT) / new_h;
@@ -1181,13 +1232,13 @@ SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
 	tr = tr / tmp;
 	tb = tb / tmp;
 	tg = tg / tmp;
-	ta = ta / tmp;
+	ta = (ta * XY_FIXED_ONE) / tmp;
 
 	pp(s, x, y, SDL_MapRGB(s->format,
 				(Uint8) tr,
 				(Uint8) tg,
 				(Uint8) tb),
-	  (Uint8) ta);
+	  (XY_fixed) ta, NULL, NULL);
       }
     }
   }
@@ -1331,24 +1382,40 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
   fsy2 = sy2 << XY_FIXED_SHIFT;
 
   if (XY_antialias)
-    XY_draw_line_xiaolinwu(fsx1, fsy1, fsx2, fsy2, color);
+  {
+    if (XY_gamma_correction)
+    {
+      XY_draw_line_xiaolinwu(fsx1, fsy1, fsx2, fsy2, color,
+                             XY_gamma_screen_to_linear_2_2,
+                             XY_gamma_linear_to_screen_2_2);
+    }
+    else
+    {
+      XY_draw_line_xiaolinwu(fsx1, fsy1, fsx2, fsy2, color, NULL, NULL);
+    }
+  }
   else
+  {
     XY_draw_line_bresenham(fsx1, fsy1, fsx2, fsy2, color);
+  }
 
   XY_add_dirty_rect(sx1, sy1, sx2 + 1, sy2 + 1);
 }
 
 void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
                             XY_fixed fsx2, XY_fixed fsy2,
-                            XY_color color)
+                            XY_color color,
+                            Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint32 sdlcolor = XY_color_to_sdl_color(color);
   XY_fixed dx, dy, ftmp, gradient;
   XY_fixed xend, yend, xgap, ygap, xpxl1, ypxl1, xpxl2, ypxl2, interx, intery;
   XY_fixed brightness1, brightness2, x, y;
   Uint8 alph;
+  XY_fixed fixed_alph;
 
   alph = (color & 0xff);
+  fixed_alph = (alph << XY_FIXED_SHIFT) / 255;
 
   dx = fsx2 - fsx1;
   dy = fsy2 - fsy1;
@@ -1377,13 +1444,13 @@ void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
     xpxl1 = xend >> XY_FIXED_SHIFT;
     ypxl1 = XY_ipart(yend) >> XY_FIXED_SHIFT;
    
-    brightness1 = (XY_mult(XY_rfpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
-    brightness2 = (XY_mult(XY_fpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
+    brightness1 = XY_mult(XY_rfpart(yend), xgap);
+    brightness2 = XY_mult(XY_fpart(yend), xgap);
   
     putpixel(XY_screen, xpxl1, ypxl1,
-             sdlcolor, (brightness1 * alph) / 255);
+             sdlcolor, XY_mult(brightness1, fixed_alph), gamma_s2l, gamma_l2s);
     putpixel(XY_screen, xpxl1, ypxl1 + 1,
-             sdlcolor, (brightness2 * alph) / 255);
+             sdlcolor, XY_mult(brightness2, fixed_alph), gamma_s2l, gamma_l2s);
   
     intery = yend + gradient;
   
@@ -1395,24 +1462,24 @@ void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
     xpxl2 = xend >> XY_FIXED_SHIFT;
     ypxl2 = XY_ipart(yend) >> XY_FIXED_SHIFT;
   
-    brightness1 = (XY_mult(XY_rfpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
-    brightness2 = (XY_mult(XY_fpart(yend), xgap) * 255) >> XY_FIXED_SHIFT;
+    brightness1 = XY_mult(XY_rfpart(yend), xgap);
+    brightness2 = XY_mult(XY_fpart(yend), xgap);
   
     putpixel(XY_screen, xpxl2, ypxl2,
-             sdlcolor, (brightness1 * alph) / 255);
+             sdlcolor, XY_mult(brightness1, fixed_alph), gamma_s2l, gamma_l2s);
     putpixel(XY_screen, xpxl2, ypxl2 + 1,
-             sdlcolor, (brightness2 * alph) / 255);
+             sdlcolor, XY_mult(brightness2, fixed_alph), gamma_s2l, gamma_l2s);
   
     /* Main loop */
     for (x = xpxl1 + 1; x < xpxl2; x++)
     {
-      brightness1 = (XY_rfpart(intery) * 255) >> XY_FIXED_SHIFT;
-      brightness2 = (XY_fpart(intery) * 255) >> XY_FIXED_SHIFT;
+      brightness1 = XY_rfpart(intery);
+      brightness2 = XY_fpart(intery);
   
       putpixel(XY_screen, x, XY_ipart(intery) >> XY_FIXED_SHIFT,
-               sdlcolor, (brightness1 * alph) / 255);
+               sdlcolor, XY_mult(brightness1, fixed_alph), gamma_s2l, gamma_l2s);
       putpixel(XY_screen, x, (XY_ipart(intery) >> XY_FIXED_SHIFT) + 1,
-               sdlcolor, (brightness2 * alph) / 255);
+               sdlcolor, XY_mult(brightness2, fixed_alph), gamma_s2l, gamma_l2s);
   
       intery += gradient;
     }
@@ -1441,13 +1508,13 @@ void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
     xpxl1 = XY_ipart(xend) >> XY_FIXED_SHIFT;
     ypxl1 = yend >> XY_FIXED_SHIFT;
    
-    brightness1 = (XY_mult(XY_rfpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
-    brightness2 = (XY_mult(XY_fpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
+    brightness1 = XY_mult(XY_rfpart(xend), ygap);
+    brightness2 = XY_mult(XY_fpart(xend), ygap);
   
     putpixel(XY_screen, xpxl1, ypxl1,
-             sdlcolor, (brightness1 * alph) / 255);
+             sdlcolor, XY_mult(brightness1, fixed_alph), gamma_s2l, gamma_l2s);
     putpixel(XY_screen, xpxl1 + 1, ypxl1,
-             sdlcolor, (brightness2 * alph) / 255);
+             sdlcolor, XY_mult(brightness2, fixed_alph), gamma_s2l, gamma_l2s);
   
     interx = xend + gradient;
   
@@ -1459,24 +1526,24 @@ void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
     xpxl2 = XY_ipart(xend) >> XY_FIXED_SHIFT;
     ypxl2 = yend >> XY_FIXED_SHIFT;
   
-    brightness1 = (XY_mult(XY_rfpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
-    brightness2 = (XY_mult(XY_fpart(xend), ygap) * 255) >> XY_FIXED_SHIFT;
+    brightness1 = XY_mult(XY_rfpart(xend), ygap);
+    brightness2 = XY_mult(XY_fpart(xend), ygap);
   
     putpixel(XY_screen, xpxl2, ypxl2,
-             sdlcolor, (brightness1 * alph) / 255);
+             sdlcolor, XY_mult(brightness1, fixed_alph), gamma_s2l, gamma_l2s);
     putpixel(XY_screen, xpxl2 + 1, ypxl2,
-             sdlcolor, (brightness2 * alph) / 255);
+             sdlcolor, XY_mult(brightness2, fixed_alph), gamma_s2l, gamma_l2s);
   
     /* Main loop */
     for (y = ypxl1 + 1; y < ypxl2; y++)
     {
-      brightness1 = (XY_rfpart(interx) * 255) >> XY_FIXED_SHIFT;
-      brightness2 = (XY_fpart(interx) * 255) >> XY_FIXED_SHIFT;
+      brightness1 = XY_rfpart(interx);
+      brightness2 = XY_fpart(interx);
   
       putpixel(XY_screen, XY_ipart(interx) >> XY_FIXED_SHIFT, y,
-               sdlcolor, (brightness1 * alph) / 255);
+               sdlcolor, XY_mult(brightness1, fixed_alph), gamma_s2l, gamma_l2s);
       putpixel(XY_screen, (XY_ipart(interx) >> XY_FIXED_SHIFT) + 1, y,
-               sdlcolor, (brightness2 * alph) / 255);
+               sdlcolor, XY_mult(brightness2, fixed_alph), gamma_s2l, gamma_l2s);
   
       interx += gradient;
     }
@@ -1488,7 +1555,7 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
                             XY_color color)
 {
   Uint32 sdlcolor = XY_color_to_sdl_color(color);
-  Uint8 alph = (color & 0xff);
+  Uint8 alph = ((color & 0xff) << XY_FIXED_SHIFT) / 255;
   XY_fixed dx, dy;
   XY_fixed m, b;
   int y;
@@ -1517,12 +1584,12 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
         if (fsy2 > fsy1)
         {
           for (y = fsy1 >> XY_FIXED_SHIFT; y <= fsy2 >> XY_FIXED_SHIFT; y++)
-            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
+            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph, NULL, NULL);
         }
         else
         {
           for (y = fsy2 >> XY_FIXED_SHIFT; y <= fsy1 >> XY_FIXED_SHIFT; y++)
-            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
+            putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph, NULL, NULL);
         }
 
         fsx1 = fsx1 + dx;
@@ -1533,12 +1600,12 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
       if (fsy2 > fsy1)
       {
         for (y = fsy1 >> XY_FIXED_SHIFT; y <= fsy2 >> XY_FIXED_SHIFT; y++)
-          putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
+          putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph, NULL, NULL);
       }
       else
       {
         for (y = fsy2 >> XY_FIXED_SHIFT; y <= fsy1 >> XY_FIXED_SHIFT; y++)
-          putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph);
+          putpixel(XY_screen, fsx1 >> XY_FIXED_SHIFT, y, sdlcolor, alph, NULL, NULL);
       }
     }
   }
@@ -1548,11 +1615,11 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color)
 {
   int sx, sy;
   Uint32 sdlcolor = XY_color_to_sdl_color(color);
-  Uint8 alph = (color & 0xff);
+  Uint8 alph = ((color & 0xff) << XY_FIXED_SHIFT) / 255;
 
   XY_canvas_to_screen(x, y, &sx, &sy);
 
-  putpixel(XY_screen, sx, sy, sdlcolor, alph);
+  putpixel(XY_screen, sx, sy, sdlcolor, alph, NULL, NULL);
 }
 
 XY_fixed XY_cos(int degrees)
@@ -1615,7 +1682,7 @@ int XY_get_screenh(void)
   return(XY_screen->h);
 }
 
-void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
 
@@ -1625,7 +1692,7 @@ void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
   *(Uint16 *)p = pixel;
 }
 
-void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
 
@@ -1643,7 +1710,7 @@ void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
   }
 }
 
-void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
 
@@ -1653,10 +1720,32 @@ void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
   *(Uint32 *)p = pixel;
 }
 
-void putpixel_fakea_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void blend(Uint8 * dest_r, Uint8 * dest_g, Uint8 * dest_b,
+           Uint8 src1_r, Uint8 src1_g, Uint8 src1_b,
+           Uint8 src2_r, Uint8 src2_g, Uint8 src2_b,
+           XY_fixed alpha,
+           Uint16 * gamma_s2l, Uint8 * gamma_l2s)
+{
+  XY_fixed antialpha;
+
+  antialpha = XY_FIXED_ONE - alpha;
+
+  if (gamma_s2l == NULL || gamma_l2s == NULL)
+  {
+    *dest_r = (((XY_fixed) (src1_r * alpha) + (XY_fixed) (src2_r * antialpha))) >> XY_FIXED_SHIFT;
+    *dest_g = (((XY_fixed) (src1_g * alpha) + (XY_fixed) (src2_g * antialpha))) >> XY_FIXED_SHIFT;
+    *dest_b = (((XY_fixed) (src1_b * alpha) + (XY_fixed) (src2_b * antialpha))) >> XY_FIXED_SHIFT;
+  }
+  else
+  {
+    /* FIXME: Use gamma-correction look-up tables */
+    /* new_component = to_screen[(to_linear[old_component] * (ONE-alpha) + to_linear[line_color] * alpha) >> some_factor] */
+  }
+}
+
+void putpixel_fakea_16(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
-  Uint8 antialph;
   Uint8 r1, g1, b1;
   Uint8 r, g, b;
 
@@ -1665,15 +1754,13 @@ void putpixel_fakea_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
 
   if (alph == 0)
     return;
-  else if (alph < 255)
+  else if (alph < XY_FIXED_ONE)
   {
-    antialph = 255 - alph;
-
     SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
 
-    r = ((int) (r1 * alph) + (int) (XY_background_r * antialph)) / 256;
-    g = ((int) (g1 * alph) + (int) (XY_background_g * antialph)) / 256;
-    b = ((int) (b1 * alph) + (int) (XY_background_b * antialph)) / 256;
+    blend(&r, &g, &b,
+          r1, g1, b1, XY_background_r, XY_background_g, XY_background_b,
+          alph, gamma_s2l, gamma_l2s);
 
     pixel = SDL_MapRGB(surface->format, r, g, b);
   }
@@ -1681,10 +1768,9 @@ void putpixel_fakea_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
   *(Uint16 *)p = pixel;
 }
 
-void putpixel_fakea_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_fakea_24(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
-  Uint8 antialph;
   Uint8 r1, g1, b1;
   Uint8 r, g, b;
 
@@ -1693,15 +1779,13 @@ void putpixel_fakea_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
 
   if (alph == 0)
     return;
-  else if (alph < 255)
+  else if (alph < XY_FIXED_ONE)
   {
-    antialph = 255 - alph;
-
     SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
 
-    r = ((int) (r1 * alph) + (int) (XY_background_r * antialph)) / 256;
-    g = ((int) (g1 * alph) + (int) (XY_background_g * antialph)) / 256;
-    b = ((int) (b1 * alph) + (int) (XY_background_b * antialph)) / 256;
+    blend(&r, &g, &b,
+          r1, g1, b1, XY_background_r, XY_background_g, XY_background_b,
+          alph, gamma_s2l, gamma_l2s);
 
     pixel = SDL_MapRGB(surface->format, r, g, b);
   }
@@ -1717,10 +1801,9 @@ void putpixel_fakea_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
   }
 }
 
-void putpixel_fakea_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_fakea_32(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
-  Uint8 antialph;
   Uint8 r1, g1, b1;
   Uint8 r, g, b;
 
@@ -1729,15 +1812,13 @@ void putpixel_fakea_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
 
   if (alph == 0)
     return;
-  else if (alph < 255)
+  else if (alph < XY_FIXED_ONE)
   {
-    antialph = 255 - alph;
-
     SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
 
-    r = ((int) (r1 * alph) + (int) (XY_background_r * antialph)) / 256;
-    g = ((int) (g1 * alph) + (int) (XY_background_g * antialph)) / 256;
-    b = ((int) (b1 * alph) + (int) (XY_background_b * antialph)) / 256;
+    blend(&r, &g, &b,
+          r1, g1, b1, XY_background_r, XY_background_g, XY_background_b,
+          alph, gamma_s2l, gamma_l2s);
 
     pixel = SDL_MapRGB(surface->format, r, g, b);
   }
@@ -1745,10 +1826,9 @@ void putpixel_fakea_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
   *(Uint32 *)p = pixel;
 }
 
-void putpixel_reala_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_reala_16(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
-  Uint8 antialph;
   Uint8 r1, g1, b1, r2, g2, b2;
   Uint32 oldpixel;
   Uint8 r, g, b;
@@ -1758,18 +1838,16 @@ void putpixel_reala_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
 
   if (alph == 0)
     return;
-  else if (alph < 255)
+  else if (XY_FIXED_ONE)
   {
-    antialph = 255 - alph;
-
     oldpixel = *(Uint16 *)p;
 
     SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
     SDL_GetRGB(oldpixel, surface->format, &r2, &g2, &b2);
 
-    r = ((int) (r1 * alph) + (int) (r2 * antialph)) / 256;
-    g = ((int) (g1 * alph) + (int) (g2 * antialph)) / 256;
-    b = ((int) (b1 * alph) + (int) (b2 * antialph)) / 256;
+    blend(&r, &g, &b,
+          r1, g1, b1, r2, g2, b2,
+          alph, gamma_s2l, gamma_l2s);
 
     pixel = SDL_MapRGB(surface->format, r, g, b);
   }
@@ -1777,10 +1855,9 @@ void putpixel_reala_16(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
   *(Uint16 *)p = pixel;
 }
 
-void putpixel_reala_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_reala_24(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
-  Uint8 antialph;
   Uint8 r1, g1, b1, r2, g2, b2;
   Uint32 oldpixel;
   Uint8 r, g, b;
@@ -1790,10 +1867,8 @@ void putpixel_reala_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
 
   if (alph == 0)
     return;
-  else if (alph < 255)
+  else if (alph < XY_FIXED_ONE)
   {
-    antialph = 255 - alph;
-
     if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
       oldpixel = (p[0] << 16) | (p[1] << 8) | p[2];
     } else {
@@ -1803,9 +1878,9 @@ void putpixel_reala_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
     SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
     SDL_GetRGB(oldpixel, surface->format, &r2, &g2, &b2);
 
-    r = ((int) (r1 * alph) + (int) (r2 * antialph)) / 256;
-    g = ((int) (g1 * alph) + (int) (g2 * antialph)) / 256;
-    b = ((int) (b1 * alph) + (int) (b2 * antialph)) / 256;
+    blend(&r, &g, &b,
+          r1, g1, b1, r2, g2, b2,
+          alph, gamma_s2l, gamma_l2s);
 
     pixel = SDL_MapRGB(surface->format, r, g, b);
   }
@@ -1821,10 +1896,9 @@ void putpixel_reala_24(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
   }
 }
 
-void putpixel_reala_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 alph)
+void putpixel_reala_32(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
-  Uint8 antialph;
   Uint8 r1, g1, b1, r2, g2, b2;
   Uint8 r, g, b;
   Uint32 oldpixel;
@@ -1836,16 +1910,14 @@ void putpixel_reala_32(SDL_Surface *surface, int x, int y, Uint32 pixel, Uint8 a
     return;
   else if (alph < 255)
   {
-    antialph = 255 - alph;
-
     oldpixel = *(Uint32 *)p;
 
     SDL_GetRGB(pixel, surface->format, &r1, &g1, &b1);
     SDL_GetRGB(oldpixel, surface->format, &r2, &g2, &b2);
 
-    r = ((int) (r1 * alph) + (int) (r2 * antialph)) / 256;
-    g = ((int) (g1 * alph) + (int) (g2 * antialph)) / 256;
-    b = ((int) (b1 * alph) + (int) (b2 * antialph)) / 256;
+    blend(&r, &g, &b,
+          r1, g1, b1, r2, g2, b2,
+          alph, gamma_s2l, gamma_l2s);
 
     pixel = SDL_MapRGB(surface->format, r, g, b);
   }

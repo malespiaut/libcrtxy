@@ -1,0 +1,9 @@
+AUTHORS for libcrtxy (CRT X-Y Library)
+http://libcrtxy.sf.net/
+
+* Main code
+  Bill Kendrick <bill@newbreedsoftware.com>
+
+* Gamma-correction look-up table generator (public domain)
+  Solra Bizna <solra@bizna.name>
+

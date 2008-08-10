@@ -7,6 +7,10 @@ Bill Kendrick <bill@newbreedsoftware.com>
 2008.08.08 (0.0.2)
 * Optimizations
   + Began dirty rectangle update implementation
+* Improvements
+  + Added support for gamma correction.
+    (Tables produce by code based on Public Domain code
+    by Solra Bizna <solra@bizna.name>)
 * Options
   + Added fullscreen/window env. var. support.
 * Fixes

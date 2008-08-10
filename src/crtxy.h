@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 8, 2008
+  July 29, 2008 - August 9, 2008
 */
 
 #ifndef _CRTXY_H
@@ -72,6 +72,7 @@ typedef struct XY_options_s {
   int fullscreen; /* Window, Want Fullscreen or Require Fullscreen? */
   int alpha;  /* Alpha-blend, fake it, or none at all (just on/off)? */
   XY_bool antialias;  /* Anti-alias lines (Xiaolin Wu) or not (Bresenham)? */
+  XY_bool gamma_correction;  /* Gamma correction when anti-aliasing */ /* FIXME: Only doing 2.2 (close to sRGB) at the moment! */
   XY_bool blur;  /* Add blur effect? */
   XY_bool additive;  /* Additive pixel effect? */
   XY_bool backgrounds;  /* Support fullscreen background */
