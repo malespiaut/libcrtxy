@@ -286,6 +286,11 @@ int main(int argc, char * argv[])
 
       if (XY_line_groups_intersect(ship_lines, rock_lines))
       {
+        /* Prevent them from getting stuck: */
+        rocks[i].x -= rocks[i].xm;
+        rocks[i].y -= rocks[i].ym;
+
+        /* Ship's mass is 1.0, rocks are mass 0.5 */
         bounce(&xm, XY_FIXED_ONE, &(rocks[i].xm), XY_FIXED_HALF);
         bounce(&ym, XY_FIXED_ONE, &(rocks[i].ym), XY_FIXED_HALF);
       }
