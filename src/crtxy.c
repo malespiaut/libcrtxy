@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 10, 2008
+  July 29, 2008 - August 11, 2008
 */
 
 #include "crtxy.h"
@@ -1254,8 +1254,8 @@ XY_color XY_setcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a)
 {
   *r = (c >> 24) & 0xff;
-  *r = (c >> 16) & 0xff;
-  *r = (c >> 8) & 0xff;
+  *g = (c >> 16) & 0xff;
+  *b = (c >> 8) & 0xff;
   *a = c & 0xff;
 }
 
