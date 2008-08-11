@@ -3,7 +3,7 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 9, 2008
+Last modified: August 11, 2008
 
 Documentation
 * Create installation docs
@@ -44,8 +44,8 @@ Visual effects
 
 Helper functions
 * Add support for line wrap-around (a la Asteroids)
-* Add line intersection test routine (for collision detection).
 * Add fast fixed-point distance calculator.
+* Add 'inside polygon' test (for Quantum-style games)
 * Other math things, as we think of them...
 
 Other features:
