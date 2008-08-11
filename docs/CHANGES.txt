@@ -11,12 +11,15 @@ Bill Kendrick <bill@newbreedsoftware.com>
   + Added support for gamma correction.
     (Tables produce by code based on Public Domain code
     by Solra Bizna <solra@bizna.name>)
+  + Added line intersection test.
   + Line collections can be made, drawn, and tested for intersection.
 * Options
   + Added fullscreen/window env. var. support.
 * Fixes
   + XY_FIXED_MIN and _MAX didn't account for the fractional part. Fixed.
   + XY_getcolor() was broken. Fixed.
+  + Made crtxy.h C++-friendly.
+    Thanks to: 'synkro' on #SDL
 
 2008.08.05 (0.0.1)
 * Initial release:

@@ -6,13 +6,17 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 10, 2008
+  July 29, 2008 - August 11, 2008
 */
 
 #ifndef _CRTXY_H
 #define _CRTXY_H
 
 #include <SDL.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* --- General types --- */
 
@@ -331,5 +335,10 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
 
 /* Returns whether any lines in one group intersect lines in another */
 XY_bool XY_line_groups_intersect(XY_lines * lines1, XY_lines * lines2);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _CRTXY_H */
