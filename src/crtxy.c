@@ -2258,12 +2258,79 @@ void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
     rects[r1].y = bottom2 - rects[r1].y + 1;
 }
 
-XY_bool XY_lines_intersect(XY_line * lines1, XY_line * lines2,
+/* Based on http://www.pdas.com/lineint.htm (Public Domain) and
+   http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/ */
+
+XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
                            XY_fixed * intersect_x, XY_fixed * intersect_y,
                            int * result)
 {
-  /* FIXME: Do it! */
+  XY_fixed a1, b1, c1, a2, b2, c2; /* Coefficients of line equations */
+  XY_fixed ua, ub, denom;
+
+  /* FIXME: The code below doesn't work yet */
+  return(XY_FALSE);
+
+
+  a1 = line1.y2 - line1.y1;
+  b1 = line1.x1 - line1.x2;
+  c1 = XY_mult(line1.x2, line1.y1) - XY_mult(line1.x1, line1.y2);
+
+  a2 = line2.y2 - line2.y1;
+  b2 = line2.x1 - line2.x2;
+  c2 = XY_mult(line2.x2, line2.y1) - XY_mult(line2.x1, line2.y2);
+
+  denom = XY_mult(a1, b2) - XY_mult(a2, b1);
+  if (denom <= XY_FIXED_DIV_ZERO)
+  {
+    if (c1 == 0 && c2 == 0)
+    {
+      if (result != NULL)
+        *result = XY_INTERSECTION_COINCIDENT;
+      return(XY_TRUE);
+    }
+    else
+    {
+      if (result != NULL)
+        *result = XY_INTERSECTION_PARALLEL;
+      return(XY_FALSE);
+    }
+  }
+
+  ua = XY_div((XY_mult(b1, c2) - XY_mult(b2, c1)), denom);
+  ub = XY_div((XY_mult(a2, c1) - XY_mult(a1, c2)), denom);
+
+  if (ua >= 0 && ua <= XY_FIXED_ONE &&
+      ub >= 0 && ub <= XY_FIXED_ONE)
+  {
+    if (intersect_x != NULL)
+      *intersect_x = line1.x1 + XY_mult(ua, (line1.x2 - line1.x1));
+   if (intersect_y != NULL)
+       *intersect_y = line1.y1 + XY_mult(ub, (line1.y2 - line1.y1));
+  
+    return(XY_TRUE);
+  }
 
   return(XY_FALSE);
 }
 
+XY_bool XY_line_groups_intersect(XY_lines * lines1, XY_lines * lines2)
+{
+  int i, j;
+
+  if (lines1 == NULL || lines1->count == 0 || lines1->lines == NULL ||
+      lines2 == NULL || lines2->count == 0 || lines2->lines == NULL)
+    return(XY_FALSE);
+
+  for (i = 0; i < lines1->count; i++)
+  {
+    for (j = 0; j < lines2->count; j++)
+    {
+      if (XY_lines_intersect(lines1->lines[i], lines2->lines[j],
+                             NULL, NULL, NULL))
+        return(XY_TRUE);
+    }
+  }
+
+  return(XY_FALSE);
+}

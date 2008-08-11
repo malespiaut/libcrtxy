@@ -284,8 +284,7 @@ int main(int argc, char * argv[])
       XY_draw_lines(rock_lines);
 
 
-      if (XY_lines_intersect(ship_lines, rock_lines,
-                             NULL, NULL, NULL) == XY_TRUE)
+      if (XY_line_groups_intersect(ship_lines, rock_lines))
       {
         bounce(&xm, XY_FIXED_ONE, &(rocks[i].xm), XY_FIXED_HALF);
         bounce(&ym, XY_FIXED_ONE, &(rocks[i].ym), XY_FIXED_HALF);

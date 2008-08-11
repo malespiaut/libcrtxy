@@ -117,6 +117,14 @@ enum {
   NUM_XY_ERRS
 };
 
+/* Line intersection results: */
+enum {
+  XY_INTERSECTION_NONE,
+  XY_INTERSECTION_INTERSECTING,
+  XY_INTERSECTION_PARALLEL,
+  XY_INTERSECTION_COINCIDENT
+};
+
 
 /* --- Runtime flags and options --- */
 
@@ -274,7 +282,10 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color);
 #define XY_qdiv(a,b) (((a) / \
 		       ((b) >> XY_FIXED_SHIFT_HALF)) \
                       << XY_FIXED_SHIFT_HALF)
-#define XY_div(a,b) ((b) == 0 ? XY_FIXED_NAN : XY_qdiv((a),(b)))
+#define XY_div(a,b) (((b) >> XY_FIXED_SHIFT_HALF) == 0 ? \
+                     XY_FIXED_NAN : XY_qdiv((a),(b)))
+
+#define XY_FIXED_DIV_ZERO ((1 << XY_FIXED_SHIFT_HALF) - 1)
 
 /* Returns the fractional part of 'a'.  XY_rfpart returns one minus that. */
 #define XY_fpart(a) ((a) & (XY_FIXED_ONE - 1))
@@ -314,8 +325,11 @@ int XY_get_screenh(void);
    return the (x,y) coordinates of the intersection (if possible), and
    the intersection result (parallel, coincident, not intersecting,
    intersecting) */
-XY_bool XY_lines_intersect(XY_line * lines1, XY_line * lines2,
+XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
                            XY_fixed * intersect_x, XY_fixed * intersect_y,
                            int * result);
+
+/* Returns whether any lines in one group intersect lines in another */
+XY_bool XY_line_groups_intersect(XY_lines * lines1, XY_lines * lines2);
 
 #endif /* _CRTXY_H */
