@@ -2265,25 +2265,26 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
                            XY_fixed * intersect_x, XY_fixed * intersect_y,
                            int * result)
 {
-  XY_fixed a1, b1, c1, a2, b2, c2; /* Coefficients of line equations */
-  XY_fixed ua, ub, denom;
-
-  /* FIXME: The code below doesn't work yet */
-  return(XY_FALSE);
-
-
+  XY_fixed a1, b1, c1, a2, b2, c2;
+  XY_fixed ua, ub, denom, numerator_a, numerator_b;
+  
   a1 = line1.y2 - line1.y1;
-  b1 = line1.x1 - line1.x2;
-  c1 = XY_mult(line1.x2, line1.y1) - XY_mult(line1.x1, line1.y2);
+  b1 = line1.x2 - line1.x1;
 
   a2 = line2.y2 - line2.y1;
-  b2 = line2.x1 - line2.x2;
-  c2 = XY_mult(line2.x2, line2.y1) - XY_mult(line2.x1, line2.y2);
+  b2 = line2.x2 - line2.x1;
 
-  denom = XY_mult(a1, b2) - XY_mult(a2, b1);
+  c1 = line1.x1 - line2.x1;
+  c2 = line1.y1 - line2.y1;
+
+  denom = XY_mult(a2, b1) - XY_mult(b2, a1);
+
+  numerator_a = XY_mult(b2, c2) - XY_mult(a2, c1);
+  numerator_b = XY_mult(b1, c2) - XY_mult(a1, c1);
+
   if (denom <= XY_FIXED_DIV_ZERO)
   {
-    if (c1 == 0 && c2 == 0)
+    if (numerator_a == 0 && numerator_b == 0)
     {
       if (result != NULL)
         *result = XY_INTERSECTION_COINCIDENT;
@@ -2297,8 +2298,8 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
     }
   }
 
-  ua = XY_div((XY_mult(b1, c2) - XY_mult(b2, c1)), denom);
-  ub = XY_div((XY_mult(a2, c1) - XY_mult(a1, c2)), denom);
+  ua = XY_div(numerator_a, denom);
+  ub = XY_div(numerator_b, denom);
 
   if (ua >= 0 && ua <= XY_FIXED_ONE &&
       ub >= 0 && ub <= XY_FIXED_ONE)
@@ -2306,7 +2307,7 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
     if (intersect_x != NULL)
       *intersect_x = line1.x1 + XY_mult(ua, (line1.x2 - line1.x1));
    if (intersect_y != NULL)
-       *intersect_y = line1.y1 + XY_mult(ub, (line1.y2 - line1.y1));
+       *intersect_y = line1.y1 + XY_mult(ua, (line1.y2 - line1.y1));
   
     return(XY_TRUE);
   }
