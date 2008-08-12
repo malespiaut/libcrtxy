@@ -3,7 +3,7 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 11, 2008
+Last modified: August 12, 2008
 
 Documentation
 * Create installation docs
@@ -35,6 +35,7 @@ Rendering implementations
   or a special XY_color value.)
 * Allow background bitmaps to be scaled (by percent, or set in terms of
   canvas units)...?
+* Implement line thickness support
 
 Visual effects
 * Support repeating background patterns.
@@ -47,6 +48,8 @@ Helper functions
 * Add fast fixed-point distance calculator.
 * Add 'inside polygon' test (for Quantum-style games)
 * Other math things, as we think of them...
+* Add line group rotation
+* Add line group scaling
 
 Other features:
 * Allow loading bitmaps from pixel data
@@ -55,6 +58,10 @@ Other features:
   unknown lines, so app-specific config files only need to get read once.
 
 Desktop interfacing
-* Support window icon
-* Support window title
-* Allow window resizing
+* Support window class (SDL_VIDEO_X11_WMCLASS=xxx.yyy)
+* Support screensaver enable/disable (SDL_VIDEO_ALLOW_SCREENSAVER=1)
+* Support windowing position (SDL_VIDEO_WINDOW_POS=center/nopref/...)
+* Support window icon (SDL_WM_setIcon())
+* Support window title (SDL_WM_SetCaption())
+* Support mouse on/off (SDL_ShowCursor())
+* Allow window resizing (SDL_RESIZABLE)

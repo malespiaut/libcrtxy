@@ -1389,12 +1389,50 @@ XY_lines * XY_new_lines(void)
   return(l);
 }
 
-void XY_start_lines(XY_lines * lines)
+XY_lines * XY_duplicate_lines(XY_lines * src)
+{
+  XY_lines * l;
+
+  if (src == NULL || src->lines == NULL)
+  {
+    XY_err_code = XY_ERR_LINES_INVALID;
+    return(NULL);
+  }
+
+  l = (XY_lines *) malloc(sizeof(XY_lines));
+  if (l == NULL)
+  {
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    return(NULL);
+  }
+
+  l->count = src->count;
+  l->max = ((src->count + 127) / 128) * 128;
+  l->lines = (XY_line *) malloc(sizeof(XY_line) * l->max);
+
+  if (l->lines == NULL)
+  {
+    XY_err_code = XY_ERR_MEM_CANT_ALLOC;
+    free(l);
+    return(NULL);
+  }
+
+  memcpy(l->lines, src->lines, sizeof(XY_line) * l->count);
+
+  return(l);
+}
+
+XY_bool XY_start_lines(XY_lines * lines)
 {
   if (lines == NULL)
-    return; /* FIXME: Error code & return? */
+  {
+    XY_err_code = XY_ERR_LINES_INVALID;
+    return(XY_FALSE);
+  }
 
   lines->count = 0;
+
+  return(XY_TRUE);
 }
 
 XY_bool XY_add_line(XY_lines * lines,
@@ -1402,7 +1440,10 @@ XY_bool XY_add_line(XY_lines * lines,
                     XY_color color, XY_fixed thickness)
 {
   if (lines == NULL)
-    return(XY_FALSE); /* FIXME: Set error code */
+  {
+    XY_err_code = XY_ERR_LINES_INVALID;
+    return(XY_FALSE);
+  }
 
   if (lines->count >= lines->max)
   {
@@ -1429,10 +1470,13 @@ XY_bool XY_add_line(XY_lines * lines,
   return(XY_TRUE);
 }
 
-void XY_free_lines(XY_lines * lines)
+XY_bool XY_free_lines(XY_lines * lines)
 {
   if (lines == NULL)
-    return; /* FIXME: Error code & return? */
+  {
+    XY_err_code = XY_ERR_LINES_INVALID;
+    return(XY_FALSE);
+  }
 
   lines->count = 0;
   lines->max = 0;
@@ -1441,17 +1485,23 @@ void XY_free_lines(XY_lines * lines)
     free(lines->lines);
     lines->lines = NULL;
   }
+  return(XY_TRUE);
 }
 
-void XY_draw_lines(XY_lines * lines)
+XY_bool XY_draw_lines(XY_lines * lines)
 {
   int i;
 
   if (lines == NULL || lines->lines == NULL)
-    return; /* FIXME: Set error code & return? */
+  {
+    XY_err_code = XY_ERR_LINES_INVALID;
+    return(XY_FALSE);
+  }
 
   for (i = 0; i < lines->count; i++)
     XY_draw_one_line(lines->lines[i]);
+
+  return(XY_TRUE);
 }
 
 void XY_draw_one_line(XY_line line)

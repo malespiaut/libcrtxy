@@ -122,6 +122,7 @@ enum {
   XY_ERR_BITMAP_CANT_DECODE, // Error decoding image file (IMG_Load failed)
   XY_ERR_BITMAP_CANT_CONVERT, // Cannot convert a surface to the display fmt.
   XY_ERR_BITMAP_CANT_SCALE, // Cannot scale an image (probably mem. alloc. fail)
+  XY_ERR_LINES_INVALID, // Invalid (NULL?) group of lines
   NUM_XY_ERRS
 };
 
@@ -253,16 +254,28 @@ int XY_end_frame(XY_bool throttle);
 /* Create a collection: */
 XY_lines * XY_new_lines(void);
 
+/* Duplicates a collection: */
+XY_lines * XY_duplicate_lines(XY_lines * lines);
+
 /* Free a collection: */
-void XY_free_lines(XY_lines * lines);
+XY_bool XY_free_lines(XY_lines * lines);
 
 /* Start/reset a collection: */
-void XY_start_lines(XY_lines * lines);
+XY_bool XY_start_lines(XY_lines * lines);
 
 /* Add a new line: */
 XY_bool XY_add_line(XY_lines * lines,
                     XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                     XY_color color, XY_fixed thickness);
+
+/* Translate a group of lines: */
+XY_bool XY_translate_lines(XY_lines * lines,
+                           XY_fixed x, XY_fixed y);
+
+/* FIXME: Also add:
+   Scale
+   Rotate
+*/
 
 
 /* - Drawing primitives: - */
@@ -273,7 +286,7 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color, XY_fixed thickness);
 
 /* Draw a collection of lines */
-void XY_draw_lines(XY_lines * lines);
+XY_bool XY_draw_lines(XY_lines * lines);
 
 /* Draw a line using an XY_line struct */
 void XY_draw_one_line(XY_line line);
