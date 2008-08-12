@@ -214,10 +214,10 @@ int main(int argc, char * argv[])
     y3 = y - XY_mult(XY_sin(angle + 135), RADIUS);
 
     XY_start_lines(ship_lines);
-    XY_add_line(ship_lines, x1, y1, x2, y2, white);
-    XY_add_line(ship_lines, x2, y2, x3, y3, white);
-    XY_add_line(ship_lines, x3, y3, x, y, white);
-    XY_add_line(ship_lines, x, y, x1, y1, white);
+    XY_add_line(ship_lines, x1, y1, x2, y2, white, XY_THIN);
+    XY_add_line(ship_lines, x2, y2, x3, y3, white, XY_THIN);
+    XY_add_line(ship_lines, x3, y3, x, y, white, XY_THIN);
+    XY_add_line(ship_lines, x, y, x1, y1, white, XY_THIN);
     XY_draw_lines(ship_lines);
 
     if (key_thrust)
@@ -228,8 +228,8 @@ int main(int argc, char * argv[])
 
       c = rand() % 3;
 
-      XY_draw_line(x1, y1, x4, y4, flame_colors[c]);
-      XY_draw_line(x3, y3, x4, y4, flame_colors[c]);
+      XY_draw_line(x1, y1, x4, y4, flame_colors[c], XY_THIN);
+      XY_draw_line(x3, y3, x4, y4, flame_colors[c], XY_THIN);
     }
 
     if (key_cw)
@@ -239,7 +239,7 @@ int main(int argc, char * argv[])
 
       c = rand() % 3;
 
-      XY_draw_line(x2, y2, x4, y4, flame_colors[c]);
+      XY_draw_line(x2, y2, x4, y4, flame_colors[c], XY_THIN);
     }
     else if (key_ccw)
     {
@@ -248,7 +248,7 @@ int main(int argc, char * argv[])
 
       c = rand() % 3;
 
-      XY_draw_line(x2, y2, x4, y4, flame_colors[c]);
+      XY_draw_line(x2, y2, x4, y4, flame_colors[c], XY_THIN);
     }
 
     for (i = 0; i < NUM_ROCKS; i++)
@@ -270,16 +270,16 @@ int main(int argc, char * argv[])
 
       XY_start_lines(rock_lines);
 
-      XY_add_line(rock_lines, x1, y1, x2, y2, colors[rocks[i].color]);
-      XY_add_line(rock_lines, x2, y2, x3, y3, colors[rocks[i].color]);
-      XY_add_line(rock_lines, x3, y3, x1, y1, colors[rocks[i].color]);
+      XY_add_line(rock_lines, x1, y1, x2, y2, colors[rocks[i].color], XY_THIN);
+      XY_add_line(rock_lines, x2, y2, x3, y3, colors[rocks[i].color], XY_THIN);
+      XY_add_line(rock_lines, x3, y3, x1, y1, colors[rocks[i].color], XY_THIN);
 
       XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x1, y1,
-                  colors[rocks[i].color]);
+                  colors[rocks[i].color], XY_THIN);
       XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x2, y2,
-                  colors[rocks[i].color]);
+                  colors[rocks[i].color], XY_THIN);
       XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x3, y3,
-                  colors[rocks[i].color]);
+                  colors[rocks[i].color], XY_THIN);
 
       XY_draw_lines(rock_lines);
 

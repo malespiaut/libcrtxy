@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 2, 2008
+  July 29, 2008 - August 12, 2008
 */
 
 #include <crtxy.h>
@@ -91,7 +91,7 @@ int main(int argc, char * argv[])
                             255 - ((a * 255) / 720),
                             i * 16);
 
-        XY_draw_line(x1, y1, x2, y2, color);
+        XY_draw_line(x1, y1, x2, y2, color, XY_THIN);
       }
     }
 

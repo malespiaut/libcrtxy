@@ -4,7 +4,7 @@ http://libcrtxy.sf.net/
 Bill Kendrick <bill@newbreedsoftware.com>
 
 
-2008.08.11 (0.0.2)
+2008.08.12 (0.0.2)
 * Optimizations
   + Began dirty rectangle update implementation
 * Improvements
@@ -13,6 +13,7 @@ Bill Kendrick <bill@newbreedsoftware.com>
     by Solra Bizna <solra@bizna.name>)
   + Added line intersection test.
   + Line collections can be made, drawn, and tested for intersection.
+  + Added line thickness support to API (thickness not yet implemented).
 * Options
   + Added fullscreen/window env. var. support.
 * Fixes

@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 11, 2008
+  July 29, 2008 - August 12, 2008
 */
 
 #include "crtxy.h"
@@ -1399,7 +1399,7 @@ void XY_start_lines(XY_lines * lines)
 
 XY_bool XY_add_line(XY_lines * lines,
                     XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
-                    XY_color color)
+                    XY_color color, XY_fixed thickness)
 {
   if (lines == NULL)
     return(XY_FALSE); /* FIXME: Set error code */
@@ -1422,6 +1422,7 @@ XY_bool XY_add_line(XY_lines * lines,
   lines->lines[lines->count].x2 = x2;
   lines->lines[lines->count].y2 = y2;
   lines->lines[lines->count].color = color;
+  lines->lines[lines->count].thickness = thickness;
 
   lines->count++;
 
@@ -1450,19 +1451,24 @@ void XY_draw_lines(XY_lines * lines)
     return; /* FIXME: Set error code & return? */
 
   for (i = 0; i < lines->count; i++)
-    XY_draw_line(lines->lines[i].x1, lines->lines[i].y1,
-                 lines->lines[i].x2, lines->lines[i].y2,
-                 lines->lines[i].color);
+    XY_draw_one_line(lines->lines[i]);
+}
+
+void XY_draw_one_line(XY_line line)
+{
+  XY_draw_line(line.x1, line.y1,
+               line.x2, line.y2,
+               line.color, line.thickness);
 }
 
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
-                  XY_color color)
+                  XY_color color, XY_fixed thickness)
 {
   int sx1, sy1, sx2, sy2;
   XY_fixed fsx1, fsy1, fsx2, fsy2;
 
-  if ((color & 0xff) == 0)
-    return; /* Fully transparent! */
+  if ((color & 0xff) == 0 || thickness < XY_FIXED_ONE)
+    return; /* Fully transparent or thickness < 1.0 ! */
 
   XY_canvas_to_screen(x1, y1, &sx1, &sy1);
   XY_canvas_to_screen(x2, y2, &sx2, &sy2);
@@ -1471,6 +1477,8 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
   fsy1 = sy1 << XY_FIXED_SHIFT;
   fsx2 = sx2 << XY_FIXED_SHIFT;
   fsy2 = sy2 << XY_FIXED_SHIFT;
+
+  /* FIXME: Take thickness into account! */
 
   if (XY_antialias)
   {
@@ -1702,15 +1710,10 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
   }
 }
 
-void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color)
+/* FIXME: Can probably just be a macro */
+void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color, XY_fixed thickness)
 {
-  int sx, sy;
-  Uint32 sdlcolor = XY_color_to_sdl_color(color);
-  XY_fixed alph = ((color & 0xff) << XY_FIXED_SHIFT) / 255;
-
-  XY_canvas_to_screen(x, y, &sx, &sy);
-
-  putpixel(XY_screen, sx, sy, sdlcolor, alph, NULL, NULL);
+  XY_draw_line(x, y, x, y, color, thickness);
 }
 
 XY_fixed XY_cos(int degrees)

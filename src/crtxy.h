@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 11, 2008
+  July 29, 2008 - August 12, 2008
 */
 
 #ifndef _CRTXY_H
@@ -54,11 +54,15 @@ typedef Sint32 XY_fixed;
 
 /* --- Geometry types: --- */
 
+/* Some standard thicknesses: */
+#define XY_THIN XY_FIXED_ONE
+
 /* Line type (struct): */
 typedef struct XY_line_s {
   XY_fixed x1, y1;
   XY_fixed x2, y2;
   XY_color color;
+  XY_fixed thickness;
 } XY_line;
 
 /* Multiple lines type (struct): */
@@ -258,7 +262,7 @@ void XY_start_lines(XY_lines * lines);
 /* Add a new line: */
 XY_bool XY_add_line(XY_lines * lines,
                     XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
-                    XY_color color);
+                    XY_color color, XY_fixed thickness);
 
 
 /* - Drawing primitives: - */
@@ -266,14 +270,17 @@ XY_bool XY_add_line(XY_lines * lines,
 /* Draw a line between (x1,y1) and (x2,y2) (in canvas virtual world units)
    in the specified color/alpha */
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
-                  XY_color color);
+                  XY_color color, XY_fixed thickness);
 
 /* Draw a collection of lines */
 void XY_draw_lines(XY_lines * lines);
 
+/* Draw a line using an XY_line struct */
+void XY_draw_one_line(XY_line line);
+
 /* Draw a point at (x,y) (in canvas virtual world units)
    in the specified color/alpha */
-void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color);
+void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color, XY_fixed thickness);
 
 
 /* - Fixed-point math functions: - */
