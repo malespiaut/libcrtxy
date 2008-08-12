@@ -1470,6 +1470,28 @@ XY_bool XY_add_line(XY_lines * lines,
   return(XY_TRUE);
 }
 
+XY_bool XY_translate_lines(XY_lines * lines,
+                           XY_fixed x, XY_fixed y)
+{
+  int i;
+
+  if (lines == NULL || lines->lines == NULL)
+  {
+    XY_err_code = XY_ERR_LINES_INVALID;
+    return(XY_FALSE);
+  }
+
+  for (i = 0; i < lines->count; i++)
+  {
+    lines->lines[i].x1 += x;
+    lines->lines[i].y1 += y;
+    lines->lines[i].x2 += x;
+    lines->lines[i].y2 += y;
+  }
+
+  return(XY_TRUE);
+}
+
 XY_bool XY_free_lines(XY_lines * lines)
 {
   if (lines == NULL)
