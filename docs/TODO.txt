@@ -19,12 +19,12 @@ Options
 Optimizations
 * Create a line clip routine
 * Lock/Unlock SDL surfaces!!!
+* Make dirty rectangle merging work
 * Subdivide dirty rectangles so they don't include as much unused area around
   diagonal lines.
 
 Code cleanup
 * Split code into modules
-* SDL_QuitSubSystem() instead of SDL_Quit()?
 
 Rendering implementations
 * "Best" bitmap scaling mode

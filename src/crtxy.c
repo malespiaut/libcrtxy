@@ -764,11 +764,30 @@ XY_bool XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash)
 
   XY_err_code = XY_ERR_NONE;
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  if (SDL_WasInit(0) != 0)
   {
-    /* FIXME: Call SDL_QuitSubSystem(SDL_INIT_VIDEO) here? */
-    XY_err_code = XY_ERR_INIT_VIDEO;
-    return(XY_FALSE);
+    /* Caller initialized SDL before calling XY_init() */
+
+    if (SDL_WasInit(SDL_INIT_VIDEO) == 0)
+    {
+      /* Caller did not yet initialize video, so we must */
+
+      if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
+      {
+        XY_err_code = XY_ERR_INIT_VIDEO;
+        return(XY_FALSE);
+      }
+    }
+  }
+  else
+  {
+    /* None of SDL was init yet, so call SDL_Init() directly: */
+
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+      XY_err_code = XY_ERR_INIT_VIDEO;
+      return(XY_FALSE);
+    }
   }
 
   XY_canvasw = canvasw;
@@ -911,8 +930,7 @@ void XY_quit(void)
   if (XY_dirty_rects_all != NULL)
     free(XY_dirty_rects_all);
 
-  /* FIXME: Use SDL_QuitSubSystem(SDL_INIT_VIDEO) instead? */
-  SDL_Quit();
+  SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
 int XY_errcode(void)
@@ -2264,7 +2282,7 @@ void XY_merge_dirty_rects(SDL_Rect * rects, int * cnt)
 
   /* FIXME: Make rect. merging work! */
 
-  return;
+  //return;
 
   do
   {
@@ -2305,8 +2323,8 @@ XY_bool XY_rects_intersect(SDL_Rect * rects, int r1, int r2)
   top2 = rects[r2].y;
   bottom2 = rects[r2].y + rects[r2].h - 1;
 
-  return !(left1 > right2 || right1 < left2 ||
-           top1 > bottom2 || bottom1 < top2);
+  return !(left1 >= right2 || right1 <= left2 ||
+           top1 >= bottom2 || bottom1 <= top2);
 }
 
 void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
@@ -2324,13 +2342,17 @@ void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
     rects[r1].x = rects[r2].x;
 
   if (right2 > right1)
-    rects[r1].w = right2 - rects[r1].x + 1;
+    right1 = right2;
+
+  rects[r1].w = right1 - rects[r1].x + 1;
 
   if (rects[r2].y < rects[r1].y)
     rects[r1].y = rects[r2].y;
 
   if (bottom2 > bottom1)
-    rects[r1].y = bottom2 - rects[r1].y + 1;
+    bottom1 = bottom2;
+
+  rects[r1].h = bottom1 - rects[r1].y + 1;
 }
 
 /* Based on http://www.pdas.com/lineint.htm (Public Domain) and

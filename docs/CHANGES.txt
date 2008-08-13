@@ -14,6 +14,9 @@ Bill Kendrick <bill@newbreedsoftware.com>
   + Added line intersection test.
   + Line collections can be made, drawn, and tested for intersection.
   + Added line thickness support to API (thickness not yet implemented).
+  + SDL_Init() called if nothing about SDL was initalized,
+    otherwise SDL_InitSubSystem(SDL_INIT_VIDEO) is called, if video
+    wasn't already initialized.
 * Options
   + Added fullscreen/window env. var. support.
 * Fixes
