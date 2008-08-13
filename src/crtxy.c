@@ -1186,6 +1186,8 @@ SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
   void (*pp) (SDL_Surface *, int, int, Uint32, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s);
   Uint32 (*gp) (SDL_Surface * surface, int x, int y);
 
+  /* FIXME: Test whether orig is actually set: */
+
   yscale = (orig->h << XY_FIXED_SHIFT) / new_h;
   xscale = (orig->w << XY_FIXED_SHIFT) / new_w;
 
@@ -1200,7 +1202,13 @@ SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
 			   orig->format->Bmask,
 			   orig->format->Amask);
   if (s == NULL)
-    return(NULL);
+    return(NULL); /* FIXME: Error */
+
+  if (SDL_MUSTLOCK(s))
+    SDL_LockSurface(s);
+
+  if (SDL_MUSTLOCK(orig))
+    SDL_LockSurface(orig);
 
   if (orig->format->BytesPerPixel == 2)
     gp = getpixel_16;
@@ -1260,6 +1268,12 @@ SDL_Surface * scale_surf_fast(SDL_Surface * orig, int new_w, int new_h)
       }
     }
   }
+
+  if (SDL_MUSTLOCK(orig))
+    SDL_UnlockSurface(orig);
+
+  if (SDL_MUSTLOCK(s))
+    SDL_UnlockSurface(s);
 
   return(s);
 }
@@ -1626,6 +1640,9 @@ void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
   Uint8 alph;
   XY_fixed fixed_alph;
 
+  if (SDL_MUSTLOCK(XY_screen))
+    SDL_LockSurface(XY_screen);
+
   alph = (color & 0xff);
   fixed_alph = (alph << XY_FIXED_SHIFT) / 255;
 
@@ -1760,6 +1777,9 @@ void XY_draw_line_xiaolinwu(XY_fixed fsx1, XY_fixed fsy1,
       interx += gradient;
     }
   }
+
+  if (SDL_MUSTLOCK(XY_screen))
+    SDL_UnlockSurface(XY_screen);
 }
 
 void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
@@ -1771,6 +1791,9 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
   XY_fixed dx, dy;
   XY_fixed m, b;
   int y;
+
+  if (SDL_MUSTLOCK(XY_screen))
+    SDL_LockSurface(XY_screen);
 
   /* FIXME: clip!  if (XY_clip(&sx1, &sy1, &sx2, &sy2)) */
   {
@@ -1821,6 +1844,9 @@ void XY_draw_line_bresenham(XY_fixed fsx1, XY_fixed fsy1,
       }
     }
   }
+  
+  if (SDL_MUSTLOCK(XY_screen))
+    SDL_UnlockSurface(XY_screen);
 }
 
 /* FIXME: Can probably just be a macro */

@@ -25,6 +25,7 @@ Bill Kendrick <bill@newbreedsoftware.com>
   + XY_getcolor() was broken. Fixed.
   + Made crtxy.h C++-friendly.
     Thanks to: 'synkro' on #SDL
+  + Locking/unlocking surfaces before accessing pixels, if necessary.
 * Additions
   + Created polygon test app.
 
