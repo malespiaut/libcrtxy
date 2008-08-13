@@ -55,7 +55,7 @@ int main(int argc, char * argv[])
   XY_print_options(stdout, opts);
 
 
-  if (XY_init(&opts, 32<<XY_FIXED_SHIFT, 24<<XY_FIXED_SHIFT) < 0)
+  if (!XY_init(&opts, 32<<XY_FIXED_SHIFT, 24<<XY_FIXED_SHIFT))
   {
     fprintf(stderr, "Error initializing libcrtxy: %s\n", XY_errstr());
     XY_print_options(stderr, opts);

@@ -67,7 +67,7 @@ int main(int argc, char * argv[])
     return(1);
   }
 
-  if (XY_init(&opts, WIDTH, HEIGHT) < 0)
+  if (!XY_init(&opts, WIDTH, HEIGHT))
   {
     fprintf(stderr, "Error initializing libcrtxy: %s\n", XY_errstr());
     XY_print_options(stderr, opts);
