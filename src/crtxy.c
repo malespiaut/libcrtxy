@@ -1512,6 +1512,27 @@ XY_bool XY_translate_lines(XY_lines * lines,
   return(XY_TRUE);
 }
 
+XY_bool XY_scale_lines(XY_lines *, XY_fixed xscale, XY_fixed yscale)
+{
+  int i;
+
+  if (lines == NULL || lines->lines == NULL)
+  {
+    XY_err_code = XY_ERR_LINES_INVALID;
+    return(XY_FALSE);
+  }
+
+  for (i = 0; i < lines->count; i++)
+  {
+    lines->lines[i].x1 = XY_mult(lines[i].x1, xscale);
+    lines->lines[i].y1 = XY_mult(lines[i].y1, yscale);
+    lines->lines[i].x2 = XY_mult(lines[i].x2, xscale);
+    lines->lines[i].y2 = XY_mult(lines[i].y2, yscale);
+  }
+
+  return(XY_TRUE);
+}
+
 XY_bool XY_free_lines(XY_lines * lines)
 {
   if (lines == NULL)

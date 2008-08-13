@@ -47,9 +47,8 @@ Helper functions
 * Add support for line wrap-around (a la Asteroids)
 * Add fast fixed-point distance calculator.
 * Add 'inside polygon' test (for Quantum-style games)
-* Other math things, as we think of them...
+* Other math functions, as we think of them...
 * Add line group rotation
-* Add line group scaling
 
 Other features:
 * Allow loading bitmaps from pixel data

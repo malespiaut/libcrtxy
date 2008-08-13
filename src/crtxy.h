@@ -268,12 +268,12 @@ XY_bool XY_add_line(XY_lines * lines,
                     XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                     XY_color color, XY_fixed thickness);
 
-/* Translate a group of lines: */
+/* Alter groups of lines: */
 XY_bool XY_translate_lines(XY_lines * lines,
                            XY_fixed x, XY_fixed y);
+XY_bool XY_scale_lines(XY_lines *, XY_fixed xscale, XY_fixed yscale);
 
 /* FIXME: Also add:
-   Scale
    Rotate
 */
 
