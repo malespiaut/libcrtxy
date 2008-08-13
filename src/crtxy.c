@@ -2429,11 +2429,15 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
     if (intersect_y != NULL)
       *intersect_y = line1.y1 + XY_mult(ua, a1);
   
-    *result = XY_INTERSECTION_INTERSECTING;
+    if (result != NULL)
+      *result = XY_INTERSECTION_INTERSECTING;
+
     return(XY_TRUE);
   }
 
-  *result = XY_INTERSECTION_NONE;
+  if (result != NULL)
+    *result = XY_INTERSECTION_NONE;
+
   return(XY_FALSE);
 }
 
