@@ -2378,67 +2378,124 @@ void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
   rects[r1].h = bottom1 - rects[r1].y + 1;
 }
 
-/* Based on http://www.pdas.com/lineint.htm (Public Domain) and
-   http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/ */
+/* Based on lines_intersect (xlines.c) by Mukesh Prasad,
+   from Graphics Gems II.
+   http://tog.acm.org/GraphicsGems/gemsii/xlines.c
+   And http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/ */
 
 XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
                            XY_fixed * intersect_x, XY_fixed * intersect_y,
                            int * result)
 {
-  XY_fixed a1, b1, c1, a2, b2, c2;
-  XY_fixed ua, ub, denom, numerator_a, numerator_b;
-  
-  a1 = line1.y2 - line1.y1;
-  b1 = line1.x2 - line1.x1;
+  XY_fixed x1, y1, x2, y2, x3, y3, x4, y4, x, y, ua;
+  XY_fixed a1, a2, b1, b2, c1, c2; /* Coefficients of line eqns. */
+  XY_fixed r1, r2, r3, r4;         /* 'Sign' values */
+  XY_fixed denom, offset, numa, numb;     /* Intermediate values */
 
-  a2 = line2.y2 - line2.y1;
-  b2 = line2.x2 - line2.x1;
+  x1 = line1.x1;
+  y1 = line1.y1;
+  x2 = line1.x2;
+  y2 = line1.y2;
+  x3 = line2.x1;
+  y3 = line2.y1;
+  x4 = line2.x2;
+  y4 = line2.y2;
 
-  c1 = line1.x1 - line2.x1;
-  c2 = line1.y1 - line2.y1;
+  /* Compute a1, b1, c1, where line joining points 1 and 2
+     is "a1 x  +  b1 y  +  c1  =  0".  */
 
-  denom = XY_mult(a2, b1) - XY_mult(b2, a1);
+  a1 = y2 - y1;
+  b1 = x1 - x2;
+  c1 = XY_mult(x2, y1) - XY_mult(x1, y2);
 
-  numerator_a = XY_mult(b2, c2) - XY_mult(a2, c1);
-  numerator_b = XY_mult(b1, c2) - XY_mult(a1, c1);
+  /* Compute r3 and r4. */
 
+  r3 = XY_mult(a1, x3) + XY_mult(b1, y3) + c1;
+  r4 = XY_mult(a1, x4) + XY_mult(b1, y4) + c1;
+
+  /* Check signs of r3 and r4.  If both point 3 and point 4 lie on
+     same side of line 1, the line segments do not intersect. */
+
+  if (r3 != 0 &&
+      r4 != 0 &&
+      ((r3 > 0 && r4 > 0) || (r3 < 0 && r4 < 0))) /* Same signs */
+  {
+    if (result != NULL)
+      *result = XY_INTERSECTION_NONE;
+
+    return(XY_FALSE);
+  }
+
+  /* Compute a2, b2, c2 */
+
+  a2 = y4 - y3;
+  b2 = x3 - x4;
+  c2 = XY_mult(x4, y3) - XY_mult(x3, y4);
+
+  /* Compute r1 and r2 */
+
+  r1 = XY_mult(a2, x1) + XY_mult(b2, y1) + c2;
+  r2 = XY_mult(a2, x2) + XY_mult(b2, y2) + c2;
+
+  /* Check signs of r1 and r2.  If both point 1 and point 2 lie
+     on same side of second line segment, the line segments do
+     not intersect. */
+
+  if (r1 != 0 &&
+      r2 != 0 &&
+      ((r1 > 0 && r2 > 0) || (r1 < 0 && r2 < 0))) /* Same signs */
+  {
+    if (result != NULL)
+      *result = XY_INTERSECTION_NONE;
+
+    return(XY_FALSE);
+  }
+
+  /* Line segments intersect: compute intersection point. */
+
+  denom = XY_mult(a1, b2) - XY_mult(a2, b1);
+  numa = XY_mult(b1, c2) - XY_mult(b2, c1);
+  numb = XY_mult(a2, c1) - XY_mult(a1, c2);
   if (denom <= XY_FIXED_DIV_ZERO)
   {
-    if (numerator_a == 0 && numerator_b == 0)
-    {
-      if (result != NULL)
-        *result = XY_INTERSECTION_COINCIDENT;
-      return(XY_TRUE);
-    }
-    else
-    {
-      if (result != NULL)
-        *result = XY_INTERSECTION_PARALLEL;
-      return(XY_FALSE);
-    }
-  }
-
-  ua = XY_div(numerator_a, denom);
-  ub = XY_div(numerator_b, denom);
-
-  if (ua >= 0 && ua <= XY_FIXED_ONE &&
-      ub >= 0 && ub <= XY_FIXED_ONE)
-  {
-    if (intersect_x != NULL)
-      *intersect_x = line1.x1 + XY_mult(ua, b1);
-    if (intersect_y != NULL)
-      *intersect_y = line1.y1 + XY_mult(ua, a1);
-  
     if (result != NULL)
-      *result = XY_INTERSECTION_INTERSECTING;
+    {
+      if (numa == 0 && numb == 0)
+        *result = XY_INTERSECTION_COINCIDENT;
+      else
+        *result = XY_INTERSECTION_PARALLEL;
+    }
 
-    return(XY_TRUE);
+    return(XY_FALSE);
   }
+
+  offset = ((denom < 0) ? -(denom / 2) : (denom / 2));
+
+  /* The denom/2 is to get rounding instead of truncating.  It
+     is added or subtracted to the numerator, depending upon the
+     sign of the numerator. */
+
+  ua = XY_div(
+         (XY_mult((x4 - x3), (y1 - y3)) -
+          XY_mult((y4 - y3), (x1 - x3))),
+         (XY_mult((y4 - y3), (x2 - x1)) -
+          XY_mult((x4 - x3), (y2 - y1))));
+
+  x = x1 + XY_mult(ua, (x2 - x1));
+  y = y1 + XY_mult(ua, (y2 - x1));
+
+printf("%d,%d - %d,%d  and  %d,%d - %d,%d  intersect at %d,%d\n", x1, y1, x2, y2, x3, y3, x4, y4, x, y);
+
+  if (intersect_x != NULL)
+    *intersect_x = x;
+
+  if (intersect_y != NULL)
+    *intersect_y = y;
 
   if (result != NULL)
-    *result = XY_INTERSECTION_NONE;
+    *result = XY_INTERSECTION_INTERSECTING;
 
-  return(XY_FALSE);
+  return (XY_TRUE);
 }
 
 XY_bool XY_line_groups_intersect(XY_lines * lines1, XY_lines * lines2)

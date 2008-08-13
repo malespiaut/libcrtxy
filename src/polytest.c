@@ -82,7 +82,7 @@ int main(int argc, char * argv[])
 
   do
   {
-    XY_start_frame(30);
+    XY_start_frame(10);
 
     for (i = 0; i < MAX_POINTS; i++)
       if (points[i].alive)
@@ -124,27 +124,33 @@ int main(int argc, char * argv[])
       {
         XY_fixed x1, y1, x2, y2;
 
+        x1 = new_line_x;
+        y1 = new_line_y;
+
         x2 = XY_screenx_to_canvasx(event.button.x);
         y2 = XY_screenx_to_canvasx(event.button.y);
 
-        if (x2 != new_line_x || y2 != new_line_y)
+        if (x2 < x1)
+          x2 -= 1;
+        else
+          x2 += 1;
+
+        if (y2 < y1)
+          y2 -= 1;
+        else
+          y2 += 1;
+
+        if (handle_intersect(lines, x1, y1, &x2, &y2))
         {
-          x1 = new_line_x;
-          y1 = new_line_y;
-
-          if (handle_intersect(lines, x1, y1, &x2, &y2))
-          {
-            click = XY_FALSE;
-            tick_speed = 1000;
-            ticks = 1;
-          }
-        
-          XY_add_line(lines, x1, y1, x2, y2, white, XY_THIN);
-
-
-          new_line_x = x2;
-          new_line_y = y2;
+          click = XY_FALSE;
+          tick_speed = 1000;
+          ticks = 1;
         }
+        
+        XY_add_line(lines, x1, y1, x2, y2, white, XY_THIN);
+
+        new_line_x = x2;
+        new_line_y = y2;
       }
     }
 
@@ -185,21 +191,31 @@ XY_bool handle_intersect(XY_lines * lines, XY_fixed x1, XY_fixed y1,
 
   for (i = 0; i < lines->count; i++)
   {
-    if (XY_lines_intersect(lines->lines[i], l, &newx, &newy, &result))
+    if ((lines->lines[i].x1 == l.x1 && lines->lines[i].y1 == l.y1) ||
+        (lines->lines[i].x1 == l.x2 && lines->lines[i].y1 == l.y2) ||
+        (lines->lines[i].x2 == l.x1 && lines->lines[i].y2 == l.y1) ||
+        (lines->lines[i].x2 == l.x2 && lines->lines[i].y2 == l.y2))
     {
-      if (result == XY_INTERSECTION_INTERSECTING)
+      /* Point A and Point B touch where they connect; that's ok */
+    }
+    else
+    {
+      if (XY_lines_intersect(lines->lines[i], l, &newx, &newy, &result))
       {
-        *x2 = newx;
-        *y2 = newy;
+        if (result == XY_INTERSECTION_INTERSECTING)
+        {
+          *x2 = newx;
+          *y2 = newy;
 
-        lines->count -= i;
-        memcpy(&(lines->lines[0]), &(lines->lines[i]),
-               sizeof(XY_line) * lines->count);
+          lines->count -= i;
+          memcpy(&(lines->lines[0]), &(lines->lines[i]),
+                 sizeof(XY_line) * lines->count);
 
-        lines->lines[0].x1 = newx;
-        lines->lines[0].y1 = newy;
+          lines->lines[0].x1 = *x2;
+          lines->lines[0].y1 = *y2;
 
-        return(XY_TRUE);
+          return(XY_TRUE);
+        }
       }
     }
   }
