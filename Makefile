@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - August 5, 2008
+# July 28, 2008 - August 13, 2008
 
 PREFIX=/usr/local
 
@@ -32,15 +32,15 @@ OBJ=crtxy.o
 
 all:	libcrtxy.so libcrtxy.a crtxy-config
 
-tests:	drawlines rockdodge
+tests:	drawlines rockdodge polytest
 
 clean:
 	-rm libcrtxy.so
 	-rm libcrtxy.a
 	-rm crtxy.o
 	-rm crtxy-config
-	-rm drawlines.o rockdodge.o
-	-rm drawlines rockdodge
+	-rm drawlines.o rockdodge.o polytest.o
+	-rm drawlines rockdodge polytest.o
 
 releaseclean:
 	-rm -rf build/libcrtxy-$(VERSION) build/libcrtxy-$(VERSION).tar.gz
@@ -105,6 +105,12 @@ rockdodge.o:	src/rockdodge.c src/crtxy.h crtxy-config
 	$(CC) -O2 -g -Wall $(shell ./crtxy-config --cflags) $< -c -o $@
 
 rockdodge:	rockdodge.o
+	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
+
+polytest.o:	src/polytest.c src/crtxy.h crtxy-config
+	$(CC) -O2 -g -Wall $(shell ./crtxy-config --cflags) $< -c -o $@
+
+polytest:	polytest.o
 	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
 
 .PHONY: all clean install tests releaseclean releasedir release

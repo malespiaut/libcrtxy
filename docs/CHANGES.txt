@@ -4,7 +4,7 @@ http://libcrtxy.sf.net/
 Bill Kendrick <bill@newbreedsoftware.com>
 
 
-2008.08.12 (0.0.2)
+2008.08.13 (0.0.2)
 * Optimizations
   + Began dirty rectangle update implementation
 * Improvements
@@ -25,6 +25,8 @@ Bill Kendrick <bill@newbreedsoftware.com>
   + XY_getcolor() was broken. Fixed.
   + Made crtxy.h C++-friendly.
     Thanks to: 'synkro' on #SDL
+* Additions
+  + Created polygon test app.
 
 2008.08.05 (0.0.1)
 * Initial release:

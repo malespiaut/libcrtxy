@@ -1512,7 +1512,7 @@ XY_bool XY_translate_lines(XY_lines * lines,
   return(XY_TRUE);
 }
 
-XY_bool XY_scale_lines(XY_lines *, XY_fixed xscale, XY_fixed yscale)
+XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale)
 {
   int i;
 
@@ -1524,10 +1524,10 @@ XY_bool XY_scale_lines(XY_lines *, XY_fixed xscale, XY_fixed yscale)
 
   for (i = 0; i < lines->count; i++)
   {
-    lines->lines[i].x1 = XY_mult(lines[i].x1, xscale);
-    lines->lines[i].y1 = XY_mult(lines[i].y1, yscale);
-    lines->lines[i].x2 = XY_mult(lines[i].x2, xscale);
-    lines->lines[i].y2 = XY_mult(lines[i].y2, yscale);
+    lines->lines[i].x1 = XY_mult(lines->lines[i].x1, xscale);
+    lines->lines[i].y1 = XY_mult(lines->lines[i].y1, yscale);
+    lines->lines[i].x2 = XY_mult(lines->lines[i].x2, xscale);
+    lines->lines[i].y2 = XY_mult(lines->lines[i].y2, yscale);
   }
 
   return(XY_TRUE);
@@ -2425,13 +2425,15 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
       ub >= 0 && ub <= XY_FIXED_ONE)
   {
     if (intersect_x != NULL)
-      *intersect_x = line1.x1 + XY_mult(ua, (line1.x2 - line1.x1));
-   if (intersect_y != NULL)
-       *intersect_y = line1.y1 + XY_mult(ua, (line1.y2 - line1.y1));
+      *intersect_x = line1.x1 + XY_mult(ua, b1);
+    if (intersect_y != NULL)
+      *intersect_y = line1.y1 + XY_mult(ua, a1);
   
+    *result = XY_INTERSECTION_INTERSECTING;
     return(XY_TRUE);
   }
 
+  *result = XY_INTERSECTION_NONE;
   return(XY_FALSE);
 }
 
