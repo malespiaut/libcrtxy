@@ -2510,7 +2510,8 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
   x = x1 + XY_mult(ua, (x2 - x1));
   y = y1 + XY_mult(ua, (y2 - x1));
 
-printf("%d,%d - %d,%d  and  %d,%d - %d,%d  intersect at %d,%d\n", x1, y1, x2, y2, x3, y3, x4, y4, x, y);
+  /* FIXME: Remove debug: */
+  /* printf("%d,%d - %d,%d  and  %d,%d - %d,%d  intersect at %d,%d\n", x1, y1, x2, y2, x3, y3, x4, y4, x, y); */
 
   if (intersect_x != NULL)
     *intersect_x = x;
