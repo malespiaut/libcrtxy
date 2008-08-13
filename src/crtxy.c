@@ -1368,7 +1368,9 @@ int XY_end_frame(XY_bool throttle)
 
     SDL_UpdateRects(XY_screen, n, XY_dirty_rects_all);
   }
-  
+ 
+  SDL_Delay(1); /* Give up to the OS! */
+ 
   end_time = SDL_GetTicks();
 
   if (throttle)

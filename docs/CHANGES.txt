@@ -17,6 +17,7 @@ Bill Kendrick <bill@newbreedsoftware.com>
   + SDL_Init() called if nothing about SDL was initalized,
     otherwise SDL_InitSubSystem(SDL_INIT_VIDEO) is called, if video
     wasn't already initialized.
+  + rockdodge can run in throttled fps, or max'd-out fps (press [F] to toggle)
 * Options
   + Added fullscreen/window env. var. support.
 * Fixes

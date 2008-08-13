@@ -43,6 +43,9 @@ int main(int argc, char * argv[])
   int angle;
   rock_t rocks[NUM_ROCKS];
   XY_bool key_ccw, key_cw, key_thrust;
+  XY_bool throttle_fps;
+  int ticks_since;
+  int a;
   XY_lines * ship_lines;
   XY_lines * rock_lines;
 
@@ -125,6 +128,9 @@ int main(int argc, char * argv[])
     rocks[i].color = rand() % NUM_COLORS;
   }
 
+  throttle_fps = XY_TRUE;
+  ticks_since = 0;
+
   do
   {
     XY_start_frame(30);
@@ -143,6 +149,8 @@ int main(int argc, char * argv[])
           key_ccw = XY_TRUE;
         else if (event.key.keysym.sym == SDLK_RIGHT)
           key_cw = XY_TRUE;
+        else if (event.key.keysym.sym == SDLK_f)
+          throttle_fps = !throttle_fps;
       }
       else if (event.type == SDL_KEYUP)
       {
@@ -157,25 +165,25 @@ int main(int argc, char * argv[])
 
     if (key_thrust)
     {
-      xm += (XY_cos(angle) / 128);
-      ym -= (XY_sin(angle) / 128);
+      xm += (((XY_cos(angle / 10) / 128) * ticks_since) / 33);
+      ym -= (((XY_sin(angle / 10) / 128) * ticks_since) / 33);
     }
 
     if (key_cw)
     {
-      angle -= 15;
+      angle -= ((150 * ticks_since) / 33);
       if (angle < 0)
-        angle += 360;
+        angle += 3600;
     }
     else if (key_ccw)
     {
-      angle += 15;
-      if (angle >= 360)
-        angle -= 360;
+      angle += ((150 * ticks_since) / 33);
+      if (angle >= 3600)
+        angle -= 3600;
     }
 
-    x = x + xm;
-    y = y + ym;
+    x += ((xm * ticks_since) / 33);
+    y += ((ym * ticks_since) / 33);
     if (x < 0)
       x += WIDTH;
     else if (x >= WIDTH)
@@ -187,8 +195,8 @@ int main(int argc, char * argv[])
 
     for (i = 0; i < NUM_ROCKS; i++)
     {
-      rocks[i].x += rocks[i].xm;
-      rocks[i].y += rocks[i].ym;
+      rocks[i].x += ((rocks[i].xm * ticks_since) / 33);
+      rocks[i].y += ((rocks[i].ym * ticks_since) / 33);
     
       if (rocks[i].x < 0)
         rocks[i].x += WIDTH;
@@ -199,19 +207,21 @@ int main(int argc, char * argv[])
       else if (rocks[i].y >= HEIGHT)
         rocks[i].y -= HEIGHT;
 
-      rocks[i].angle += rocks[i].anglem;
+      rocks[i].angle += ((rocks[i].anglem * ticks_since) / 33);
       if (rocks[i].angle < 0)
         rocks[i].angle += (360 << XY_FIXED_SHIFT);
       else if (rocks[i].angle >= (360 << XY_FIXED_SHIFT))
         rocks[i].angle -= (360 << XY_FIXED_SHIFT);
     }
 
-    x1 = x + XY_mult(XY_cos(angle - 135), RADIUS);
-    y1 = y - XY_mult(XY_sin(angle - 135), RADIUS);
-    x2 = x + XY_mult(XY_cos(angle), RADIUS * 2);
-    y2 = y - XY_mult(XY_sin(angle), RADIUS * 2);
-    x3 = x + XY_mult(XY_cos(angle + 135), RADIUS);
-    y3 = y - XY_mult(XY_sin(angle + 135), RADIUS);
+    a = angle / 10;
+
+    x1 = x + XY_mult(XY_cos(a - 135), RADIUS);
+    y1 = y - XY_mult(XY_sin(a - 135), RADIUS);
+    x2 = x + XY_mult(XY_cos(a), RADIUS * 2);
+    y2 = y - XY_mult(XY_sin(a), RADIUS * 2);
+    x3 = x + XY_mult(XY_cos(a + 135), RADIUS);
+    y3 = y - XY_mult(XY_sin(a + 135), RADIUS);
 
     XY_start_lines(ship_lines);
     XY_add_line(ship_lines, x1, y1, x2, y2, white, XY_THIN);
@@ -223,8 +233,8 @@ int main(int argc, char * argv[])
     if (key_thrust)
     {
       r = RADIUS + (rand() % RADIUS);
-      x4 = x + XY_mult(XY_cos(angle + 180), r);
-      y4 = y - XY_mult(XY_sin(angle + 180), r);
+      x4 = x + XY_mult(XY_cos(a + 180), r);
+      y4 = y - XY_mult(XY_sin(a + 180), r);
 
       c = rand() % 3;
 
@@ -234,8 +244,8 @@ int main(int argc, char * argv[])
 
     if (key_cw)
     {
-      x4 = x + XY_mult(XY_cos(angle + 30), RADIUS * 2);
-      y4 = y - XY_mult(XY_sin(angle + 30), RADIUS * 2);
+      x4 = x + XY_mult(XY_cos(a + 30), RADIUS * 2);
+      y4 = y - XY_mult(XY_sin(a + 30), RADIUS * 2);
 
       c = rand() % 3;
 
@@ -243,8 +253,8 @@ int main(int argc, char * argv[])
     }
     else if (key_ccw)
     {
-      x4 = x + XY_mult(XY_cos(angle - 30), RADIUS * 2);
-      y4 = y - XY_mult(XY_sin(angle - 30), RADIUS * 2);
+      x4 = x + XY_mult(XY_cos(a - 30), RADIUS * 2);
+      y4 = y - XY_mult(XY_sin(a - 30), RADIUS * 2);
 
       c = rand() % 3;
 
@@ -296,8 +306,7 @@ int main(int argc, char * argv[])
       }
     }
 
-    XY_end_frame(XY_TRUE);
-
+    ticks_since = XY_end_frame(throttle_fps);
   }
   while (!done);
 
