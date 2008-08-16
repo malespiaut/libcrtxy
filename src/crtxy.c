@@ -25,7 +25,7 @@ XY_bool XY_background_bitmap_possible, XY_antialias, XY_gamma_correction;
 XY_bool XY_background_bitmap_enabled;
 SDL_Rect XY_background_dest;
 Uint32 XY_want_fps, XY_start_time;
-int XY_err_code;
+XY_err XY_err_code;
 SDL_Rect * XY_dirty_rects, * XY_dirty_rects_erasure, * XY_dirty_rects_all;
 int XY_dirty_rect_count, XY_dirty_rect_erasure_count;
 int XY_dirty_rect_max;
@@ -933,7 +933,7 @@ void XY_quit(void)
   SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
-int XY_errcode(void)
+XY_err XY_errcode(void)
 {
   return(XY_err_code);
 }
