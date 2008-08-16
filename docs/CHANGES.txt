@@ -3,6 +3,9 @@ http://libcrtxy.sf.net/
 
 Bill Kendrick <bill@newbreedsoftware.com>
 
+2008.08.16 (0.0.3)
+* License change
+  + Including GNU LGPL 2.1, rather than 3.
 
 2008.08.16 (0.0.2)
 * Optimizations
