@@ -4,7 +4,7 @@ http://libcrtxy.sf.net/
 Bill Kendrick <bill@newbreedsoftware.com>
 
 
-2008.08.13 (0.0.2)
+2008.08.15 (0.0.2)
 * Optimizations
   + Began dirty rectangle update implementation
 * Improvements
@@ -18,6 +18,8 @@ Bill Kendrick <bill@newbreedsoftware.com>
     otherwise SDL_InitSubSystem(SDL_INIT_VIDEO) is called, if video
     wasn't already initialized.
   + rockdodge can run in throttled fps, or max'd-out fps (press [F] to toggle)
+* Documentation
+  + Adding API documentation to header file, for doxygen.
 * Options
   + Added fullscreen/window env. var. support.
 * Fixes

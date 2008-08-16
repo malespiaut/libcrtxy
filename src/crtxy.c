@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 12, 2008
+  July 29, 2008 - August 14, 2008
 */
 
 #include "crtxy.h"
@@ -2411,7 +2411,7 @@ void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
 
 XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
                            XY_fixed * intersect_x, XY_fixed * intersect_y,
-                           int * result)
+                           XY_intersection * result)
 {
   XY_fixed x1, y1, x2, y2, x3, y3, x4, y4, x, y, ua;
   XY_fixed a1, a2, b1, b2, c1, c2; /* Coefficients of line eqns. */
