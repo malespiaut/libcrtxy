@@ -4,7 +4,7 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.36 2008/08/16 15:24:54 wkendrick Exp $
+$Id: crtxy.h,v 1.37 2008/08/16 16:01:18 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -51,6 +51,8 @@ sound effects, etc., you use SDL functions and types directly.
 For video initialization, loading and displaying of bitmaps,
 and drawing vectors, libcrtxy's "XY_" functions and types should be used.
 
+\todo Add OpenGL support.
+
 */
 
 /*! \page optionsSubpage Options
@@ -73,17 +75,20 @@ Display settings:
 \li Screen width & height
 \li Screen depth (16bpp, 24bpp or 32bpp)
 \li Window or fullscreen (requested or required)
+\todo Utilize SDL_ListModes()
+\todo Native screen resolution when in fullscreen
 
 Rendering quality:
 \li Alpha blending (on, off, or "fake")
 \li Anti-aliasing
-\li Gamma correction
+\li Gamma correction \todo Support gamma values
 \li Backgrounds
-\li Bitmap scaling (fast or best)
+\li Bitmap scaling (fast or best) \todo Implement best scaling
 
 Special effects:
-\li Blurring
-\li Additive effect
+\li Blurring \todo Implement blur effect
+\li Additive effect \todo Implement additive effect
+\todo Persistence-of-vision effect
 
 The options that get used are determined by the following, and should
 occur in this order:
@@ -103,10 +108,69 @@ occur in this order:
 
 /** \page installationSubpage Installing libcrtxy
 
-To be written.
+\section requirementsSection Requirements
+
+libcrtxy requires the Simple DirectMedia Layer library (libSDL),
+available from http://www.libsdl.org/
+
+For support for various formats of bitmap images (PNG, JPEG, GIF, etc.),
+SDL_image is also required, available from
+http://www.libsdl.org/projects/SDL_image/
+
+\section compilingSection Compiling
+
+To compile libcrtxy, simply type <tt>make</tt>.
+
+\subsection compilationOptionsSubsection Compilation Options
+
+You may override the following <tt>Makefile</tt> variables via command-line
+arguments to <tt>make</tt> (e.g., "<tt>make PREFIX=/home/username/opt/</tt>"):
+
+\li <tt>PREFIX</tt> - Base path of where everything gets installed
+(default: <tt>/usr/local</tt>)
+\li <tt>CONFDIR</tt> - Path where libcrtxy's global configuration file
+will be installed, and looked for. (default: <tt>$PREFIX/etc/libcrtxy</tt>,
+unless <tt>PREFIX</tt> is <tt>/usr</tt>, in which case it is simply
+<tt>/etc/libcrtxy</tt>)
+\li <tt>LIBDIR</tt> - Path where libcrtxy's object files will be placed
+(and where <tt>crtxy-config --libs</tt> will report them).
+(default: <tt>$PREFIX/lib</tt>)
+\li <tt>INCDIR</tt> - Path where libcrtxy's header files will be placed
+(and where <tt>crtxy-config --cflags</tt> will report them).
+(default: <tt>$PREFIX/include</tt>)
+\li <tt>BINDIR</tt> - Path where the <tt>crtxy-config</tt> helper tool
+will be installed. (default: <tt>$PREFIX/bin</tt>)
+
+\todo Documentation installation
+\todo Man page installation
+
+\section installingSection Installing
+
+To install libcrtxy's library files, header files, default global configuration
+file and the <tt>crtxy-config</tt> helper tool, simply type
+<tt>make install</tt>.
+
+\b Note: Provide <tt>make</tt> with the same variable overrides you
+gave it when installing (e.g.,
+"<tt>make PREFIX=/home/username/opt/ install</tt>")
+
+\section compilingTestsSection Compiling test apps
+
+Once libcrtxy is installed, you can build the test applications that
+came with the source. Type: <tt>make tests</tt>.
+
+\li drawlines - Draws a sequences of polygons
+\li rockdodge - A game-like example, where you control the thrust and
+direction of a space ship in a field of asteroids (rocks).
+Press [F] key to toggle between throttled (attempting max 30fps) and
+unthrottled framerate modes.
+\li polytest - Use the mouse to draw a sequence of attached lines, which
+will form a polygon when you cross back over them.
+\todo Explain polytest right-click for adding dots.
+
 */
 
-/** \page buildingSubpage "Building Games with libcrtxy"
+/** \page buildingSubpage Building Games with libcrtxy
 
 \section crtxy-configSection Using crtxy-config to compile and link
 
@@ -151,7 +215,7 @@ source.
 
 */
 
-/** \page settingOptionsSubpage "Setting Options"
+/** \page settingOptionsSubpage Setting Options
 
 \section optionsAvailable Available Options
 
@@ -164,7 +228,7 @@ source.
 \subsection renderingQualitySubsection Rendering quality options
 \li Alpha-blended lines (on, 'fake', or off)
 \li Anti-aliased lines (on or off)
-\li Gamma-corrected anti-aliasing (on or off)
+\li Gamma-corrected anti-aliasing (on or off) \todo Support gamma values
 \li Backgrounds (on or off)
 \li Background bitmap scaling quality (best or fast)
 
@@ -191,17 +255,17 @@ own config. file).
 
 \li <tt>crtxy-width=NNN</tt>
 \li <tt>crtxy-height=NNN</tt>
-\li <tt>crtxy-bpp={16|24|32|any}</tt> - 
-\li <tt>crtxy-windowed</tt> - 
-\li <tt>crtxy-fullscreen</tt> - 
-\li <tt>crtxy-fullscreen-or-window</tt> - 
-\li <tt>crtxy-alpha={on|fake|off}</tt> - 
-\li <tt>crtxy-antialias={on|off}</tt> - 
-\li <tt>crtxy-backgrounds={on|off}</tt> - 
-\li <tt>crtxy-scaling={best|fast}</tt> - 
-\li <tt>crtxy-gamma-correction={on|off}</tt> - 
-\li <tt>crtxy-blur={on|off}</tt> - 
-\li <tt>crtxy-additive={on|off}</tt> - 
+\li <tt>crtxy-bpp={16|24|32|any}</tt>
+\li <tt>crtxy-windowed</tt>
+\li <tt>crtxy-fullscreen</tt>
+\li <tt>crtxy-fullscreen-or-window</tt>
+\li <tt>crtxy-alpha={on|fake|off}</tt>
+\li <tt>crtxy-antialias={on|off}</tt>
+\li <tt>crtxy-backgrounds={on|off}</tt>
+\li <tt>crtxy-scaling={best|fast}</tt>
+\li <tt>crtxy-gamma-correction={on|off}</tt> \todo Support gamma values
+\li <tt>crtxy-blur={on|off}</tt>
+\li <tt>crtxy-additive={on|off}</tt>
 
 
 \subsection optionsFromCommandLine Command-Line Arguments
@@ -211,17 +275,17 @@ application.
 
 \li <tt>--crtxy-width NNN</tt>
 \li <tt>--crtxy-height NNN</tt>
-\li <tt>--crtxy-bpp {16|24|32|any}</tt> - 
-\li <tt>--crtxy-windowed</tt> - 
-\li <tt>--crtxy-fullscreen</tt> - 
-\li <tt>--crtxy-fullscreen-or-window</tt> - 
-\li <tt>--crtxy-alpha {on|fake|off}</tt> - 
-\li <tt>--crtxy-antialias {on|off}</tt> - 
-\li <tt>--crtxy-backgrounds {on|off}</tt> - 
-\li <tt>--crtxy-scaling {best|fast}</tt> - 
-\li <tt>--crtxy-gamma-correction {on|off}</tt> - 
-\li <tt>--crtxy-blur {on|off}</tt> - 
-\li <tt>--crtxy-additive {on|off}</tt> - 
+\li <tt>--crtxy-bpp {16|24|32|any}</tt>
+\li <tt>--crtxy-windowed</tt>
+\li <tt>--crtxy-fullscreen</tt>
+\li <tt>--crtxy-fullscreen-or-window</tt>
+\li <tt>--crtxy-alpha {on|fake|off}</tt>
+\li <tt>--crtxy-antialias {on|off}</tt>
+\li <tt>--crtxy-backgrounds {on|off}</tt>
+\li <tt>--crtxy-scaling {best|fast}</tt>
+\li <tt>--crtxy-gamma-correction {on|off}</tt> \todo Support gamma values
+\li <tt>--crtxy-blur {on|off}</tt>
+\li <tt>--crtxy-additive {on|off}</tt>
 \li <tt>--help-crtxy</tt> - Presents a list of libcrtxy-related usage, and quits.
 
 \subsection optionsFromEnvironment Environment Variables
@@ -236,7 +300,7 @@ runtime enviroment for libcrtxy-related variables.
 \li <tt>CRTXY_ANTIALIAS</tt> (ON|OFF)
 \li <tt>CRTXY_BACKGROUNDS</tt> (ON|OFF)
 \li <tt>CRTXY_SCALING</tt> (BEST|FAST)
-\li <tt>CRTXY_GAMMA_CORRECTION</tt> (ON|OFF)
+\li <tt>CRTXY_GAMMA_CORRECTION</tt> (ON|OFF) \todo Support gamma values
 \li <tt>CRTXY_BLUR</tt> (ON|OFF)
 \li <tt>CRTXY_ADDITIVE</tt> (ON|OFF)
 
@@ -268,6 +332,9 @@ typedef enum {
 
 /** @defgroup bitmapGroup Background bitmap management.
  *  @{
+ *
+ *  \todo Load bitmaps from an SDL_Surface
+ *  \todo Load bitmaps from RGBA pixel data
  */
 
 /**
@@ -317,6 +384,11 @@ typedef Sint32 XY_fixed;
 
 /** @defgroup geometryGroup Geometry.
  *  @{
+ *
+ * \todo Add inside-polygon test
+ * \todo Add distance calculator
+ * \todo Add wrapped lines to a group (a la Asteroids)
+ * \todo Clip lines in a group
  */
 
 /* Some standard thicknesses: */
@@ -332,7 +404,7 @@ typedef struct XY_line_s {
   XY_fixed x2; /**< X coordinate of line end point */
   XY_fixed y2; /**< Y coordinate of line end point */
   XY_color color; /**< Color of line */
-  XY_fixed thickness; /**< Thickness of line */
+  XY_fixed thickness; /**< Thickness of line \todo Implement thick lines */
 } XY_line;
 
 /**
@@ -397,7 +469,7 @@ typedef struct XY_options_s {
   XY_opt_fullscreen fullscreen; /**< Window, Want Fullscreen or Require Fullscreen? */
   XY_opt_alpha alpha;  /**< Alpha-blend, fake it, or none at all (just on/off)? */
   XY_bool antialias;  /**< Anti-alias lines (Xiaolin Wu) or not (Bresenham)? */
-  XY_bool gamma_correction;  /**< Gamma correction when anti-aliasing */ /* FIXME: Only doing 2.2 (close to sRGB) at the moment! */
+  XY_bool gamma_correction;  /**< Gamma correction when anti-aliasing  \todo Support gamma values (only doing 2.2 (close to sRGB) at the moment) */
   XY_bool blur;  /**< Add blur effect? */
   XY_bool additive;  /**< Additive pixel effect? */
   XY_bool backgrounds;  /**< Support fullscreen background */
@@ -405,9 +477,8 @@ typedef struct XY_options_s {
 } XY_options;
 
 /* Where system-wide (global) and user's (local) config files live: */
-/* FIXME: Set during build!!! */
-#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf"
-#define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc"
+#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf" /**< Global configuration file \todo Make config location configurable at build */ /* FIXME */
+#define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc" /**< User configuration file (in $HOME) \todo Make config location configurable at build */ /* FIXME */
 
 /** @} */
 
@@ -490,6 +561,9 @@ XY_bool XY_load_options(XY_options * opts);
  * on unrecognized lines (useful if you want to let users put libcrtxy
  * configuration options in an app-specific config file.)
  * \return XY_TRUE on success, or XY_FALSE on failure (and set error code).
+ *
+ * \todo Support a callback function for processing non-libcrtxy-related
+ * options without processing files twice.
  */
 XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
                                   XY_bool ignore_unknowns);
@@ -529,6 +603,14 @@ XY_bool XY_parse_envvars(XY_options * opts);
  * \param canvash is the height (in XY_fixed units) of a virtual canvas which
  * will be scaled to the real display.
  * \return XY_TRUE on success, or XY_FALSE on failure (and set error code).
+ *
+ * \todo Allow setting window class (SDL_VIDEO_X11_WMCLASS=xxx.yyy)
+ * \todo Allow enabling/disabling screensaver (SDL_VIDEO_ALLOW_SCREENSAVER=1)
+ * \todo Allow positioning the window (SDL_VIDEO_WINDOW_POS=center/nopref/...)
+ * \todo Allow setting window icon (SDL_WM_SetIcon())
+ * \todo Allow setting window title (SDL_WM_SetCaption())
+ * \todo Allow hiding mouse (SDL_ShowCursor()) (separate function?)
+ * \todo Allow resizable windows (SDL_RESIZABLE)
  */
 XY_bool XY_init(XY_options * opts, XY_fixed canvasw, XY_fixed canvash);
 
@@ -631,6 +713,9 @@ void XY_free_bitmap(XY_bitmap * bitmap);
  * the following: XY_SCALE_NONE, XY_SCALE_STRETCH, XY_SCALE_KEEP_ASPECT_WIDE
  * or XY_SCALE_KEEP_ASPECT_TALL.
  * \return XY_TRUE on success, or XY_FALE on failure, and sets error code.
+ * \todo Support repeating backgrounds
+ * \todo Support color overlays
+ * \todo Support scaling bitmaps, relative to canvas
  */
 XY_bool XY_set_background(XY_color color, XY_bitmap * bitmap,
                           XY_fixed x, XY_fixed y, int posflags, int scaling);
@@ -700,6 +785,9 @@ void XY_start_frame(int fps);
  * \return The number of milliseconds since the last XY_start_frame() call.
  * (This will be approximately '1000/fps', if throttle is XY_TRUE and the
  * system was able to do everything in between quickly enough.)
+ *
+ * \todo Get dirty rectangle merging to work.
+ * \todo Subdivide dirty rectangles (to waste less around diagonal lines)
  */
 int XY_end_frame(XY_bool throttle);
 
@@ -795,8 +883,9 @@ XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale);
  * scale.
  * \param angle is angle (in degrees) to rotate each line in the collection.
  * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \todo Implement line rotation
  */
-/* XY_bool XY_rotate_lines(XY_lines * lines, int angle); */
+XY_bool XY_rotate_lines(XY_lines * lines, int angle);
 
 /** @} */
 
@@ -817,6 +906,7 @@ XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale);
  * \param color is an XY_color representing the color and transparency of the
  * line.
  * \param thickness is an XY_fixed representing the thickness of the line.
+ * \todo Create line clip routine (for efficiency)
  */
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
                   XY_color color, XY_fixed thickness);

@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 14, 2008
+  July 29, 2008 - August 16, 2008
 */
 
 #include "crtxy.h"
@@ -1543,6 +1543,13 @@ XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale)
     lines->lines[i].x2 = XY_mult(lines->lines[i].x2, xscale);
     lines->lines[i].y2 = XY_mult(lines->lines[i].y2, yscale);
   }
+
+  return(XY_TRUE);
+}
+
+XY_bool XY_rotate_lines(XY_lines * lines, int angle)
+{
+  /* FIXME: Do it */
 
   return(XY_TRUE);
 }
