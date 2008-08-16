@@ -3,7 +3,7 @@
 \author Bill Kendrick <bill@newbreedsoftware.com>
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.33 2008/08/16 08:09:54 wkendrick Exp $
+$Id: crtxy.h,v 1.34 2008/08/16 08:11:37 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -457,7 +457,7 @@ void XY_print_options(FILE * fi, XY_options opts);
 XY_bitmap * XY_load_bitmap(char * filename);
 
 /**
- * Create a bitmap based on image data in a buffer..
+ * Create a bitmap based on image data in a buffer.
  * 
  * \param buffer is a pointer to memory containing image file data.
  * \param size is the size of the image file data.
@@ -548,7 +548,7 @@ void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a);
 /** @} */
 
 
-/** @defGroup frameGroup Starting and ending a drawing frame.
+/** @defgroup frameGroup Starting and ending a drawing frame.
   * @{
   */
 
@@ -658,7 +658,7 @@ XY_bool XY_translate_lines(XY_lines * lines,
  * \param yscale is the scale to change all of the lines' Y coordinates.
  * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
  */
-XY_bool XY_scale_lines(XY_lines *, XY_fixed xscale, XY_fixed yscale);
+XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale);
 
 /**
  * Rotate all lines within a collection (centered around the origin (0,0)).
@@ -668,7 +668,7 @@ XY_bool XY_scale_lines(XY_lines *, XY_fixed xscale, XY_fixed yscale);
  * \param angle is angle (in degrees) to rotate each line in the collection.
  * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
  */
-/* XY_bool XY_rotate_lines(XY_lines *, int angle); */
+/* XY_bool XY_rotate_lines(XY_lines * lines, int angle); */
 
 /** @} */
 
