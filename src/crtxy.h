@@ -3,7 +3,7 @@
 \author Bill Kendrick <bill@newbreedsoftware.com>
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.34 2008/08/16 08:11:37 wkendrick Exp $
+$Id: crtxy.h,v 1.35 2008/08/16 08:37:02 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -106,12 +106,87 @@ To be written.
 
 /** \page buildingSubpage "Building Games with libcrtxy"
 
-To be written.
+\section crtxy-configSection Using crtxy-config to compile and link
+
+Use the <tt>crtxy-config</tt> command get the
+options necessary to compile and link an application against libcrtxy.
+
+  - <tt>crtxy-config --cflags</tt> \n
+    .
+    This outputs compiler flags necessary to compile a C or C++ program
+    with libcrtxy.  Example: <tt>gcc game.c -c `crtxy-config --cflags`</tt>
+  - <tt>crtxy-config --libs</tt> \n
+    .
+    This outputs linker flags necessary to link a program
+    against libcrtxy as a shared library.
+    Example: <tt>gcc -o game game.o other.o `crtxy-config --libs`</tt>
+  - <tt>crtxy-config --static-libs</tt> \n
+    .
+    This outputs linker flags necessary to link a program
+    against libcrtxy as a static library.
+    Example: <tt>gcc -o game game.o other.o `crtxy-config --static-libs`</tt>
+  - <tt>crtxy-config --version</tt> \n
+    .
+    This outputs the version of libcrtxy that is installed. It's useful for
+    automated checking of whether the installed version of libcrtxy is
+    compatible with what your application expects.
+
+\b Note: Since libcrtxy depends on libSDL, the output of
+<tt>crtxy-config</tt> includes the output of libSDL's
+<tt>sdl-config</tt> for --cflags, --libs and --static-libs.
+
+\section crtxy-configSection Including libcrtxy's header
+
+<tt>crtxy-config --cflags</tt> should have told your compiler where
+to find libcrtxy's headers, so you should include the main header like this:
+
+<tt>\#include "crtxy.h"</tt>
+
+\b Note: libcrtxy depends on libSDL, so its <tt>SDL.h</tt> is
+included automatically. SDL_image library's <tt>SDL_image.h</tt> may
+also have been included. However, no harm is done by including them in your own
+source.
+
 */
 
 /** \page settingOptionsSubpage "Setting Options"
 
-To be written.
+\section optionsAvailable Available Options
+
+\li FIXME: List them
+
+\section optionsFromSection Where Options Can Get Set
+
+Options such as rendering quality settings and screen resolution
+can come from various places.  They are listed below, in the most
+reasonable order that they should be picked up:
+
+\subsection optionsFromDefault Defaults
+The <tt>XY_default_options()</tt> function sets some base values for
+the various options, in case no others are sent elsewhere.
+These are the values compiled into libcrtxy.
+
+\subsection optionsFromFile Config. Files
+The <tt>XY_load_options()</tt> function loads options from configuration
+files specific to libcrtxy.  <tt>XY_load_options_from_file()</tt> may be
+used by applications to load options from arbitrary files (such as a game's
+own config. file).
+
+\li FIXME: List config file options
+
+\subsection optionsFromCommandLine Command-Line Arguments
+The <tt>XY_parse_options()</tt> function can look for and parse
+and libcrtxy-related options found in the command-line arguments to an
+application.
+
+\li FIXME: List parsable options
+
+\subsection optionsFromEnvironment Environment Variables
+Finally, <tt>XY_parse_envvars()</tt> examines the application's
+runtime enviroment for libcrtxy-related variables.
+
+\li FIXME: List env vars.
+
 */
 
 
