@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - August 13, 2008
+# July 28, 2008 - August 15, 2008
 
 PREFIX=/usr/local
 
@@ -40,7 +40,7 @@ clean:
 	-rm crtxy.o
 	-rm crtxy-config
 	-rm drawlines.o rockdodge.o polytest.o
-	-rm drawlines rockdodge polytest.o
+	-rm drawlines rockdodge polytest
 
 releaseclean:
 	-rm -rf build/libcrtxy-$(VERSION) build/libcrtxy-$(VERSION).tar.gz
