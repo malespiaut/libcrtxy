@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - August 15, 2008
+# July 28, 2008 - August 16, 2008
 
 PREFIX=/usr/local
 
@@ -24,7 +24,7 @@ BINDIR=$(PREFIX)/bin
 
 VER_MAJOR=0
 VER_MINOR=0
-VER_REV=1
+VER_REV=2
 VERSION=$(VER_MAJOR).$(VER_MINOR).$(VER_REV)
 
 OBJ=crtxy.o

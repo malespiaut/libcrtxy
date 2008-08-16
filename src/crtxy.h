@@ -4,7 +4,7 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.37 2008/08/16 16:01:18 wkendrick Exp $
+$Id: crtxy.h,v 1.38 2008/08/16 16:04:37 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -37,6 +37,8 @@ and can be used for sub-pixel movement) and trigonometry
 \li \subpage installationSubpage "Installing libcrtxy"
 \li \subpage buildingSubpage "Building Games with libcrtxy"
 \li \subpage settingOptionsSubpage "Setting Options"
+
+\todo Construct man pages
 */
 
 /*! \page backendsSubpage Backends
