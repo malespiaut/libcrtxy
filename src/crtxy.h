@@ -1,9 +1,10 @@
 /*! \mainpage The CRT X-Y library (libcrtxy)
 
 \author Bill Kendrick <bill@newbreedsoftware.com>
+
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.35 2008/08/16 08:37:02 wkendrick Exp $
+$Id: crtxy.h,v 1.36 2008/08/16 15:24:54 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -76,6 +77,7 @@ Display settings:
 Rendering quality:
 \li Alpha blending (on, off, or "fake")
 \li Anti-aliasing
+\li Gamma correction
 \li Backgrounds
 \li Bitmap scaling (fast or best)
 
@@ -153,7 +155,22 @@ source.
 
 \section optionsAvailable Available Options
 
-\li FIXME: List them
+\subsection displayOptionsSubsection Display options
+\li Screen width
+\li Screen height
+\li Screen color depth (bits per pixel (bpp))
+\li Windowed, fullscreen required, or fullscreen requested
+
+\subsection renderingQualitySubsection Rendering quality options
+\li Alpha-blended lines (on, 'fake', or off)
+\li Anti-aliased lines (on or off)
+\li Gamma-corrected anti-aliasing (on or off)
+\li Backgrounds (on or off)
+\li Background bitmap scaling quality (best or fast)
+
+\subsection effectsSubsection Visual effects
+\li Blur
+\li Additive lines
 
 \section optionsFromSection Where Options Can Get Set
 
@@ -172,20 +189,56 @@ files specific to libcrtxy.  <tt>XY_load_options_from_file()</tt> may be
 used by applications to load options from arbitrary files (such as a game's
 own config. file).
 
-\li FIXME: List config file options
+\li <tt>crtxy-width=NNN</tt>
+\li <tt>crtxy-height=NNN</tt>
+\li <tt>crtxy-bpp={16|24|32|any}</tt> - 
+\li <tt>crtxy-windowed</tt> - 
+\li <tt>crtxy-fullscreen</tt> - 
+\li <tt>crtxy-fullscreen-or-window</tt> - 
+\li <tt>crtxy-alpha={on|fake|off}</tt> - 
+\li <tt>crtxy-antialias={on|off}</tt> - 
+\li <tt>crtxy-backgrounds={on|off}</tt> - 
+\li <tt>crtxy-scaling={best|fast}</tt> - 
+\li <tt>crtxy-gamma-correction={on|off}</tt> - 
+\li <tt>crtxy-blur={on|off}</tt> - 
+\li <tt>crtxy-additive={on|off}</tt> - 
+
 
 \subsection optionsFromCommandLine Command-Line Arguments
 The <tt>XY_parse_options()</tt> function can look for and parse
 and libcrtxy-related options found in the command-line arguments to an
 application.
 
-\li FIXME: List parsable options
+\li <tt>--crtxy-width NNN</tt>
+\li <tt>--crtxy-height NNN</tt>
+\li <tt>--crtxy-bpp {16|24|32|any}</tt> - 
+\li <tt>--crtxy-windowed</tt> - 
+\li <tt>--crtxy-fullscreen</tt> - 
+\li <tt>--crtxy-fullscreen-or-window</tt> - 
+\li <tt>--crtxy-alpha {on|fake|off}</tt> - 
+\li <tt>--crtxy-antialias {on|off}</tt> - 
+\li <tt>--crtxy-backgrounds {on|off}</tt> - 
+\li <tt>--crtxy-scaling {best|fast}</tt> - 
+\li <tt>--crtxy-gamma-correction {on|off}</tt> - 
+\li <tt>--crtxy-blur {on|off}</tt> - 
+\li <tt>--crtxy-additive {on|off}</tt> - 
+\li <tt>--help-crtxy</tt> - Presents a list of libcrtxy-related usage, and quits.
 
 \subsection optionsFromEnvironment Environment Variables
 Finally, <tt>XY_parse_envvars()</tt> examines the application's
 runtime enviroment for libcrtxy-related variables.
 
-\li FIXME: List env vars.
+\li <tt>CRTXY_WIDTH</tt>
+\li <tt>CRTXY_HEIGHT</tt>
+\li <tt>CRTXY_BPP</tt> (16|24|32|ANY)
+\li <tt>CRTXY_FULLSCREEN</tt> (ON|OPTIONAL|OFF)
+\li <tt>CRTXY_ALPHA</tt> (ON|FAKE|OFF)
+\li <tt>CRTXY_ANTIALIAS</tt> (ON|OFF)
+\li <tt>CRTXY_BACKGROUNDS</tt> (ON|OFF)
+\li <tt>CRTXY_SCALING</tt> (BEST|FAST)
+\li <tt>CRTXY_GAMMA_CORRECTION</tt> (ON|OFF)
+\li <tt>CRTXY_BLUR</tt> (ON|OFF)
+\li <tt>CRTXY_ADDITIVE</tt> (ON|OFF)
 
 */
 
