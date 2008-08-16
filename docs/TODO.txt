@@ -3,12 +3,10 @@ http://libcrtxy.sf.net/
 
 by Bill Kendrick <bill@newbreedsoftware.com>
 
-Last modified: August 13, 2008
+Last modified: August 15, 2008
 
 Documentation
 * Create installation docs
-* Finish API docs
-* Create man pages
 
 Options
 * Allow native screen resolution (for fullscreen mode), a la Tux Paint.
