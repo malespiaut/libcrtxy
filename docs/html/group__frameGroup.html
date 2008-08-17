@@ -50,7 +50,7 @@ Mark the start of a frame.
 Screen backbuffer is wiped to the background color and/or bitmap. Also setting of preferred FPS.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>fps</em>&nbsp;</td><td>The requested FPS, if <a class="el" href="group__frameGroup.html#gac89da321b3c4960bfb4f8de66100fef" title="Mark the end of a frame.">XY_end_frame()</a>'s throttle option is used. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fps</em>&nbsp;</td><td>The requested FPS, if <a class="el" href="group__frameGroup.html#gac89da321b3c4960bfb4f8de66100fef">XY_end_frame()</a>'s throttle option is used. </td></tr>
   </table>
 </dl>
 
@@ -75,20 +75,20 @@ Screen backbuffer is wiped to the background color and/or bitmap. Also setting o
 <p>
 Mark the end of a frame. 
 <p>
-Screen backbuffer is made visible. Optionally, pause until (1000/fps) milliseconds have passed since <a class="el" href="group__frameGroup.html#gfb0667323eb7ab4aeae9a3c435961911" title="Mark the start of a frame.">XY_start_frame()</a> was called. (If 'throttle' is set to XY_TRUE.)<p>
+Screen backbuffer is made visible. Optionally, pause until (1000/fps) milliseconds have passed since <a class="el" href="group__frameGroup.html#gfb0667323eb7ab4aeae9a3c435961911">XY_start_frame()</a> was called. (If 'throttle' is set to <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>.)<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>throttle</em>&nbsp;</td><td>causes <a class="el" href="group__frameGroup.html#gac89da321b3c4960bfb4f8de66100fef" title="Mark the end of a frame.">XY_end_frame()</a> to pause the application (by calling SDL_Delay()) so that the amount of time between the last <a class="el" href="group__frameGroup.html#gfb0667323eb7ab4aeae9a3c435961911" title="Mark the start of a frame.">XY_start_frame()</a> call and now is approximately 1000/fps milliseconds, if set to XY_TRUE. Otherwise, pauses only 1ms, to relinquish control to the OS. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>throttle</em>&nbsp;</td><td>causes <a class="el" href="group__frameGroup.html#gac89da321b3c4960bfb4f8de66100fef" title="Mark the end of a frame.">XY_end_frame()</a> to pause the application (by calling SDL_Delay()) so that the amount of time between the last <a class="el" href="group__frameGroup.html#gfb0667323eb7ab4aeae9a3c435961911">XY_start_frame()</a> call and now is approximately 1000/fps milliseconds, if set to <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. Otherwise, pauses only 1ms, to relinquish control to the OS. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>The number of milliseconds since the last <a class="el" href="group__frameGroup.html#gfb0667323eb7ab4aeae9a3c435961911" title="Mark the start of a frame.">XY_start_frame()</a> call. (This will be approximately '1000/fps', if throttle is XY_TRUE and the system was able to do everything in between quickly enough.)</dd></dl>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000034">Todo:</a></b></dt><dd>Get dirty rectangle merging to work. </dd></dl>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000034">Todo:</a></b></dt><dd>Subdivide dirty rectangles (to waste less around diagonal lines) </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>The number of milliseconds since the last <a class="el" href="group__frameGroup.html#gfb0667323eb7ab4aeae9a3c435961911" title="Mark the start of a frame.">XY_start_frame()</a> call. (This will be approximately '1000/fps', if throttle is <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a> and the system was able to do everything in between quickly enough.)</dd></dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000036">Todo:</a></b></dt><dd>Get dirty rectangle merging to work. </dd></dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000036">Todo:</a></b></dt><dd>Subdivide dirty rectangles (to waste less around diagonal lines) </dd></dl>
 
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:42:32 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

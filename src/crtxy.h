@@ -4,7 +4,7 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.39 2008/08/17 04:28:44 wkendrick Exp $
+$Id: crtxy.h,v 1.40 2008/08/17 04:42:51 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -134,7 +134,7 @@ To compile libcrtxy, simply type <tt>make</tt>.
 \subsection compilationOptionsSubsection Compilation Options
 
 You may override the following <tt>Makefile</tt> variables via command-line
-arguments to <tt>make</tt> (e.g., "<tt>make PREFIX=/home/username/opt/</tt>"):
+arguments to <tt>make</tt> (e.g., <tt>make PREFIX=/home/username/opt/</tt>):
 
 \li <tt>PREFIX</tt> - Base path of where everything gets installed
 (default: <tt>/usr/local</tt>)
@@ -162,7 +162,7 @@ file and the <tt>crtxy-config</tt> helper tool, simply type
 
 \b Note: Provide <tt>make</tt> with the same variable overrides you
 gave it when installing (e.g.,
-"<tt>make PREFIX=/home/username/opt/ install</tt>")
+<tt>make PREFIX=/home/username/opt/ install</tt>)
 
 \section compilingTestsSection Compiling test apps
 
@@ -494,9 +494,16 @@ typedef struct XY_options_s {
   XY_opt_scaling scaling;  /**< Fast or Best scaling? */
 } XY_options;
 
-/* Where system-wide (global) and user's (local) config files live: */
-#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf" /**< Global configuration file \todo Make config location configurable at build */ /* FIXME */
-#define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc" /**< User configuration file (in $HOME) \todo Make config location configurable at build */ /* FIXME */
+/**
+ * Where system-wide (global) config file lives.
+ * \todo Make config locations configurable at build (FIXME)
+ */
+#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf"
+/**
+ * Where user's (local) config file lives.
+ * \todo Make config locations configurable at build (FIXME)
+ */
+#define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc"
 
 /** @} */
 
@@ -741,8 +748,9 @@ void XY_free_bitmap(XY_bitmap * bitmap);
  * \param scaling describes how the bitmap should be scaled. Use one of
  * the following: \ref XY_SCALE_NONE, \ref XY_SCALE_STRETCH,
  * \ref XY_SCALE_KEEP_ASPECT_WIDE or \ref XY_SCALE_KEEP_ASPECT_TALL.
- * \return \ref XY_TRUE on success, or \ref XY_FALSE on failure, and
- * sets error code.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  * \todo Support repeating backgrounds
  * \todo Support color overlays
  * \todo Support scaling bitmaps, relative to canvas
@@ -753,8 +761,8 @@ XY_bool XY_set_background(XY_color color, XY_bitmap * bitmap,
 /**
  * Enable or disable the background bitmap (affects next frame).
  *
- * \param enable set to XY_TRUE enables background bitmap (if any), and
- * XY_FALSE disables it.
+ * \param enable set to \ref XY_TRUE enables background bitmap (if any), and
+ * \ref XY_FALSE disables it.
  */
 void XY_enable_background(XY_bool enable);
 
@@ -766,20 +774,20 @@ void XY_enable_background(XY_bool enable);
   */
 
 /**
- * Combines values for R, G, B and A components into an XY_color. 
+ * Combines values for R, G, B and A components into an \ref XY_color. 
  *
  * \param r Red component (between 0 and 255).
  * \param g Green component (between 0 and 255).
  * \param b Blue component (between 0 and 255).
  * \param a Alpha component (between 0 (transparent) and 255 (opaque)).
- * \return An XY_color representing the RGBA values provided.
+ * \return An \ref XY_color representing the RGBA values provided.
  */
 XY_color XY_setcolor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 /**
- * Breaks an XY_color into its R, G, B and A components.
+ * Breaks an \ref XY_color into its R, G, B and A components.
  *
- * \param c An XY_color from which color components should be extracted.
+ * \param c An \ref XY_color from which color components should be extracted.
  * \param r Pointer to a variable to contain the red component.
  * \param g Pointer to a variable to contain the blue component.
  * \param b Pointer to a variable to contain the green component.
@@ -799,21 +807,23 @@ void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a);
  * Mark the start of a frame. Screen backbuffer is wiped to the background
  * color and/or bitmap.  Also setting of preferred FPS.
  *
- * \param fps The requested FPS, if XY_end_frame()'s throttle option is used.
+ * \param fps The requested FPS, if \ref XY_end_frame()'s throttle option is
+ * used.
  */
 void XY_start_frame(int fps);
 
 /**
  * Mark the end of a frame. Screen backbuffer is made visible.
  * Optionally, pause until (1000/fps) milliseconds have passed since
- * XY_start_frame() was called. (If 'throttle' is set to XY_TRUE.)
+ * \ref XY_start_frame() was called. (If 'throttle' is set to \ref XY_TRUE.)
  *
  * \param throttle causes XY_end_frame() to pause the application (by calling
- * SDL_Delay()) so that the amount of time between the last XY_start_frame()
- * call and now is approximately 1000/fps milliseconds, if set to XY_TRUE.
+ * SDL_Delay()) so that the amount of time between the last
+ * \ref XY_start_frame()
+ * call and now is approximately 1000/fps milliseconds, if set to \ref XY_TRUE.
  * Otherwise, pauses only 1ms, to relinquish control to the OS.
  * \return The number of milliseconds since the last XY_start_frame() call.
- * (This will be approximately '1000/fps', if throttle is XY_TRUE and the
+ * (This will be approximately '1000/fps', if throttle is \ref XY_TRUE and the
  * system was able to do everything in between quickly enough.)
  *
  * \todo Get dirty rectangle merging to work.
@@ -841,7 +851,9 @@ XY_lines * XY_new_lines(void);
  *
  * \param lines is an \ref XY_lines pointer from which you want to copy.
  * \return a pointer to a new \ref XY_lines with all lines from 'lines' copied
- * to it on success, or NULL on failure, and sets error code.
+ * to it on success, or NULL on failure, and sets error code to one of the
+ * following:
+ * \li FIXME
  */
 XY_lines * XY_duplicate_lines(XY_lines * lines);
 
