@@ -34,7 +34,7 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load arbitrary config file into opts.  <a href="#g94451c696821afe53384fd9a78222c48"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__optionsGroup.html#g3c68f8bed2898ef3567026fdf4624872">XY_parse_options</a> (int *argc, char *argv[], <a class="el" href="structXY__options.html">XY_options</a> *opts)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse libcrtxy-related arguments into opts.  <a href="#g3c68f8bed2898ef3567026fdf4624872"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse libcrtxy-related command-line arguments into opts.  <a href="#g3c68f8bed2898ef3567026fdf4624872"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__optionsGroup.html#gd9266332f25f1c215d6f3009f2369d6c">XY_parse_envvars</a> (<a class="el" href="structXY__options.html">XY_options</a> *opts)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Read any libcrtxy-related environment variables into opts.  <a href="#gd9266332f25f1c215d6f3009f2369d6c"></a><br></td></tr>
@@ -246,7 +246,9 @@ Load global, then local (user) libcrtxy config files into opts.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651">XY_ERR_OPTION_BAD</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4677ca11232f4179b5479a32703cbf01e78">XY_ERR_OPTION_UNKNOWN</a> </li>
 </ul>
 </dd></dl>
 
@@ -294,7 +296,10 @@ Load arbitrary config file into opts.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME</li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4675586ad34de6aa73248765e9d76abb01a">XY_ERR_FILE_CANT_OPEN</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651">XY_ERR_OPTION_BAD</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4677ca11232f4179b5479a32703cbf01e78">XY_ERR_OPTION_UNKNOWN</a></li>
 </ul>
 </dd></dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000025">Todo:</a></b></dt><dd>Support a callback function for processing non-libcrtxy-related options without processing files twice. </dd></dl>
@@ -333,7 +338,7 @@ Load arbitrary config file into opts.
 <div class="memdoc">
 
 <p>
-Parse libcrtxy-related arguments into opts. 
+Parse libcrtxy-related command-line arguments into opts. 
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -343,7 +348,8 @@ Parse libcrtxy-related arguments into opts.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: 0 on success. On failure, an index into argv[] of an offending argument, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651">XY_ERR_OPTION_BAD</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4677ca11232f4179b5479a32703cbf01e78">XY_ERR_OPTION_UNKNOWN</a> </li>
 </ul>
 </dd></dl>
 
@@ -374,14 +380,14 @@ Read any libcrtxy-related environment variables into opts.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651">XY_ERR_OPTION_BAD</a> </li>
 </ul>
 </dd></dl>
 
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:42:32 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:52:41 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

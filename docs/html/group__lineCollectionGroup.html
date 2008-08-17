@@ -97,7 +97,7 @@ Duplicates a collection.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>a pointer to a new <a class="el" href="structXY__lines.html">XY_lines</a> with all lines from 'lines' copied to it on success, or NULL on failure, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
 </ul>
 </dd></dl>
 
@@ -128,7 +128,8 @@ Free a line collection.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">XY_ERR_LINES_INVALID</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
 </ul>
 </dd></dl>
 
@@ -160,7 +161,7 @@ This allows you to reconstruct a line collection (without making a new one) at d
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">XY_ERR_LINES_INVALID</a> </li>
 </ul>
 </dd></dl>
 
@@ -236,7 +237,8 @@ Add a line to a line collection.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">XY_ERR_LINES_INVALID</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
 </ul>
 </dd></dl>
 
@@ -284,7 +286,7 @@ Translate all lines within a collection.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">XY_ERR_LINES_INVALID</a> </li>
 </ul>
 </dd></dl>
 
@@ -332,7 +334,7 @@ Scale all lines within a collection (centered around the origin (0,0)).
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">XY_ERR_LINES_INVALID</a> </li>
 </ul>
 </dd></dl>
 
@@ -373,7 +375,7 @@ Rotate all lines within a collection (centered around the origin (0,0)).
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">XY_ERR_LINES_INVALID</a> </li>
 </ul>
 </dd></dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000038">Todo:</a></b></dt><dd>Implement line rotation </dd></dl>
@@ -381,7 +383,7 @@ Rotate all lines within a collection (centered around the origin (0,0)).
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:42:32 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:52:41 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

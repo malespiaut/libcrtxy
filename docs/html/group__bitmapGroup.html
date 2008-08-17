@@ -72,7 +72,12 @@ Create a bitmap based on an image file.
     <tr><td valign="top"></td><td valign="top"><em>filename</em>&nbsp;</td><td>is the name of an image file to attempt to load. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>an <a class="el" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> pointer on success, or NULL on failure (and set error code). </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>an <a class="el" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> pointer on success, or NULL on failure and set error code to one of the following: <ul>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467f074ed1612f3b0453cb9a002c16a8ae3">XY_ERR_BITMAP_CANT_DECODE</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673951d09b1044d269606c488a75edf151">XY_ERR_BITMAP_CANT_CONVERT</a> </li>
+</ul>
+</dd></dl>
 
 </div>
 </div><p>
@@ -110,7 +115,12 @@ Create a bitmap based on image data in a buffer.
     <tr><td valign="top"></td><td valign="top"><em>size</em>&nbsp;</td><td>is the size of the image file data. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>an <a class="el" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> pointer on success, or NULL on failure (and set error code). </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>an <a class="el" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> pointer on success, or NULL on failure and set error code to one of the following: <ul>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467f074ed1612f3b0453cb9a002c16a8ae3">XY_ERR_BITMAP_CANT_DECODE</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673951d09b1044d269606c488a75edf151">XY_ERR_BITMAP_CANT_CONVERT</a> </li>
+</ul>
+</dd></dl>
 
 </div>
 </div><p>
@@ -205,7 +215,9 @@ Enables background bitmap.<p>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
-<li>FIXME </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">XY_ERR_MEM_CANT_ALLOC</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b46740b0b690c11f8154b3abe524b4924e03">XY_ERR_BITMAP_CANT_SCALE</a> </li>
+<li><a class="el" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673951d09b1044d269606c488a75edf151">XY_ERR_BITMAP_CANT_CONVERT</a> </li>
 </ul>
 </dd></dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000033">Todo:</a></b></dt><dd>Support repeating backgrounds </dd></dl>
@@ -242,7 +254,7 @@ Enable or disable the background bitmap (affects next frame).
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:42:32 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:52:41 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

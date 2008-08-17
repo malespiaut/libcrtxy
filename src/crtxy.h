@@ -4,7 +4,7 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.40 2008/08/17 04:42:51 wkendrick Exp $
+$Id: crtxy.h,v 1.41 2008/08/17 04:54:47 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -575,7 +575,9 @@ void XY_default_options(XY_options * opts);
  * \param opts is a pointer to an options structure to fill.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
+ * \li \ref XY_ERR_OPTION_BAD
+ * \li \ref XY_ERR_OPTION_UNKNOWN
  */
 XY_bool XY_load_options(XY_options * opts);
 
@@ -589,7 +591,10 @@ XY_bool XY_load_options(XY_options * opts);
  * configuration options in an app-specific config file.)
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_FILE_CANT_OPEN
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
+ * \li \ref XY_ERR_OPTION_BAD
+ * \li \ref XY_ERR_OPTION_UNKNOWN
  *
  * \todo Support a callback function for processing non-libcrtxy-related
  * options without processing files twice.
@@ -598,14 +603,15 @@ XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
                                   XY_bool ignore_unknowns);
 
 /**
- * Parse libcrtxy-related arguments into opts.
+ * Parse libcrtxy-related command-line arguments into opts.
  *
  * \param argc is a count of arguments to parse.
  * \param argv is an array of arguments to parse.
  * \param opts is a pointer to an options structure to fill.
  * \return On success: 0 on success. On failure, an index into argv[] of an
  * offending argument, and sets error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_OPTION_BAD
+ * \li \ref XY_ERR_OPTION_UNKNOWN
  */
 int XY_parse_options(int * argc, char * argv[], XY_options * opts);
 
@@ -615,7 +621,7 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts);
  * \param opts is a pointer to an options structure to fill.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_OPTION_BAD
  */
 XY_bool XY_parse_envvars(XY_options * opts);
 
@@ -637,7 +643,10 @@ XY_bool XY_parse_envvars(XY_options * opts);
  * will be scaled to the real display.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_INIT_VIDEO
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
+ * \li \ref XY_ERR_INIT_DISPLAY
+ * \li \ref XY_ERR_INIT_UNSUPPORTED_BPP
  *
  * \todo Allow setting window class (SDL_VIDEO_X11_WMCLASS=xxx.yyy)
  * \todo Allow enabling/disabling screensaver (SDL_VIDEO_ALLOW_SCREENSAVER=1)
@@ -696,8 +705,11 @@ void XY_print_options(FILE * fi, XY_options opts);
  * Create a bitmap based on an image file.
  *
  * \param filename is the name of an image file to attempt to load.
- * \return an XY_bitmap pointer on success, or NULL on failure (and set error
- * code).
+ * \return an XY_bitmap pointer on success, or NULL on failure and set error
+ * code to one of the following:
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
+ * \li \ref XY_ERR_BITMAP_CANT_DECODE
+ * \li \ref XY_ERR_BITMAP_CANT_CONVERT
  */
 XY_bitmap * XY_load_bitmap(char * filename);
 
@@ -706,8 +718,11 @@ XY_bitmap * XY_load_bitmap(char * filename);
  * 
  * \param buffer is a pointer to memory containing image file data.
  * \param size is the size of the image file data.
- * \return an XY_bitmap pointer on success, or NULL on failure (and set error
- * code).
+ * \return an XY_bitmap pointer on success, or NULL on failure and set error
+ * code to one of the following:
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
+ * \li \ref XY_ERR_BITMAP_CANT_DECODE
+ * \li \ref XY_ERR_BITMAP_CANT_CONVERT
  */
 XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer, int size);
 
@@ -750,7 +765,9 @@ void XY_free_bitmap(XY_bitmap * bitmap);
  * \ref XY_SCALE_KEEP_ASPECT_WIDE or \ref XY_SCALE_KEEP_ASPECT_TALL.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
+ * \li \ref XY_ERR_BITMAP_CANT_SCALE
+ * \li \ref XY_ERR_BITMAP_CANT_CONVERT
  * \todo Support repeating backgrounds
  * \todo Support color overlays
  * \todo Support scaling bitmaps, relative to canvas
@@ -853,7 +870,7 @@ XY_lines * XY_new_lines(void);
  * \return a pointer to a new \ref XY_lines with all lines from 'lines' copied
  * to it on success, or NULL on failure, and sets error code to one of the
  * following:
- * \li FIXME
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
  */
 XY_lines * XY_duplicate_lines(XY_lines * lines);
 
@@ -864,7 +881,8 @@ XY_lines * XY_duplicate_lines(XY_lines * lines);
  * more!  You may reuse your variable, if you create a new bitmap, of course.)
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_LINES_INVALID
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
  */
 XY_bool XY_free_lines(XY_lines * lines);
 
@@ -876,7 +894,7 @@ XY_bool XY_free_lines(XY_lines * lines);
  * \param lines is an \ref XY_lines pointer to reset.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_LINES_INVALID
  */
 XY_bool XY_start_lines(XY_lines * lines);
 
@@ -894,7 +912,8 @@ XY_bool XY_start_lines(XY_lines * lines);
  * line.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_LINES_INVALID
+ * \li \ref XY_ERR_MEM_CANT_ALLOC
  */
 XY_bool XY_add_line(XY_lines * lines,
                     XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
@@ -911,7 +930,7 @@ XY_bool XY_add_line(XY_lines * lines,
  * translate all of the lines vertically.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_LINES_INVALID
  */
 XY_bool XY_translate_lines(XY_lines * lines,
                            XY_fixed x, XY_fixed y);
@@ -925,7 +944,7 @@ XY_bool XY_translate_lines(XY_lines * lines,
  * \param yscale is the scale to change all of the lines' Y coordinates.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_LINES_INVALID
  */
 XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale);
 
@@ -937,7 +956,7 @@ XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale);
  * \param angle is angle (in degrees) to rotate each line in the collection.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_LINES_INVALID
  * \todo Implement line rotation
  */
 XY_bool XY_rotate_lines(XY_lines * lines, int angle);
@@ -972,7 +991,7 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
  * \param lines is an \ref XY_lines pointer with a collection of lines to draw.
  * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
  * error code to one of the following:
- * \li FIXME
+ * \li \ref XY_ERR_LINES_INVALID
  */
 XY_bool XY_draw_lines(XY_lines * lines);
 
