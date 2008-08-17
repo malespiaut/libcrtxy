@@ -56,102 +56,6 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns cosine() of 'degrees'.  <a href="#g8d9a2ef2c6c2c7349e315c4f9f5a4f53"></a><br></td></tr>
 </table>
 <hr><h2>Define Documentation</h2>
-<a class="anchor" name="gf2b75c7937f4c8a02a604ee8c157e557"></a><!-- doxytag: member="crtxy.h::XY_div" ref="gf2b75c7937f4c8a02a604ee8c157e557" args="(a, b)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define XY_div          </td>
-          <td>(</td>
-          <td class="paramtype">a,         <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">b&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-<b>Value:</b><div class="fragment"><pre class="fragment">(((b) &gt;&gt; <a class="code" href="group__fixedGroup.html#g7d789fee5273838f05cb5f7ba53321cc" title="For half-shift during mult &amp;amp; divide macros.">XY_FIXED_SHIFT_HALF</a>) == 0 ? \
-                     <a class="code" href="group__fixedGroup.html#g7dba2b69c33f38f9d2c133057458f2ab" title="Not-a-number (NAN), occurs when you divide by zero.">XY_FIXED_NAN</a> : <a class="code" href="group__fixedMathGroup.html#g00d0d8c600d3c476ba8706b1ec7cf753" title="Divide one XY_fixed value by another.">XY_qdiv</a>((a),(b)))
-</pre></div>Divide one XY_fixed value by another. 
-<p>
-Returns Not-A-Number if denominator is (sufficient close to) zero.<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>numerator </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>b</em>&nbsp;</td><td>denominator </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>a divided by b, approximately, or XY_FIXED_NAN if b is zero (approximately) </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="g88978433a0508924b675cf20cab0c2e8"></a><!-- doxytag: member="crtxy.h::XY_FIXED_DIV_ZERO" ref="g88978433a0508924b675cf20cab0c2e8" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define XY_FIXED_DIV_ZERO&nbsp;&nbsp;&nbsp;((1 &lt;&lt; XY_FIXED_SHIFT_HALF) - 1)          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-The maximum value that, when <a class="el" href="group__fixedMathGroup.html#gf2b75c7937f4c8a02a604ee8c157e557" title="Divide one XY_fixed value by another.">XY_div()</a> is used to divide two digits, the denominator may be, and be considered zero (due to shifting to reduce precision loss. 
-<p>
-) 
-</div>
-</div><p>
-<a class="anchor" name="g81d37a8d66fcb10cb35fe4011389f7fe"></a><!-- doxytag: member="crtxy.h::XY_fpart" ref="g81d37a8d66fcb10cb35fe4011389f7fe" args="(a)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define XY_fpart          </td>
-          <td>(</td>
-          <td class="paramtype">a&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;((a) &amp; (XY_FIXED_ONE - 1))</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Return the fractional part of 'a'. 
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="g33d1a42ebe7c8a791f70b5d80377b55d"></a><!-- doxytag: member="crtxy.h::XY_ipart" ref="g33d1a42ebe7c8a791f70b5d80377b55d" args="(a)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define XY_ipart          </td>
-          <td>(</td>
-          <td class="paramtype">a&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%">&nbsp;&nbsp;&nbsp;((a) - XY_fpart(a))</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Returns the integer (whole) part of 'a'. 
-<p>
-
-</div>
-</div><p>
 <a class="anchor" name="gf05c9edd71aac11022c56f9d54dae3ae"></a><!-- doxytag: member="crtxy.h::XY_mult" ref="gf05c9edd71aac11022c56f9d54dae3ae" args="(a, b)" -->
 <div class="memitem">
 <div class="memproto">
@@ -221,6 +125,80 @@ Returns the integer (whole) part of 'a'.
 
 </div>
 </div><p>
+<a class="anchor" name="gf2b75c7937f4c8a02a604ee8c157e557"></a><!-- doxytag: member="crtxy.h::XY_div" ref="gf2b75c7937f4c8a02a604ee8c157e557" args="(a, b)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define XY_div          </td>
+          <td>(</td>
+          <td class="paramtype">a,         <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">b&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment">(((b) &gt;&gt; <a class="code" href="group__fixedGroup.html#g7d789fee5273838f05cb5f7ba53321cc" title="For half-shift during mult &amp;amp; divide macros.">XY_FIXED_SHIFT_HALF</a>) == 0 ? \
+                     <a class="code" href="group__fixedGroup.html#g7dba2b69c33f38f9d2c133057458f2ab" title="Not-a-number (NAN), occurs when you divide by zero.">XY_FIXED_NAN</a> : <a class="code" href="group__fixedMathGroup.html#g00d0d8c600d3c476ba8706b1ec7cf753" title="Divide one XY_fixed value by another.">XY_qdiv</a>((a),(b)))
+</pre></div>Divide one XY_fixed value by another. 
+<p>
+Returns Not-A-Number if denominator is (sufficient close to) zero.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>numerator </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>b</em>&nbsp;</td><td>denominator </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>a divided by b, approximately, or <a class="el" href="group__fixedGroup.html#g7dba2b69c33f38f9d2c133057458f2ab">XY_FIXED_NAN</a> if b is zero (approximately) </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="g88978433a0508924b675cf20cab0c2e8"></a><!-- doxytag: member="crtxy.h::XY_FIXED_DIV_ZERO" ref="g88978433a0508924b675cf20cab0c2e8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define XY_FIXED_DIV_ZERO&nbsp;&nbsp;&nbsp;((1 &lt;&lt; XY_FIXED_SHIFT_HALF) - 1)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The maximum value that, when <a class="el" href="group__fixedMathGroup.html#gf2b75c7937f4c8a02a604ee8c157e557" title="Divide one XY_fixed value by another.">XY_div()</a> is used to divide two digits, the denominator may be, and be considered zero (due to shifting to reduce precision loss. 
+<p>
+) 
+</div>
+</div><p>
+<a class="anchor" name="g81d37a8d66fcb10cb35fe4011389f7fe"></a><!-- doxytag: member="crtxy.h::XY_fpart" ref="g81d37a8d66fcb10cb35fe4011389f7fe" args="(a)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define XY_fpart          </td>
+          <td>(</td>
+          <td class="paramtype">a&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;((a) &amp; (XY_FIXED_ONE - 1))</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Return the fractional part of 'a'. 
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="g7d3110fd151a058c0c51c96d4cabc719"></a><!-- doxytag: member="crtxy.h::XY_rfpart" ref="g7d3110fd151a058c0c51c96d4cabc719" args="(a)" -->
 <div class="memitem">
 <div class="memproto">
@@ -239,6 +217,28 @@ Returns the integer (whole) part of 'a'.
 
 <p>
 Return one minus the fractional part of 'a'. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="g33d1a42ebe7c8a791f70b5d80377b55d"></a><!-- doxytag: member="crtxy.h::XY_ipart" ref="g33d1a42ebe7c8a791f70b5d80377b55d" args="(a)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define XY_ipart          </td>
+          <td>(</td>
+          <td class="paramtype">a&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%">&nbsp;&nbsp;&nbsp;((a) - XY_fpart(a))</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the integer (whole) part of 'a'. 
 <p>
 
 </div>
@@ -325,7 +325,7 @@ Returns cosine() of 'degrees'.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

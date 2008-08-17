@@ -48,60 +48,6 @@
 <dl compact><dt><b><a class="el" href="todo.html#_todo000017">Todo:</a></b></dt><dd>Load bitmaps from an SDL_Surface </dd></dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000017">Todo:</a></b></dt><dd>Load bitmaps from RGBA pixel data </dd></dl>
 <hr><h2>Function Documentation</h2>
-<a class="anchor" name="g272611caa1b6d0d27f3dac94f796ef52"></a><!-- doxytag: member="crtxy.h::XY_enable_background" ref="g272611caa1b6d0d27f3dac94f796ef52" args="(XY_bool enable)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void XY_enable_background           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a>&nbsp;</td>
-          <td class="paramname"> <em>enable</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Enable or disable the background bitmap (affects next frame). 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>enable</em>&nbsp;</td><td>set to XY_TRUE enables background bitmap (if any), and XY_FALSE disables it. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-<a class="anchor" name="ge0329cd6e05777d194314559203829b8"></a><!-- doxytag: member="crtxy.h::XY_free_bitmap" ref="ge0329cd6e05777d194314559203829b8" args="(XY_bitmap *bitmap)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void XY_free_bitmap           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structXY__bitmap.html">XY_bitmap</a> *&nbsp;</td>
-          <td class="paramname"> <em>bitmap</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Free a bitmap. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>bitmap</em>&nbsp;</td><td>is an <a class="el" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> pointer to free. (Do not use the pointer any more! You may reuse your variable, if you create a new bitmap, of course.) </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
 <a class="anchor" name="g68a75d2a7659faf9ba7ac421740856ed"></a><!-- doxytag: member="crtxy.h::XY_load_bitmap" ref="g68a75d2a7659faf9ba7ac421740856ed" args="(char *filename)" -->
 <div class="memitem">
 <div class="memproto">
@@ -168,6 +114,33 @@ Create a bitmap based on image data in a buffer.
 
 </div>
 </div><p>
+<a class="anchor" name="ge0329cd6e05777d194314559203829b8"></a><!-- doxytag: member="crtxy.h::XY_free_bitmap" ref="ge0329cd6e05777d194314559203829b8" args="(XY_bitmap *bitmap)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void XY_free_bitmap           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXY__bitmap.html">XY_bitmap</a> *&nbsp;</td>
+          <td class="paramname"> <em>bitmap</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Free a bitmap. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>bitmap</em>&nbsp;</td><td>is an <a class="el" href="structXY__bitmap.html">XY_bitmap</a> pointer to free. (Do not use the pointer any more! You may reuse your variable, if you create a new bitmap, of course.) </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
 <a class="anchor" name="g8633e7028cc5b9452598519420c97cde"></a><!-- doxytag: member="crtxy.h::XY_set_background" ref="g8633e7028cc5b9452598519420c97cde" args="(XY_color color, XY_bitmap *bitmap, XY_fixed x, XY_fixed y, int posflags, int scaling)" -->
 <div class="memitem">
 <div class="memproto">
@@ -223,23 +196,50 @@ Set the background color, and optional bitmap, its position, and options for sca
 Enables background bitmap.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an XY_color for the display's background. (The entire display will be this color, if no bitmap is provided, otherwise any part of the display not covered by the bitmap will be this color. Lines alpha-blended or anti-aliased in 'fake' rendering mode will blend against this color, as well.) </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>bitmap</em>&nbsp;</td><td>is an <a class="el" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> pointer for a background image to use. It may be NULL if no background image is desired. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an <a class="el" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d">XY_color</a> for the display's background. (The entire display will be this color, if no bitmap is provided, otherwise any part of the display not covered by the bitmap will be this color. Lines alpha-blended or anti-aliased in 'fake' rendering mode will blend against this color, as well.) </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>bitmap</em>&nbsp;</td><td>is an <a class="el" href="structXY__bitmap.html">XY_bitmap</a> pointer for a background image to use. It may be NULL if no background image is desired. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>represents how far right (or left, if negative) to nudge the background image after it has been positioned, in canvas units. Use 0 for no nudging. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>y</em>&nbsp;</td><td>represents how far down (or up, if negative) to nudge the background image after it has been positioned, in canvas units. Use 0 for no nudging. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>posflags</em>&nbsp;</td><td>determines how to position a bitmap. Use the "|" (or) bitwise operator to combine one horizontal choice (XY_POS_LEFT, XY_POS_HCENTER or XY_POS_RIGHT) with one vertical choice (XY_POS_TOP, XY_POS_VCENTER or XY_POS_BOTTOM). Use 0 as a shortcut for 'top left'. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>scaling</em>&nbsp;</td><td>describes how the bitmap should be scaled. Use one of the following: XY_SCALE_NONE, XY_SCALE_STRETCH, XY_SCALE_KEEP_ASPECT_WIDE or XY_SCALE_KEEP_ASPECT_TALL. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>posflags</em>&nbsp;</td><td>determines how to position a bitmap. Use the "|" (or) bitwise operator to combine one horizontal choice (<a class="el" href="group__bitmapPositioningGroup.html#g2fb8f573c7c2ac7ff59011446f27d3ce">XY_POS_LEFT</a>, <a class="el" href="group__bitmapPositioningGroup.html#g1faea8bb460d6d9128898094940c2ca9">XY_POS_HCENTER</a> or <a class="el" href="group__bitmapPositioningGroup.html#g84659ab46287e5b7047a03bc2d763408">XY_POS_RIGHT</a>) with one vertical choice (<a class="el" href="group__bitmapPositioningGroup.html#g2cbcc34162e79ca642e5f3402bf92f2d">XY_POS_TOP</a>, <a class="el" href="group__bitmapPositioningGroup.html#g750519ccc289cda020e515ab1f4dadde">XY_POS_VCENTER</a> or <a class="el" href="group__bitmapPositioningGroup.html#g9f4383c8ea8478cef75b1d9550b60c3a">XY_POS_BOTTOM</a>). Use 0 as a shortcut for 'top left'. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>scaling</em>&nbsp;</td><td>describes how the bitmap should be scaled. Use one of the following: <a class="el" href="group__bitmapScalingGroup.html#g1094c4010960be996339b3d71b70f3e1">XY_SCALE_NONE</a>, <a class="el" href="group__bitmapScalingGroup.html#gd79696c8e5845cdf9abd70cc57a473cf">XY_SCALE_STRETCH</a>, <a class="el" href="group__bitmapScalingGroup.html#ge470bfdafe8967178f03e5b7ce5ce50e">XY_SCALE_KEEP_ASPECT_WIDE</a> or <a class="el" href="group__bitmapScalingGroup.html#gb7af629968506ccb492c0458e8c59c91">XY_SCALE_KEEP_ASPECT_TALL</a>. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALE on failure, and sets error code. </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd><a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a> on success, or <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a> on failure, and sets error code. </dd></dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000031">Todo:</a></b></dt><dd>Support repeating backgrounds </dd></dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000031">Todo:</a></b></dt><dd>Support color overlays </dd></dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000031">Todo:</a></b></dt><dd>Support scaling bitmaps, relative to canvas </dd></dl>
 
 </div>
 </div><p>
+<a class="anchor" name="g272611caa1b6d0d27f3dac94f796ef52"></a><!-- doxytag: member="crtxy.h::XY_enable_background" ref="g272611caa1b6d0d27f3dac94f796ef52" args="(XY_bool enable)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void XY_enable_background           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a>&nbsp;</td>
+          <td class="paramname"> <em>enable</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<div class="memdoc">
+
+<p>
+Enable or disable the background bitmap (affects next frame). 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>enable</em>&nbsp;</td><td>set to XY_TRUE enables background bitmap (if any), and XY_FALSE disables it. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

@@ -49,6 +49,58 @@ Color type.
 </div>
 </div><p>
 <hr><h2>Function Documentation</h2>
+<a class="anchor" name="g9ea71e06b087beb2b5581b3c00b1a35c"></a><!-- doxytag: member="crtxy.h::XY_setcolor" ref="g9ea71e06b087beb2b5581b3c00b1a35c" args="(Uint8 r, Uint8 g, Uint8 b, Uint8 a)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d">XY_color</a> XY_setcolor           </td>
+          <td>(</td>
+          <td class="paramtype">Uint8&nbsp;</td>
+          <td class="paramname"> <em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Uint8&nbsp;</td>
+          <td class="paramname"> <em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Uint8&nbsp;</td>
+          <td class="paramname"> <em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Uint8&nbsp;</td>
+          <td class="paramname"> <em>a</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Combines values for R, G, B and A components into an XY_color. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>r</em>&nbsp;</td><td>Red component (between 0 and 255). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>g</em>&nbsp;</td><td>Green component (between 0 and 255). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>b</em>&nbsp;</td><td>Blue component (between 0 and 255). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>Alpha component (between 0 (transparent) and 255 (opaque)). </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>An XY_color representing the RGBA values provided. </dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="g37fdef0e0baf47e25bc9735e2684e4e4"></a><!-- doxytag: member="crtxy.h::XY_getcolor" ref="g37fdef0e0baf47e25bc9735e2684e4e4" args="(XY_color c, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a)" -->
 <div class="memitem">
 <div class="memproto">
@@ -107,60 +159,8 @@ Breaks an XY_color into its R, G, B and A components.
 
 </div>
 </div><p>
-<a class="anchor" name="g9ea71e06b087beb2b5581b3c00b1a35c"></a><!-- doxytag: member="crtxy.h::XY_setcolor" ref="g9ea71e06b087beb2b5581b3c00b1a35c" args="(Uint8 r, Uint8 g, Uint8 b, Uint8 a)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d">XY_color</a> XY_setcolor           </td>
-          <td>(</td>
-          <td class="paramtype">Uint8&nbsp;</td>
-          <td class="paramname"> <em>r</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Uint8&nbsp;</td>
-          <td class="paramname"> <em>g</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Uint8&nbsp;</td>
-          <td class="paramname"> <em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Uint8&nbsp;</td>
-          <td class="paramname"> <em>a</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
 </div>
-<div class="memdoc">
-
-<p>
-Combines values for R, G, B and A components into an XY_color. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>r</em>&nbsp;</td><td>Red component (between 0 and 255). </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>g</em>&nbsp;</td><td>Green component (between 0 and 255). </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>b</em>&nbsp;</td><td>Blue component (between 0 and 255). </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>Alpha component (between 0 (transparent) and 255 (opaque)). </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>An XY_color representing the RGBA values provided. </dd></dl>
-
-</div>
-</div><p>
-</div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

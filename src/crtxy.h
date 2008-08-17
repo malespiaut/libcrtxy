@@ -4,11 +4,9 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.38 2008/08/16 16:04:37 wkendrick Exp $
+$Id: crtxy.h,v 1.39 2008/08/17 04:28:44 wkendrick Exp $
 
 \section introSection Introduction
-
-\subsection purposeSubsection Purpose
 
 "libcrtxy" is meant to allow game programmers to develop
 vector-graphics-style games like those from the late 1970s and early 1980s
@@ -31,17 +29,23 @@ and can be used for sub-pixel movement) and trigonometry
 
 (*) Names are trademarks of their respective trademark and copyright holders.
 
+\section tocSection More about libcrtxy
 
-\li \subpage backendsSubpage Backends
-\li \subpage optionsSubpage Options
+\subsection tocGeneralSubsection General
+\li \subpage backendsSubpage
+\li \subpage optionsSubpage
+
+\subsection tocGeneralSubsection Programming games with libcrtxy
 \li \subpage installationSubpage "Installing libcrtxy"
 \li \subpage buildingSubpage "Building Games with libcrtxy"
+
+\subsection tocGeneralSubsection Running games that use libcrtxy
 \li \subpage settingOptionsSubpage "Setting Options"
 
 \todo Construct man pages
 */
 
-/*! \page backendsSubpage Backends
+/*! \page backendsSubpage Backends that libcrtxy can use for drawing
 
 libcrtxy is being built on top of libSDL, the Simple DirectMedia Layer library
 (http://www.libsdl.org/), and therefore uses it (and SDL_Image for bitmap
@@ -57,7 +61,7 @@ and drawing vectors, libcrtxy's "XY_" functions and types should be used.
 
 */
 
-/*! \page optionsSubpage Options
+/*! \page optionsSubpage Options for rendering quality that libcrtxy provides
 
 Depending on the target system (e.g., a high-powered desktop PC or
 an embedded handheld system with a slow CPU and no FPU), various
@@ -73,39 +77,43 @@ positions are given using fixed-point values.
 
 The options that can be set at runtime include:
 
-Display settings:
+\section optionsDisplaySection Display settings:
+
 \li Screen width & height
 \li Screen depth (16bpp, 24bpp or 32bpp)
 \li Window or fullscreen (requested or required)
 \todo Utilize SDL_ListModes()
 \todo Native screen resolution when in fullscreen
 
-Rendering quality:
+\section optionsRenderingSection Rendering quality:
 \li Alpha blending (on, off, or "fake")
 \li Anti-aliasing
 \li Gamma correction \todo Support gamma values
 \li Backgrounds
 \li Bitmap scaling (fast or best) \todo Implement best scaling
 
-Special effects:
+\section optionsSFXSection Special effects:
 \li Blurring \todo Implement blur effect
 \li Additive effect \todo Implement additive effect
 \todo Persistence-of-vision effect
 
+\section optionsHowSection How options get set:
 The options that get used are determined by the following, and should
 occur in this order:
 \li Hard-coded defaults (set at the time libcrtxy is compiled)
 \li System-wide "libcrtxy" configuration file (e.g.,
-  "<tt>/etc/libcrtxy/libcrtxy.conf</tt>")
+  "/etc/libcrtxy/libcrtxy.conf")
 \li User's own "libcrtxy" configuration file (e.g.,
-  "<tt>~/.libcrtxyrc</tt>")
-\li Environment variables (e.g., "<tt>CRTXY_SCALE=FAST</tt>")
+  "~/.libcrtxyrc")
+\li Environment variables (e.g., "CRTXY_SCALE=FAST")
 \li System-wide configuration file for the application (e.g.,
-  "<tt>/etc/some_game/some_game.conf</tt>")
+  "/etc/some_game/some_game.conf")
 \li User's own configuration file for the application (e.g.,
-  "<tt>~/.some_gamerc</tt>")
+  "~/.some_gamerc")
 \li Command-line arguments (e.g.,
-  "<tt>some_game --crtxy-bpp 32</tt>")
+  "some_game --crtxy-bpp 32")
+
+See also: \ref settingOptionsSubpage
 */
 
 /** \page installationSubpage Installing libcrtxy
@@ -180,24 +188,25 @@ Use the <tt>crtxy-config</tt> command get the
 options necessary to compile and link an application against libcrtxy.
 
   - <tt>crtxy-config --cflags</tt> \n
-    .
     This outputs compiler flags necessary to compile a C or C++ program
-    with libcrtxy.  Example: <tt>gcc game.c -c `crtxy-config --cflags`</tt>
+    with libcrtxy. \n
+    Example: <tt>gcc game.c -c `crtxy-config --cflags`</tt>
+  .
   - <tt>crtxy-config --libs</tt> \n
-    .
     This outputs linker flags necessary to link a program
-    against libcrtxy as a shared library.
+    against libcrtxy as a shared library. \n
     Example: <tt>gcc -o game game.o other.o `crtxy-config --libs`</tt>
+  .
   - <tt>crtxy-config --static-libs</tt> \n
-    .
     This outputs linker flags necessary to link a program
-    against libcrtxy as a static library.
+    against libcrtxy as a static library. \n
     Example: <tt>gcc -o game game.o other.o `crtxy-config --static-libs`</tt>
+  .
   - <tt>crtxy-config --version</tt> \n
-    .
     This outputs the version of libcrtxy that is installed. It's useful for
     automated checking of whether the installed version of libcrtxy is
     compatible with what your application expects.
+  .
 
 \b Note: Since libcrtxy depends on libSDL, the output of
 <tt>crtxy-config</tt> includes the output of libSDL's
@@ -244,6 +253,14 @@ Options such as rendering quality settings and screen resolution
 can come from various places.  They are listed below, in the most
 reasonable order that they should be picked up:
 
+\li Defaults
+\li Global libcrtxy configuration file
+\li Local (user's) libcrtxy configuration file
+\li Global game configuration file
+\li Local (user's) game configuration file
+\li Environment variables
+\li Command-line options
+
 \subsection optionsFromDefault Defaults
 The <tt>XY_default_options()</tt> function sets some base values for
 the various options, in case no others are sent elsewhere.
@@ -269,9 +286,24 @@ own config. file).
 \li <tt>crtxy-blur={on|off}</tt>
 \li <tt>crtxy-additive={on|off}</tt>
 
+\subsection optionsFromEnvironment Environment Variables
+<tt>XY_parse_envvars()</tt> examines the application's
+runtime enviroment for libcrtxy-related variables.
+
+\li <tt>CRTXY_WIDTH</tt>
+\li <tt>CRTXY_HEIGHT</tt>
+\li <tt>CRTXY_BPP</tt> (16|24|32|ANY)
+\li <tt>CRTXY_FULLSCREEN</tt> (ON|OPTIONAL|OFF)
+\li <tt>CRTXY_ALPHA</tt> (ON|FAKE|OFF)
+\li <tt>CRTXY_ANTIALIAS</tt> (ON|OFF)
+\li <tt>CRTXY_BACKGROUNDS</tt> (ON|OFF)
+\li <tt>CRTXY_SCALING</tt> (BEST|FAST)
+\li <tt>CRTXY_GAMMA_CORRECTION</tt> (ON|OFF) \todo Support gamma values
+\li <tt>CRTXY_BLUR</tt> (ON|OFF)
+\li <tt>CRTXY_ADDITIVE</tt> (ON|OFF)
 
 \subsection optionsFromCommandLine Command-Line Arguments
-The <tt>XY_parse_options()</tt> function can look for and parse
+Finally, the <tt>XY_parse_options()</tt> function can look for and parse
 and libcrtxy-related options found in the command-line arguments to an
 application.
 
@@ -289,22 +321,6 @@ application.
 \li <tt>--crtxy-blur {on|off}</tt>
 \li <tt>--crtxy-additive {on|off}</tt>
 \li <tt>--help-crtxy</tt> - Presents a list of libcrtxy-related usage, and quits.
-
-\subsection optionsFromEnvironment Environment Variables
-Finally, <tt>XY_parse_envvars()</tt> examines the application's
-runtime enviroment for libcrtxy-related variables.
-
-\li <tt>CRTXY_WIDTH</tt>
-\li <tt>CRTXY_HEIGHT</tt>
-\li <tt>CRTXY_BPP</tt> (16|24|32|ANY)
-\li <tt>CRTXY_FULLSCREEN</tt> (ON|OPTIONAL|OFF)
-\li <tt>CRTXY_ALPHA</tt> (ON|FAKE|OFF)
-\li <tt>CRTXY_ANTIALIAS</tt> (ON|OFF)
-\li <tt>CRTXY_BACKGROUNDS</tt> (ON|OFF)
-\li <tt>CRTXY_SCALING</tt> (BEST|FAST)
-\li <tt>CRTXY_GAMMA_CORRECTION</tt> (ON|OFF) \todo Support gamma values
-\li <tt>CRTXY_BLUR</tt> (ON|OFF)
-\li <tt>CRTXY_ADDITIVE</tt> (ON|OFF)
 
 */
 
@@ -550,7 +566,9 @@ void XY_default_options(XY_options * opts);
  * Load global, then local (user) libcrtxy config files into opts.
  *
  * \param opts is a pointer to an options structure to fill.
- * \return XY_TRUE on success, or XY_FALSE on failure (and set error code).
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_load_options(XY_options * opts);
 
@@ -562,7 +580,9 @@ XY_bool XY_load_options(XY_options * opts);
  * \param ignore_unknowns set to XY_TRUE to prevent function from aborting
  * on unrecognized lines (useful if you want to let users put libcrtxy
  * configuration options in an app-specific config file.)
- * \return XY_TRUE on success, or XY_FALSE on failure (and set error code).
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  *
  * \todo Support a callback function for processing non-libcrtxy-related
  * options without processing files twice.
@@ -576,7 +596,9 @@ XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
  * \param argc is a count of arguments to parse.
  * \param argv is an array of arguments to parse.
  * \param opts is a pointer to an options structure to fill.
- * \return 0 on success, or an index into argv[] of an offending argument.
+ * \return On success: 0 on success. On failure, an index into argv[] of an
+ * offending argument, and sets error code to one of the following:
+ * \li FIXME
  */
 int XY_parse_options(int * argc, char * argv[], XY_options * opts);
 
@@ -584,7 +606,9 @@ int XY_parse_options(int * argc, char * argv[], XY_options * opts);
  * Read any libcrtxy-related environment variables into opts.
  *
  * \param opts is a pointer to an options structure to fill.
- * \return XY_TRUE on success, or XY_FALSE on failure (and set error code).
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_parse_envvars(XY_options * opts);
 
@@ -604,7 +628,9 @@ XY_bool XY_parse_envvars(XY_options * opts);
  * will be scaled to the real display.
  * \param canvash is the height (in XY_fixed units) of a virtual canvas which
  * will be scaled to the real display.
- * \return XY_TRUE on success, or XY_FALSE on failure (and set error code).
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  *
  * \todo Allow setting window class (SDL_VIDEO_X11_WMCLASS=xxx.yyy)
  * \todo Allow enabling/disabling screensaver (SDL_VIDEO_ALLOW_SCREENSAVER=1)
@@ -681,8 +707,9 @@ XY_bitmap * XY_load_bitmap_from_buffer(unsigned char * buffer, int size);
 /**
  * Free a bitmap.
  *
- * \param bitmap is an XY_bitmap pointer to free. (Do not use the pointer any
- * more! You may reuse your variable, if you create a new bitmap, of course.)
+ * \param bitmap is an \ref XY_bitmap pointer to free. (Do not use the pointer
+ * any more! You may reuse your variable, if you create a new bitmap, of
+ * course.)
  */
 void XY_free_bitmap(XY_bitmap * bitmap);
 
@@ -693,12 +720,12 @@ void XY_free_bitmap(XY_bitmap * bitmap);
  * Set the background color, and optional bitmap, its position, and
  * options for scaling it to the screen size.  Enables background bitmap.
  *
- * \param color is an XY_color for the display's background. (The entire
+ * \param color is an \ref XY_color for the display's background. (The entire
  * display will be this color, if no bitmap is provided, otherwise any part
  * of the display not covered by the bitmap will be this color.
  * Lines alpha-blended or anti-aliased in 'fake' rendering mode will blend
  * against this color, as well.)
- * \param bitmap is an XY_bitmap pointer for a background image to use.
+ * \param bitmap is an \ref XY_bitmap pointer for a background image to use.
  * It may be NULL if no background image is desired.
  * \param x represents how far right (or left, if negative) to nudge the
  * background image after it has been positioned, in canvas units. Use 0 for
@@ -707,14 +734,15 @@ void XY_free_bitmap(XY_bitmap * bitmap);
  * background image after it has been positioned, in canvas units. Use 0 for
  * no nudging.
  * \param posflags determines how to position a bitmap. Use the "|" (or)
- * bitwise operator to combine one horizontal choice (XY_POS_LEFT,
- * XY_POS_HCENTER or XY_POS_RIGHT) with one vertical choice
- * (XY_POS_TOP, XY_POS_VCENTER or XY_POS_BOTTOM). Use 0 as a shortcut for
- * 'top left'.
+ * bitwise operator to combine one horizontal choice (\ref XY_POS_LEFT,
+ * \ref XY_POS_HCENTER or \ref XY_POS_RIGHT) with one vertical choice
+ * (\ref XY_POS_TOP, \ref XY_POS_VCENTER or \ref XY_POS_BOTTOM).
+ * Use 0 as a shortcut for 'top left'.
  * \param scaling describes how the bitmap should be scaled. Use one of
- * the following: XY_SCALE_NONE, XY_SCALE_STRETCH, XY_SCALE_KEEP_ASPECT_WIDE
- * or XY_SCALE_KEEP_ASPECT_TALL.
- * \return XY_TRUE on success, or XY_FALE on failure, and sets error code.
+ * the following: \ref XY_SCALE_NONE, \ref XY_SCALE_STRETCH,
+ * \ref XY_SCALE_KEEP_ASPECT_WIDE or \ref XY_SCALE_KEEP_ASPECT_TALL.
+ * \return \ref XY_TRUE on success, or \ref XY_FALSE on failure, and
+ * sets error code.
  * \todo Support repeating backgrounds
  * \todo Support color overlays
  * \todo Support scaling bitmaps, relative to canvas
@@ -811,18 +839,20 @@ XY_lines * XY_new_lines(void);
 /**
  * Duplicates a collection.
  *
- * \param lines is an XY_lines pointer from which you want to copy.
- * \return a pointer to a new XY_lines with all lines from 'lines' copied to
- * it on success, or NULL on failure, and sets error code.
+ * \param lines is an \ref XY_lines pointer from which you want to copy.
+ * \return a pointer to a new \ref XY_lines with all lines from 'lines' copied
+ * to it on success, or NULL on failure, and sets error code.
  */
 XY_lines * XY_duplicate_lines(XY_lines * lines);
 
 /**
  * Free a line collection.
  *
- * \param lines is an XY_lines pointer to free. (Do not use the pointer any
+ * \param lines is an \ref XY_lines pointer to free. (Do not use the pointer any
  * more!  You may reuse your variable, if you create a new bitmap, of course.)
- * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_free_lines(XY_lines * lines);
 
@@ -831,23 +861,28 @@ XY_bool XY_free_lines(XY_lines * lines);
  * This allows you to reconstruct a line collection (without making a new one)
  * at different times (e.g., at the start of a new frame).
  *
- * \param lines is an XY_lines pointer to reset.
- * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \param lines is an \ref XY_lines pointer to reset.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_start_lines(XY_lines * lines);
 
 /**
  * Add a line to a line collection.
  *
- * \param lines is an XY_lines pointer to add a line to.
+ * \param lines is an \ref XY_lines pointer to add a line to.
  * \param x1 is the X coordinate of the new line's starting point.
  * \param y1 is the Y coordinate of the new line's starting point.
  * \param x2 is the X coordinate of the new line's ending point.
  * \param y2 is the Y coordinate of the new line's ending point.
- * \param color is an XY_color representing the color and transparency of the
- * new line.
- * \param thickness is an XY_fixed representing the thickness of the new line.
- * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \param color is an \ref XY_color representing the color and transparency of
+ * the new line.
+ * \param thickness is an \ref XY_fixed representing the thickness of the new
+ * line.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_add_line(XY_lines * lines,
                     XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
@@ -856,13 +891,15 @@ XY_bool XY_add_line(XY_lines * lines,
 /**
  * Translate all lines within a collection.
  *
- * \param lines is an XY_lines pointer containing a collection of lines to
+ * \param lines is an \ref XY_lines pointer containing a collection of lines to
  * translate.
  * \param x is the offset (positive for right, negative for left) by which to
  * translate all of the lines horizontally.
  * \param y is the offset (positive for down, negative for up) by which to
  * translate all of the lines vertically.
- * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_translate_lines(XY_lines * lines,
                            XY_fixed x, XY_fixed y);
@@ -870,21 +907,25 @@ XY_bool XY_translate_lines(XY_lines * lines,
 /**
  * Scale all lines within a collection (centered around the origin (0,0)).
  *
- * \param lines is an XY_lines pointer containing a collection of lines to
+ * \param lines is an \ref XY_lines pointer containing a collection of lines to
  * scale.
  * \param xscale is the scale to change all of the lines' X coordinates.
  * \param yscale is the scale to change all of the lines' Y coordinates.
- * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale);
 
 /**
  * Rotate all lines within a collection (centered around the origin (0,0)).
  *
- * \param lines is an XY_lines pointer containing a collection of lines to
+ * \param lines is an \ref XY_lines pointer containing a collection of lines to
  * scale.
  * \param angle is angle (in degrees) to rotate each line in the collection.
- * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  * \todo Implement line rotation
  */
 XY_bool XY_rotate_lines(XY_lines * lines, int angle);
@@ -905,9 +946,9 @@ XY_bool XY_rotate_lines(XY_lines * lines, int angle);
  * \param y1 is the Y coordinate of the line's starting point.
  * \param x2 is the X coordinate of the line's ending point.
  * \param y2 is the Y coordinate of the line's ending point.
- * \param color is an XY_color representing the color and transparency of the
- * line.
- * \param thickness is an XY_fixed representing the thickness of the line.
+ * \param color is an \ref XY_color representing the color and transparency of
+ * the line.
+ * \param thickness is an \ref XY_fixed representing the thickness of the line.
  * \todo Create line clip routine (for efficiency)
  */
 void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
@@ -916,15 +957,17 @@ void XY_draw_line(XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2,
 /**
  * Draw a collection of lines.
  *
- * \param lines is an XY_lines pointer with a collection of lines to draw.
- * \return XY_TRUE on success, or XY_FALSE on failure, and set error code.
+ * \param lines is an \ref XY_lines pointer with a collection of lines to draw.
+ * \return On success: \ref XY_TRUE. On failure, \ref XY_FALSE, and sets
+ * error code to one of the following:
+ * \li FIXME
  */
 XY_bool XY_draw_lines(XY_lines * lines);
 
 /**
  * Draw a single line using an XY_line struct.
  *
- * \param line is an XY_line struct representing a line to draw.
+ * \param line is an \ref XY_line struct representing a line to draw.
  */
 void XY_draw_one_line(XY_line line);
 
@@ -934,9 +977,9 @@ void XY_draw_one_line(XY_line line);
  *
  * \param x is the X coordinate of the point.
  * \param y is the Y coordinate of the point.
- * \param color is an XY_color representing the color and transparency of the
- * point.
- * \param thickness is an XY_fixed representing the thickness of the point.
+ * \param color is an \ref XY_color representing the color and transparency of
+ * the point.
+ * \param thickness is an \ref XY_fixed representing the thickness of the point.
  */
 void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color, XY_fixed thickness);
 
@@ -975,7 +1018,7 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color, XY_fixed thickness);
  *
  * \param a numerator
  * \param b denominator
- * \return a divided by b, approximately, or XY_FIXED_NAN if b is
+ * \return a divided by b, approximately, or \ref XY_FIXED_NAN if b is
  * zero (approximately)
  */
 #define XY_div(a,b) (((b) >> XY_FIXED_SHIFT_HALF) == 0 ? \
@@ -1125,16 +1168,16 @@ int XY_get_screenh(void);
  * (if possible), and how the lines intersect (or don't): parallel, coincident,
  * not intersecting, or intersecting.
  *
- * \param line1 is an XY_line structure containing a line.
- * \param line2 is an XY_line structure containing a line.
+ * \param line1 is an \ref XY_line structure containing a line.
+ * \param line2 is an \ref XY_line structure containing a line.
  * \param intersect_x is a pointer to a variable into which the X coordinates
  * of the intersection (if any) occurred; may be NULL to ignore.
  * \param intersect_y is a pointer to a variable into which the Y coordinates
  * of the intersection (if any) occurred; may be NULL to ignore.
  * \param result is a pointer to an XY_intersection variable into which
  * the type of intersection (if any) occurred; may be NULL to ignore.
- * \return XY_TRUE if the lines intersect or are coincident, XY_FALSE if they
- * do not intersect or are parallel.
+ * \return \ref XY_TRUE if the lines intersect or are coincident,
+ * \ref XY_FALSE if they do not intersect or are parallel.
  */
 XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
                            XY_fixed * intersect_x, XY_fixed * intersect_y,
@@ -1143,10 +1186,10 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
 /**
  * Returns whether any lines in one group intersect any lines in another.
  *
- * \param lines1 an XY_lines pointer containing a collection of lines.
- * \param lines2 an XY_lines pointer containing a collection of lines.
- * \return XY_TRUE if any lines in 'lines1' intersect or are coincident
- * with any lines in 'lines2', XY_FALSE if not.
+ * \param lines1 is an \ref XY_lines pointer containing a collection of lines.
+ * \param lines2 is an \ref XY_lines pointer containing a collection of lines.
+ * \return \ref XY_TRUE if any lines in 'lines1' intersect or are coincident
+ * with any lines in 'lines2', \ref XY_FALSE if not.
  */
 XY_bool XY_line_groups_intersect(XY_lines * lines1, XY_lines * lines2);
 

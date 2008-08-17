@@ -47,7 +47,17 @@ Visual effects</a></h3>
 </ul>
 <h2><a class="anchor" name="optionsFromSection">
 Where Options Can Get Set</a></h2>
-Options such as rendering quality settings and screen resolution can come from various places. They are listed below, in the most reasonable order that they should be picked up:<h3><a class="anchor" name="optionsFromDefault">
+Options such as rendering quality settings and screen resolution can come from various places. They are listed below, in the most reasonable order that they should be picked up:<p>
+<ul>
+<li>Defaults </li>
+<li>Global libcrtxy configuration file </li>
+<li>Local (user's) libcrtxy configuration file </li>
+<li>Global game configuration file </li>
+<li>Local (user's) game configuration file </li>
+<li>Environment variables </li>
+<li>Command-line options</li>
+</ul>
+<h3><a class="anchor" name="optionsFromDefault">
 Defaults</a></h3>
 The <code><a class="el" href="group__optionsGroup.html#g1b63223443f042344542182c3625762a" title="Set opts to default (libcrtxy&#39;s compiled-time) options.">XY_default_options()</a></code> function sets some base values for the various options, in case no others are sent elsewhere. These are the values compiled into libcrtxy.<h3><a class="anchor" name="optionsFromFile">
 Config. Files</a></h3>
@@ -68,9 +78,26 @@ The <code><a class="el" href="group__optionsGroup.html#gfa3679a3ce5bbb1c1aaa1f50
 <li><code>crtxy-blur={on|off}</code> </li>
 <li><code>crtxy-additive={on|off}</code></li>
 </ul>
+<h3><a class="anchor" name="optionsFromEnvironment">
+Environment Variables</a></h3>
+<code><a class="el" href="group__optionsGroup.html#gd9266332f25f1c215d6f3009f2369d6c" title="Read any libcrtxy-related environment variables into opts.">XY_parse_envvars()</a></code> examines the application's runtime enviroment for libcrtxy-related variables.<p>
+<ul>
+<li><code>CRTXY_WIDTH</code> </li>
+<li><code>CRTXY_HEIGHT</code> </li>
+<li><code>CRTXY_BPP</code> (16|24|32|ANY) </li>
+<li><code>CRTXY_FULLSCREEN</code> (ON|OPTIONAL|OFF) </li>
+<li><code>CRTXY_ALPHA</code> (ON|FAKE|OFF) </li>
+<li><code>CRTXY_ANTIALIAS</code> (ON|OFF) </li>
+<li><code>CRTXY_BACKGROUNDS</code> (ON|OFF) </li>
+<li><code>CRTXY_SCALING</code> (BEST|FAST) </li>
+<li><code>CRTXY_GAMMA_CORRECTION</code> (ON|OFF) <dl compact><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Support gamma values </dd></dl>
+</li>
+<li><code>CRTXY_BLUR</code> (ON|OFF) </li>
+<li><code>CRTXY_ADDITIVE</code> (ON|OFF)</li>
+</ul>
 <h3><a class="anchor" name="optionsFromCommandLine">
 Command-Line Arguments</a></h3>
-The <code><a class="el" href="group__optionsGroup.html#g3c68f8bed2898ef3567026fdf4624872" title="Parse libcrtxy-related arguments into opts.">XY_parse_options()</a></code> function can look for and parse and libcrtxy-related options found in the command-line arguments to an application.<p>
+Finally, the <code><a class="el" href="group__optionsGroup.html#g3c68f8bed2898ef3567026fdf4624872" title="Parse libcrtxy-related arguments into opts.">XY_parse_options()</a></code> function can look for and parse and libcrtxy-related options found in the command-line arguments to an application.<p>
 <ul>
 <li><code>--crtxy-width NNN</code> </li>
 <li><code>--crtxy-height NNN</code> </li>
@@ -86,27 +113,10 @@ The <code><a class="el" href="group__optionsGroup.html#g3c68f8bed2898ef3567026fd
 </li>
 <li><code>--crtxy-blur {on|off}</code> </li>
 <li><code>--crtxy-additive {on|off}</code> </li>
-<li><code>--help-crtxy</code> - Presents a list of libcrtxy-related usage, and quits.</li>
-</ul>
-<h3><a class="anchor" name="optionsFromEnvironment">
-Environment Variables</a></h3>
-Finally, <code><a class="el" href="group__optionsGroup.html#gd9266332f25f1c215d6f3009f2369d6c" title="Read any libcrtxy-related environment variables into opts.">XY_parse_envvars()</a></code> examines the application's runtime enviroment for libcrtxy-related variables.<p>
-<ul>
-<li><code>CRTXY_WIDTH</code> </li>
-<li><code>CRTXY_HEIGHT</code> </li>
-<li><code>CRTXY_BPP</code> (16|24|32|ANY) </li>
-<li><code>CRTXY_FULLSCREEN</code> (ON|OPTIONAL|OFF) </li>
-<li><code>CRTXY_ALPHA</code> (ON|FAKE|OFF) </li>
-<li><code>CRTXY_ANTIALIAS</code> (ON|OFF) </li>
-<li><code>CRTXY_BACKGROUNDS</code> (ON|OFF) </li>
-<li><code>CRTXY_SCALING</code> (BEST|FAST) </li>
-<li><code>CRTXY_GAMMA_CORRECTION</code> (ON|OFF) <dl compact><dt><b><a class="el" href="todo.html#_todo000013">Todo:</a></b></dt><dd>Support gamma values </dd></dl>
-</li>
-<li><code>CRTXY_BLUR</code> (ON|OFF) </li>
-<li><code>CRTXY_ADDITIVE</code> (ON|OFF) </li>
+<li><code>--help-crtxy</code> - Presents a list of libcrtxy-related usage, and quits. </li>
 </ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

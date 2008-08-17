@@ -24,17 +24,25 @@ Using crtxy-config to compile and link</a></h2>
 Use the <code>crtxy-config</code> command get the options necessary to compile and link an application against libcrtxy.<p>
 <ul>
 <li><code>crtxy-config --cflags</code> <br>
- This outputs compiler flags necessary to compile a C or C++ program with libcrtxy. Example: <code>gcc game.c -c `crtxy-config --cflags`</code></li><li><code>crtxy-config --libs</code> <br>
- This outputs linker flags necessary to link a program against libcrtxy as a shared library. Example: <code>gcc -o game game.o other.o `crtxy-config --libs`</code></li><li><code>crtxy-config --static-libs</code> <br>
- This outputs linker flags necessary to link a program against libcrtxy as a static library. Example: <code>gcc -o game game.o other.o `crtxy-config --static-libs`</code></li><li><code>crtxy-config --version</code> <br>
+ This outputs compiler flags necessary to compile a C or C++ program with libcrtxy. <br>
+ Example: <code>gcc game.c -c `crtxy-config --cflags`</code></li></ul>
+<ul>
+<li><code>crtxy-config --libs</code> <br>
+ This outputs linker flags necessary to link a program against libcrtxy as a shared library. <br>
+ Example: <code>gcc -o game game.o other.o `crtxy-config --libs`</code></li></ul>
+<ul>
+<li><code>crtxy-config --static-libs</code> <br>
+ This outputs linker flags necessary to link a program against libcrtxy as a static library. <br>
+ Example: <code>gcc -o game game.o other.o `crtxy-config --static-libs`</code></li></ul>
+<ul>
+<li><code>crtxy-config --version</code> <br>
  This outputs the version of libcrtxy that is installed. It's useful for automated checking of whether the installed version of libcrtxy is compatible with what your application expects.</li></ul>
-<p>
 <b>Note:</b> Since libcrtxy depends on libSDL, the output of <code>crtxy-config</code> includes the output of libSDL's <code>sdl-config</code> for --cflags, --libs and --static-libs.<h2><a class="anchor" name="crtxy-configSection">
 Using crtxy-config to compile and link</a></h2>
 <code>crtxy-config --cflags</code> should have told your compiler where to find libcrtxy's headers, so you should include the main header like this:<p>
 <code>#include "crtxy.h"</code><p>
 <b>Note:</b> libcrtxy depends on libSDL, so its <code>SDL.h</code> is included automatically. SDL_image library's <code>SDL_image.h</code> may also have been included. However, no harm is done by including them in your own source. </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

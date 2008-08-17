@@ -92,8 +92,8 @@ Draw a single line between (x1,y1) and (x2,y2) (in canvas virtual world units) a
     <tr><td valign="top"></td><td valign="top"><em>y1</em>&nbsp;</td><td>is the Y coordinate of the line's starting point. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>x2</em>&nbsp;</td><td>is the X coordinate of the line's ending point. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>y2</em>&nbsp;</td><td>is the Y coordinate of the line's ending point. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an XY_color representing the color and transparency of the line. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>thickness</em>&nbsp;</td><td>is an XY_fixed representing the thickness of the line. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an <a class="el" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d">XY_color</a> representing the color and transparency of the line. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>thickness</em>&nbsp;</td><td>is an <a class="el" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">XY_fixed</a> representing the thickness of the line. </td></tr>
   </table>
 </dl>
 <dl compact><dt><b><a class="el" href="todo.html#_todo000037">Todo:</a></b></dt><dd>Create line clip routine (for efficiency) </dd></dl>
@@ -121,10 +121,13 @@ Draw a collection of lines.
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer with a collection of lines to draw. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer with a collection of lines to draw. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALSE on failure, and set error code. </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
+<li>FIXME </li>
+</ul>
+</dd></dl>
 
 </div>
 </div><p>
@@ -149,7 +152,7 @@ Draw a single line using an <a class="el" href="structXY__line.html" title="Repr
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>line</em>&nbsp;</td><td>is an <a class="el" href="structXY__line.html" title="Represents a single line.">XY_line</a> struct representing a line to draw. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>line</em>&nbsp;</td><td>is an <a class="el" href="structXY__line.html">XY_line</a> struct representing a line to draw. </td></tr>
   </table>
 </dl>
 
@@ -199,15 +202,15 @@ Draw a point at (x,y) (in canvas virtual world units) in the specified color/alp
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>is the X coordinate of the point. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>y</em>&nbsp;</td><td>is the Y coordinate of the point. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an XY_color representing the color and transparency of the point. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>thickness</em>&nbsp;</td><td>is an XY_fixed representing the thickness of the point. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an <a class="el" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d">XY_color</a> representing the color and transparency of the point. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>thickness</em>&nbsp;</td><td>is an <a class="el" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">XY_fixed</a> representing the thickness of the point. </td></tr>
   </table>
 </dl>
 
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

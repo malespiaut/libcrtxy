@@ -31,44 +31,6 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns whether any lines in one group intersect any lines in another.  <a href="#g178b4538f0c90057aa60d943324c0d4f"></a><br></td></tr>
 </table>
 <hr><h2>Function Documentation</h2>
-<a class="anchor" name="g178b4538f0c90057aa60d943324c0d4f"></a><!-- doxytag: member="crtxy.h::XY_line_groups_intersect" ref="g178b4538f0c90057aa60d943324c0d4f" args="(XY_lines *lines1, XY_lines *lines2)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_line_groups_intersect           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
-          <td class="paramname"> <em>lines1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
-          <td class="paramname"> <em>lines2</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Returns whether any lines in one group intersect any lines in another. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines1</em>&nbsp;</td><td>an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer containing a collection of lines. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>lines2</em>&nbsp;</td><td>an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer containing a collection of lines. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE if any lines in 'lines1' intersect or are coincident with any lines in 'lines2', XY_FALSE if not. </dd></dl>
-
-</div>
-</div><p>
 <a class="anchor" name="gcca39a24ad05750a69276b6173a0e0d6"></a><!-- doxytag: member="crtxy.h::XY_lines_intersect" ref="gcca39a24ad05750a69276b6173a0e0d6" args="(XY_line line1, XY_line line2, XY_fixed *intersect_x, XY_fixed *intersect_y, XY_intersection *result)" -->
 <div class="memitem">
 <div class="memproto">
@@ -118,19 +80,57 @@ Returns whether two lines intersect.
 Optionally (if not NULL), return the (x,y) coordinates of the intersection (if possible), and how the lines intersect (or don't): parallel, coincident, not intersecting, or intersecting.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>line1</em>&nbsp;</td><td>is an <a class="el" href="structXY__line.html" title="Represents a single line.">XY_line</a> structure containing a line. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>line2</em>&nbsp;</td><td>is an <a class="el" href="structXY__line.html" title="Represents a single line.">XY_line</a> structure containing a line. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>line1</em>&nbsp;</td><td>is an <a class="el" href="structXY__line.html">XY_line</a> structure containing a line. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>line2</em>&nbsp;</td><td>is an <a class="el" href="structXY__line.html">XY_line</a> structure containing a line. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>intersect_x</em>&nbsp;</td><td>is a pointer to a variable into which the X coordinates of the intersection (if any) occurred; may be NULL to ignore. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>intersect_y</em>&nbsp;</td><td>is a pointer to a variable into which the Y coordinates of the intersection (if any) occurred; may be NULL to ignore. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>result</em>&nbsp;</td><td>is a pointer to an XY_intersection variable into which the type of intersection (if any) occurred; may be NULL to ignore. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE if the lines intersect or are coincident, XY_FALSE if they do not intersect or are parallel. </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd><a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a> if the lines intersect or are coincident, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a> if they do not intersect or are parallel. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="g178b4538f0c90057aa60d943324c0d4f"></a><!-- doxytag: member="crtxy.h::XY_line_groups_intersect" ref="g178b4538f0c90057aa60d943324c0d4f" args="(XY_lines *lines1, XY_lines *lines2)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_line_groups_intersect           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
+          <td class="paramname"> <em>lines1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
+          <td class="paramname"> <em>lines2</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns whether any lines in one group intersect any lines in another. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>lines1</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer containing a collection of lines. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>lines2</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer containing a collection of lines. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd><a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a> if any lines in 'lines1' intersect or are coincident with any lines in 'lines2', <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a> if not. </dd></dl>
 
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

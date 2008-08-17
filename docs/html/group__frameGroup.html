@@ -28,6 +28,34 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mark the end of a frame.  <a href="#gac89da321b3c4960bfb4f8de66100fef"></a><br></td></tr>
 </table>
 <hr><h2>Function Documentation</h2>
+<a class="anchor" name="gfb0667323eb7ab4aeae9a3c435961911"></a><!-- doxytag: member="crtxy.h::XY_start_frame" ref="gfb0667323eb7ab4aeae9a3c435961911" args="(int fps)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void XY_start_frame           </td>
+          <td>(</td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>fps</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Mark the start of a frame. 
+<p>
+Screen backbuffer is wiped to the background color and/or bitmap. Also setting of preferred FPS.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>fps</em>&nbsp;</td><td>The requested FPS, if <a class="el" href="group__frameGroup.html#gac89da321b3c4960bfb4f8de66100fef" title="Mark the end of a frame.">XY_end_frame()</a>'s throttle option is used. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
 <a class="anchor" name="gac89da321b3c4960bfb4f8de66100fef"></a><!-- doxytag: member="crtxy.h::XY_end_frame" ref="gac89da321b3c4960bfb4f8de66100fef" args="(XY_bool throttle)" -->
 <div class="memitem">
 <div class="memproto">
@@ -59,36 +87,8 @@ Screen backbuffer is made visible. Optionally, pause until (1000/fps) millisecon
 
 </div>
 </div><p>
-<a class="anchor" name="gfb0667323eb7ab4aeae9a3c435961911"></a><!-- doxytag: member="crtxy.h::XY_start_frame" ref="gfb0667323eb7ab4aeae9a3c435961911" args="(int fps)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void XY_start_frame           </td>
-          <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>fps</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
 </div>
-<div class="memdoc">
-
-<p>
-Mark the start of a frame. 
-<p>
-Screen backbuffer is wiped to the background color and/or bitmap. Also setting of preferred FPS.<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>fps</em>&nbsp;</td><td>The requested FPS, if <a class="el" href="group__frameGroup.html#gac89da321b3c4960bfb4f8de66100fef" title="Mark the end of a frame.">XY_end_frame()</a>'s throttle option is used. </td></tr>
-  </table>
-</dl>
-
-</div>
-</div><p>
-</div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

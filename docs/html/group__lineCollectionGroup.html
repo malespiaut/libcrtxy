@@ -49,6 +49,120 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Rotate all lines within a collection (centered around the origin (0,0)).  <a href="#geede2bb69a172168a61e24cf8fbcb721"></a><br></td></tr>
 </table>
 <hr><h2>Function Documentation</h2>
+<a class="anchor" name="g1a03c47c04f618ad8c5edba6c2241f2d"></a><!-- doxytag: member="crtxy.h::XY_new_lines" ref="g1a03c47c04f618ad8c5edba6c2241f2d" args="(void)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXY__lines.html">XY_lines</a>* XY_new_lines           </td>
+          <td>(</td>
+          <td class="paramtype">void&nbsp;</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Create a new line collection. 
+<p>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>a new <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer, with no lines. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="gf9d26a65f96dadc42362734b866d049b"></a><!-- doxytag: member="crtxy.h::XY_duplicate_lines" ref="gf9d26a65f96dadc42362734b866d049b" args="(XY_lines *lines)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structXY__lines.html">XY_lines</a>* XY_duplicate_lines           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
+          <td class="paramname"> <em>lines</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Duplicates a collection. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer from which you want to copy. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>a pointer to a new <a class="el" href="structXY__lines.html">XY_lines</a> with all lines from 'lines' copied to it on success, or NULL on failure, and sets error code. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="gae7e7e7bde0c1c29dad1913c8d5e4854"></a><!-- doxytag: member="crtxy.h::XY_free_lines" ref="gae7e7e7bde0c1c29dad1913c8d5e4854" args="(XY_lines *lines)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_free_lines           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
+          <td class="paramname"> <em>lines</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Free a line collection. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer to free. (Do not use the pointer any more! You may reuse your variable, if you create a new bitmap, of course.) </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
+<li>FIXME </li>
+</ul>
+</dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="gd806d25cf569c098e80664c058289f3d"></a><!-- doxytag: member="crtxy.h::XY_start_lines" ref="gd806d25cf569c098e80664c058289f3d" args="(XY_lines *lines)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_start_lines           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
+          <td class="paramname"> <em>lines</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Reset a line collection so that it contains no lines. 
+<p>
+This allows you to reconstruct a line collection (without making a new one) at different times (e.g., at the start of a new frame).<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer to reset. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
+<li>FIXME </li>
+</ul>
+</dd></dl>
+
+</div>
+</div><p>
 <a class="anchor" name="g23e0b93545ec1c507cbeff5bc2373347"></a><!-- doxytag: member="crtxy.h::XY_add_line" ref="g23e0b93545ec1c507cbeff5bc2373347" args="(XY_lines *lines, XY_fixed x1, XY_fixed y1, XY_fixed x2, XY_fixed y2, XY_color color, XY_fixed thickness)" -->
 <div class="memitem">
 <div class="memproto">
@@ -109,208 +223,19 @@ Add a line to a line collection.
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer to add a line to. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer to add a line to. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>x1</em>&nbsp;</td><td>is the X coordinate of the new line's starting point. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>y1</em>&nbsp;</td><td>is the Y coordinate of the new line's starting point. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>x2</em>&nbsp;</td><td>is the X coordinate of the new line's ending point. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>y2</em>&nbsp;</td><td>is the Y coordinate of the new line's ending point. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an XY_color representing the color and transparency of the new line. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>thickness</em>&nbsp;</td><td>is an XY_fixed representing the thickness of the new line. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>color</em>&nbsp;</td><td>is an <a class="el" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d">XY_color</a> representing the color and transparency of the new line. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>thickness</em>&nbsp;</td><td>is an <a class="el" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">XY_fixed</a> representing the thickness of the new line. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALSE on failure, and set error code. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="gf9d26a65f96dadc42362734b866d049b"></a><!-- doxytag: member="crtxy.h::XY_duplicate_lines" ref="gf9d26a65f96dadc42362734b866d049b" args="(XY_lines *lines)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structXY__lines.html">XY_lines</a>* XY_duplicate_lines           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
-          <td class="paramname"> <em>lines</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Duplicates a collection. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer from which you want to copy. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>a pointer to a new <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> with all lines from 'lines' copied to it on success, or NULL on failure, and sets error code. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="gae7e7e7bde0c1c29dad1913c8d5e4854"></a><!-- doxytag: member="crtxy.h::XY_free_lines" ref="gae7e7e7bde0c1c29dad1913c8d5e4854" args="(XY_lines *lines)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_free_lines           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
-          <td class="paramname"> <em>lines</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Free a line collection. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer to free. (Do not use the pointer any more! You may reuse your variable, if you create a new bitmap, of course.) </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALSE on failure, and set error code. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="g1a03c47c04f618ad8c5edba6c2241f2d"></a><!-- doxytag: member="crtxy.h::XY_new_lines" ref="g1a03c47c04f618ad8c5edba6c2241f2d" args="(void)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structXY__lines.html">XY_lines</a>* XY_new_lines           </td>
-          <td>(</td>
-          <td class="paramtype">void&nbsp;</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Create a new line collection. 
-<p>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>a new <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer, with no lines. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="geede2bb69a172168a61e24cf8fbcb721"></a><!-- doxytag: member="crtxy.h::XY_rotate_lines" ref="geede2bb69a172168a61e24cf8fbcb721" args="(XY_lines *lines, int angle)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_rotate_lines           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
-          <td class="paramname"> <em>lines</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>angle</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Rotate all lines within a collection (centered around the origin (0,0)). 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer containing a collection of lines to scale. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>angle</em>&nbsp;</td><td>is angle (in degrees) to rotate each line in the collection. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALSE on failure, and set error code. </dd></dl>
-<dl compact><dt><b><a class="el" href="todo.html#_todo000036">Todo:</a></b></dt><dd>Implement line rotation </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="g20daec25e33843875276590608965f20"></a><!-- doxytag: member="crtxy.h::XY_scale_lines" ref="g20daec25e33843875276590608965f20" args="(XY_lines *lines, XY_fixed xscale, XY_fixed yscale)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_scale_lines           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
-          <td class="paramname"> <em>lines</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">XY_fixed</a>&nbsp;</td>
-          <td class="paramname"> <em>xscale</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">XY_fixed</a>&nbsp;</td>
-          <td class="paramname"> <em>yscale</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Scale all lines within a collection (centered around the origin (0,0)). 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer containing a collection of lines to scale. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>xscale</em>&nbsp;</td><td>is the scale to change all of the lines' X coordinates. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>yscale</em>&nbsp;</td><td>is the scale to change all of the lines' Y coordinates. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALSE on failure, and set error code. </dd></dl>
-
-</div>
-</div><p>
-<a class="anchor" name="gd806d25cf569c098e80664c058289f3d"></a><!-- doxytag: member="crtxy.h::XY_start_lines" ref="gd806d25cf569c098e80664c058289f3d" args="(XY_lines *lines)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_start_lines           </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
-          <td class="paramname"> <em>lines</em>          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td width="100%"></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Reset a line collection so that it contains no lines. 
-<p>
-This allows you to reconstruct a line collection (without making a new one) at different times (e.g., at the start of a new frame).<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer to reset. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALSE on failure, and set error code. </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
+<li>FIXME </li>
+</ul>
+</dd></dl>
 
 </div>
 </div><p>
@@ -350,17 +275,110 @@ Translate all lines within a collection.
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html" title="A group of lines.">XY_lines</a> pointer containing a collection of lines to translate. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer containing a collection of lines to translate. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>is the offset (positive for right, negative for left) by which to translate all of the lines horizontally. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>y</em>&nbsp;</td><td>is the offset (positive for down, negative for up) by which to translate all of the lines vertically. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>XY_TRUE on success, or XY_FALSE on failure, and set error code. </dd></dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
+<li>FIXME </li>
+</ul>
+</dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="g20daec25e33843875276590608965f20"></a><!-- doxytag: member="crtxy.h::XY_scale_lines" ref="g20daec25e33843875276590608965f20" args="(XY_lines *lines, XY_fixed xscale, XY_fixed yscale)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_scale_lines           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
+          <td class="paramname"> <em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">XY_fixed</a>&nbsp;</td>
+          <td class="paramname"> <em>xscale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">XY_fixed</a>&nbsp;</td>
+          <td class="paramname"> <em>yscale</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Scale all lines within a collection (centered around the origin (0,0)). 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer containing a collection of lines to scale. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>xscale</em>&nbsp;</td><td>is the scale to change all of the lines' X coordinates. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>yscale</em>&nbsp;</td><td>is the scale to change all of the lines' Y coordinates. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
+<li>FIXME </li>
+</ul>
+</dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="geede2bb69a172168a61e24cf8fbcb721"></a><!-- doxytag: member="crtxy.h::XY_rotate_lines" ref="geede2bb69a172168a61e24cf8fbcb721" args="(XY_lines *lines, int angle)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">XY_bool</a> XY_rotate_lines           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structXY__lines.html">XY_lines</a> *&nbsp;</td>
+          <td class="paramname"> <em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&nbsp;</td>
+          <td class="paramname"> <em>angle</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td width="100%"></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Rotate all lines within a collection (centered around the origin (0,0)). 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>lines</em>&nbsp;</td><td>is an <a class="el" href="structXY__lines.html">XY_lines</a> pointer containing a collection of lines to scale. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>angle</em>&nbsp;</td><td>is angle (in degrees) to rotate each line in the collection. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>On success: <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">XY_TRUE</a>. On failure, <a class="el" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">XY_FALSE</a>, and sets error code to one of the following: <ul>
+<li>FIXME </li>
+</ul>
+</dd></dl>
+<dl compact><dt><b><a class="el" href="todo.html#_todo000036">Todo:</a></b></dt><dd>Implement line rotation </dd></dl>
 
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 09:04:01 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 21:28:05 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>
