@@ -21,6 +21,7 @@ CFLAGS=-O2 -g -Wall \
 LIBDIR=$(PREFIX)/lib
 INCDIR=$(PREFIX)/include
 BINDIR=$(PREFIX)/bin
+DOCDIR=$(PREFIX)/share/doc/libcrtxy
 
 VER_MAJOR=0
 VER_MINOR=0
@@ -78,6 +79,9 @@ install:
 	install crtxy-config $(BINDIR)
 	install -d $(CONFDIR)
 	install -m 644 src/libcrtxy.conf-max $(CONFDIR)/libcrtxy.conf
+	install -d $(DOCDIR)/html
+	cp docs/html/*.* $(DOCDIR)/html/
+	chmod 644 $(DOCDIR)/html/*.*
 
 libcrtxy.so:	$(OBJ)
 	$(CC) $(CFLAGS) -shared $^ -o libcrtxy.so
