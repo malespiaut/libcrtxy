@@ -43,11 +43,18 @@ clean:
 	-rm drawlines.o rockdodge.o polytest.o
 	-rm drawlines rockdodge polytest
 
+cleandocs:
+	-rm -rf docs/html
+	-rm -rf docs/man
+
+docs/html:	src/crtxy.h
+	doxygen docs/doxygen.cfg
+
 releaseclean:
 	-rm -rf build/libcrtxy-$(VERSION) build/libcrtxy-$(VERSION).tar.gz
 	-if [ -d build ] ; then rmdir build ; fi
 
-release:	releasedir
+release:	releasedir docs/html
 	cd build ; \
 	    tar -czvf libcrtxy-$(VERSION).tar.gz libcrtxy-$(VERSION)
 
