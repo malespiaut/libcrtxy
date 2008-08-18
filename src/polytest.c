@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  August 13, 2008 - August 13, 2008
+  August 13, 2008 - August 17, 2008
 */
 
 #include <crtxy.h>
@@ -182,7 +182,7 @@ XY_bool handle_intersect(XY_lines * lines, XY_fixed x1, XY_fixed y1,
   XY_line l;
   int i;
   XY_fixed newx, newy;
-  int result;
+  XY_intersection result;
 
   l.x1 = x1;
   l.y1 = y1;
