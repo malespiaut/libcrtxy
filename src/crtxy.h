@@ -1,10 +1,14 @@
+/** @defgroup libcrtxy The CRT X-Y library (libcrtxy) *
+  * @{
+  */
+
 /*! \mainpage The CRT X-Y library (libcrtxy)
 
 \author Bill Kendrick <bill@newbreedsoftware.com>
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.41 2008/08/17 04:54:47 wkendrick Exp $
+$Id: crtxy.h,v 1.42 2008/08/22 02:20:22 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -32,20 +36,20 @@ and can be used for sub-pixel movement) and trigonometry
 \section tocSection More about libcrtxy
 
 \subsection tocGeneralSubsection General
-\li \subpage backendsSubpage
-\li \subpage optionsSubpage
+\li \subpage libcrtxy_backends
+\li \subpage libcrtxy_options
 
 \subsection tocGeneralSubsection Programming games with libcrtxy
-\li \subpage installationSubpage "Installing libcrtxy"
-\li \subpage buildingSubpage "Building Games with libcrtxy"
+\li \subpage libcrtxy_installation "Installing libcrtxy"
+\li \subpage libcrtxy_building_games "Building Games with libcrtxy"
 
 \subsection tocGeneralSubsection Running games that use libcrtxy
-\li \subpage settingOptionsSubpage "Setting Options"
+\li \subpage libcrtxy_setting_options "Setting Options"
 
 \todo Construct man pages
 */
 
-/*! \page backendsSubpage Backends that libcrtxy can use for drawing
+/*! \page libcrtxy_backends Backends that libcrtxy can use for drawing
 
 libcrtxy is being built on top of libSDL, the Simple DirectMedia Layer library
 (http://www.libsdl.org/), and therefore uses it (and SDL_Image for bitmap
@@ -61,7 +65,7 @@ and drawing vectors, libcrtxy's "XY_" functions and types should be used.
 
 */
 
-/*! \page optionsSubpage Options for rendering quality that libcrtxy provides
+/*! \page libcrtxy_options Options for rendering quality that libcrtxy provides
 
 Depending on the target system (e.g., a high-powered desktop PC or
 an embedded handheld system with a slow CPU and no FPU), various
@@ -113,10 +117,10 @@ occur in this order:
 \li Command-line arguments (e.g.,
   "some_game --crtxy-bpp 32")
 
-See also: \ref settingOptionsSubpage
+See also: \ref libcrtxy_setting_options
 */
 
-/** \page installationSubpage Installing libcrtxy
+/** \page libcrtxy_installation Installing libcrtxy
 
 \section requirementsSection Requirements
 
@@ -180,7 +184,7 @@ will form a polygon when you cross back over them.
 
 */
 
-/** \page buildingSubpage Building Games with libcrtxy
+/** \page libcrtxy_building_games Building Games with libcrtxy
 
 \section crtxy-configSection Using crtxy-config to compile and link
 
@@ -226,7 +230,7 @@ source.
 
 */
 
-/** \page settingOptionsSubpage Setting Options
+/** \page libcrtxy_setting_options Setting Options
 
 \section optionsAvailable Available Options
 
@@ -334,7 +338,7 @@ application.
 extern "C" {
 #endif
 
-/** @defgroup generalGroup General types.
+/** @defgroup XY_bool_ Boolean type.
  *  @{
  */
 
@@ -348,7 +352,7 @@ typedef enum {
 
 /** @} */
 
-/** @defgroup bitmapGroup Background bitmap management.
+/** @defgroup XY_bitmap_ Background bitmap management.
  *  @{
  *
  *  \todo Load bitmaps from an SDL_Surface
@@ -364,7 +368,7 @@ typedef struct XY_bitmap_s {
 
 /** @} */
 
-/** @defgroup colorGroup Color manipulation and conversion.
+/** @defgroup XY_color_ Color manipulation and conversion.
  *  @{
  */
 /**
@@ -375,7 +379,7 @@ typedef Uint32 XY_color;
 /** @} */
 
 
-/** @defgroup fixedGroup Fixed-point.
+/** @defgroup XY_fixed_ Fixed-point.
  *  @{
  */
 
@@ -400,7 +404,7 @@ typedef Sint32 XY_fixed;
 /** @} */
 
 
-/** @defgroup geometryGroup Geometry.
+/** @defgroup XY_line_ Geometry.
  *  @{
  *
  * \todo Add inside-polygon test
@@ -447,7 +451,7 @@ typedef enum {
 /** @} */
 
 
-/** @defgroup optionsGroup Loading and setting options for rendering quality.
+/** @defgroup libcrtxy_options Loading and setting options for rendering quality.
  *  @{
  */
 
@@ -508,7 +512,7 @@ typedef struct XY_options_s {
 /** @} */
 
 
-/** @defgroup errorGroup Error reporting.
+/** @defgroup XY_err_ Error reporting.
  *  @{
  */
 typedef enum {
@@ -530,8 +534,8 @@ typedef enum {
 /** @} */
 
 
-/** @defgroup bitmapPositioningGroup Bitmap positioning flags.
-  * @ingroup bitmapGroup
+/** @defgroup XY_POS_TOP_ Bitmap positioning flags.
+  * @ingroup XY_bitmap_
   * @{
   */
 
@@ -544,8 +548,8 @@ typedef enum {
 
 /** @} */
 
-/** @defgroup bitmapScalingGroup Options for scaling bitmaps that don't match screen/window size.
-  * @ingroup bitmapGroup
+/** @defgroup XY_SCALE_NONE_ Options for scaling bitmaps that don't match screen/window size.
+  * @ingroup XY_bitmap_
   * @{
   */
 #define XY_SCALE_NONE 0 /**< Do not stretch; clip or show solid border(s) */
@@ -556,7 +560,7 @@ typedef enum {
 /** @} */
 
 
-/** @ingroup optionsGroup
+/** @ingroup libcrtxy_options_
   * @{
   */
 
@@ -628,7 +632,7 @@ XY_bool XY_parse_envvars(XY_options * opts);
 /** @} */
 
 
-/** @defgroup initGroup Initializing and quitting libcrtxy.
+/** @defgroup XY_init_ Initializing and quitting libcrtxy.
   * @{
   */
 
@@ -666,7 +670,7 @@ void XY_quit(void);
 /** @} */
 
 
-/** @ingroup errorGroup
+/** @ingroup XY_err_
   * @{
   */
 
@@ -697,7 +701,7 @@ void XY_print_options(FILE * fi, XY_options opts);
 /** @} */
 
 
-/** @ingroup bitmapGroup
+/** @ingroup XY_bitmap_
  *  @{
  */
 
@@ -786,7 +790,7 @@ void XY_enable_background(XY_bool enable);
 /** @} */
 
 
-/** @ingroup colorGroup
+/** @ingroup XY_color_
   * @{
   */
 
@@ -816,7 +820,7 @@ void XY_getcolor(XY_color c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a);
 /** @} */
 
 
-/** @defgroup frameGroup Starting and ending a drawing frame.
+/** @defgroup XY_start_frame_ Starting and ending a drawing frame.
   * @{
   */
 
@@ -851,8 +855,8 @@ int XY_end_frame(XY_bool throttle);
 /** @} */
 
 
-/** @defgroup lineCollectionGroup Line collection manipulation.
-  * @ingroup geometryGroup
+/** @defgroup XY_lines_ Line collection manipulation.
+  * @ingroup XY_line_
   * @{
   */
 
@@ -964,7 +968,7 @@ XY_bool XY_rotate_lines(XY_lines * lines, int angle);
 /** @} */
 
 
-/** @defgroup drawingGroup Drawing primitives.
+/** @defgroup XY_draw_line_ Drawing primitives.
   * @{
   */
 
@@ -1017,8 +1021,8 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color, XY_fixed thickness);
 /** @} */
 
 
-/** @defgroup fixedMathGroup Fixed-point math functions.
-  * @ingroup fixedGroup
+/** @defgroup XY_fixed_functions Fixed-point math functions.
+  * @ingroup XY_fixed_
   * @{
   */
 
@@ -1103,7 +1107,7 @@ XY_fixed XY_cos(int degrees);
 /** @} */
 
 
-/** @defgroup screenToCanvasGroup Screen/canvas conversions and queries.
+/** @defgroup XY_screenx_to_canvasx_ Screen/canvas conversions and queries.
   * @{
   */
 
@@ -1188,8 +1192,8 @@ int XY_get_screenh(void);
 /** @} */
 
 
-/** @defgroup intersectionGroup Intersection tests.
-  * @ingroup geometryGroup
+/** @defgroup XY_lines_intersect_ Intersection tests.
+  * @ingroup XY_line_
   * @{
   */
 
@@ -1231,3 +1235,4 @@ XY_bool XY_line_groups_intersect(XY_lines * lines1, XY_lines * lines2);
 #endif
 
 #endif /* _CRTXY_H */
+/** @} */
