@@ -1,0 +1,109 @@
+.TH "Error reporting." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Error reporting. \- 
+.in +1c
+.ti -1c
+.RI "\fBXY_err\fP \fBXY_errcode\fP (void)"
+.br
+.RI "\fIGets the most recent error code. \fP"
+.ti -1c
+.RI "const char * \fBXY_errstr\fP (void)"
+.br
+.RI "\fIGets a string representing the most recent error code. \fP"
+.ti -1c
+.RI "void \fBXY_print_options\fP (FILE *fi, \fBXY_options\fP opts)"
+.br
+.RI "\fIDumps options in opts to the file stream (eg, stderr or an opened logfile). \fP"
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBXY_err\fP { \fBXY_ERR_NONE\fP, \fBXY_ERR_OPTION_BAD\fP, \fBXY_ERR_OPTION_UNKNOWN\fP, \fBXY_ERR_FILE_CANT_OPEN\fP, \fBXY_ERR_MEM_CANT_ALLOC\fP, \fBXY_ERR_INIT_VIDEO\fP, \fBXY_ERR_INIT_DISPLAY\fP, \fBXY_ERR_INIT_UNSUPPORTED_BPP\fP, \fBXY_ERR_BITMAP_CANT_DECODE\fP, \fBXY_ERR_BITMAP_CANT_CONVERT\fP, \fBXY_ERR_BITMAP_CANT_SCALE\fP, \fBXY_ERR_LINES_INVALID\fP, \fBNUM_XY_ERRS\fP }"
+.br
+.in -1c
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBXY_err\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIXY_ERR_NONE \fP\fP
+No error. 
+.TP
+\fB\fIXY_ERR_OPTION_BAD \fP\fP
+Bad value to an option. 
+.TP
+\fB\fIXY_ERR_OPTION_UNKNOWN \fP\fP
+Unrecognized option. 
+.TP
+\fB\fIXY_ERR_FILE_CANT_OPEN \fP\fP
+Cannot open file. 
+.TP
+\fB\fIXY_ERR_MEM_CANT_ALLOC \fP\fP
+Cannot allocate memory. 
+.TP
+\fB\fIXY_ERR_INIT_VIDEO \fP\fP
+Cannot initialize video subsystem. 
+.TP
+\fB\fIXY_ERR_INIT_DISPLAY \fP\fP
+Cannot open display. 
+.TP
+\fB\fIXY_ERR_INIT_UNSUPPORTED_BPP \fP\fP
+Unsupported (so far as we're concerned) bpp. 
+.TP
+\fB\fIXY_ERR_BITMAP_CANT_DECODE \fP\fP
+Error decoding image file (IMG_Load failed). 
+.TP
+\fB\fIXY_ERR_BITMAP_CANT_CONVERT \fP\fP
+Cannot convert a surface to the display fmt. 
+.PP
+
+.TP
+\fB\fIXY_ERR_BITMAP_CANT_SCALE \fP\fP
+Cannot scale an image (probably mem. 
+.PP
+alloc. fail) 
+.TP
+\fB\fIXY_ERR_LINES_INVALID \fP\fP
+Invalid (NULL?) group of lines. 
+.TP
+\fB\fINUM_XY_ERRS \fP\fP
+
+.SH "Function Documentation"
+.PP 
+.SS "\fBXY_err\fP XY_errcode (void)"
+.PP
+Gets the most recent error code. 
+.PP
+\fBReturns:\fP
+.RS 4
+the latest error code value. 
+.RE
+.PP
+
+.SS "const char* XY_errstr (void)"
+.PP
+Gets a string representing the most recent error code. 
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing a human-readable message describing the latest error code value. 
+.RE
+.PP
+
+.SS "void XY_print_options (FILE * fi, \fBXY_options\fP opts)"
+.PP
+Dumps options in opts to the file stream (eg, stderr or an opened logfile). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfi\fP is a file pointer to output to (stderr or stdout could be used, or a file that you've opened for write or append using fopen()) 
+.br
+\fIopts\fP is a pointer to an options structure that has been filled. 
+.RE
+.PP
+

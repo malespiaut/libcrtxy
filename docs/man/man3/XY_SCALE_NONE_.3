@@ -1,0 +1,44 @@
+.TH "Options for scaling bitmaps that don't match screen/window size." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Options for scaling bitmaps that don't match screen/window size. \- 
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBXY_SCALE_NONE\fP   0"
+.br
+.RI "\fIDo not stretch; clip or show solid border(s). \fP"
+.ti -1c
+.RI "#define \fBXY_SCALE_STRETCH\fP   1"
+.br
+.RI "\fIStretch; aspect ratio can be altered. \fP"
+.ti -1c
+.RI "#define \fBXY_SCALE_KEEP_ASPECT_WIDE\fP   2"
+.br
+.RI "\fIStretch w/o alt'ing aspect; fit width. \fP"
+.ti -1c
+.RI "#define \fBXY_SCALE_KEEP_ASPECT_TALL\fP   3"
+.br
+.RI "\fIStretch w/o alt'ing aspect; fit height. \fP"
+.in -1c
+.SH "Define Documentation"
+.PP 
+.SS "#define XY_SCALE_NONE   0"
+.PP
+Do not stretch; clip or show solid border(s). 
+.PP
+.SS "#define XY_SCALE_STRETCH   1"
+.PP
+Stretch; aspect ratio can be altered. 
+.PP
+.SS "#define XY_SCALE_KEEP_ASPECT_WIDE   2"
+.PP
+Stretch w/o alt'ing aspect; fit width. 
+.PP
+.SS "#define XY_SCALE_KEEP_ASPECT_TALL   3"
+.PP
+Stretch w/o alt'ing aspect; fit height. 
+.PP
+

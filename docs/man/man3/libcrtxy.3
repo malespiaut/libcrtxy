@@ -1,0 +1,757 @@
+.TH "The CRT X-Y library (libcrtxy)" 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+The CRT X-Y library (libcrtxy) \- 
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "\fBBoolean type.\fP"
+.br
+.ti -1c
+.RI "\fBBackground bitmap management.\fP"
+.br
+.ti -1c
+.RI "\fBColor manipulation and conversion.\fP"
+.br
+.ti -1c
+.RI "\fBFixed-point.\fP"
+.br
+.ti -1c
+.RI "\fBGeometry.\fP"
+.br
+.ti -1c
+.RI "\fBLoading and setting options for rendering quality.\fP"
+.br
+.ti -1c
+.RI "\fBError reporting.\fP"
+.br
+.ti -1c
+.RI "\fBBitmap positioning flags.\fP"
+.br
+.ti -1c
+.RI "\fBOptions for scaling bitmaps that don't match screen/window size.\fP"
+.br
+.ti -1c
+.RI "\fBInitializing and quitting libcrtxy.\fP"
+.br
+.ti -1c
+.RI "\fBStarting and ending a drawing frame.\fP"
+.br
+.ti -1c
+.RI "\fBLine collection manipulation.\fP"
+.br
+.ti -1c
+.RI "\fBDrawing primitives.\fP"
+.br
+.ti -1c
+.RI "\fBFixed-point math functions.\fP"
+.br
+.ti -1c
+.RI "\fBScreen/canvas conversions and queries.\fP"
+.br
+.ti -1c
+.RI "\fBIntersection tests.\fP"
+.br
+.in -1c
+.in +1c
+.ti -1c
+.RI "void \fBXY_default_options\fP (\fBXY_options\fP *opts)"
+.br
+.RI "\fISet opts to default (libcrtxy's compiled-time) options. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_load_options\fP (\fBXY_options\fP *opts)"
+.br
+.RI "\fILoad global, then local (user) libcrtxy config files into opts. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_load_options_from_file\fP (char *fname, \fBXY_options\fP *opts, \fBXY_bool\fP ignore_unknowns)"
+.br
+.RI "\fILoad arbitrary config file into opts. \fP"
+.ti -1c
+.RI "int \fBXY_parse_options\fP (int *argc, char *argv[], \fBXY_options\fP *opts)"
+.br
+.RI "\fIParse libcrtxy-related command-line arguments into opts. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_parse_envvars\fP (\fBXY_options\fP *opts)"
+.br
+.RI "\fIRead any libcrtxy-related environment variables into opts. \fP"
+.in -1c
+.in +1c
+.ti -1c
+.RI "const char * \fBXY_errstr\fP (void)"
+.br
+.RI "\fIGets a string representing the most recent error code. \fP"
+.ti -1c
+.RI "void \fBXY_print_options\fP (FILE *fi, \fBXY_options\fP opts)"
+.br
+.RI "\fIDumps options in opts to the file stream (eg, stderr or an opened logfile). \fP"
+.in -1c
+.in +1c
+.ti -1c
+.RI "\fBXY_bitmap\fP * \fBXY_load_bitmap_from_buffer\fP (unsigned char *buffer, int size)"
+.br
+.RI "\fICreate a bitmap based on image data in a buffer. \fP"
+.ti -1c
+.RI "void \fBXY_free_bitmap\fP (\fBXY_bitmap\fP *bitmap)"
+.br
+.RI "\fIFree a bitmap. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_set_background\fP (\fBXY_color\fP color, \fBXY_bitmap\fP *bitmap, \fBXY_fixed\fP x, \fBXY_fixed\fP y, int posflags, int scaling)"
+.br
+.RI "\fISet the background color, and optional bitmap, its position, and options for scaling it to the screen size. \fP"
+.ti -1c
+.RI "void \fBXY_enable_background\fP (\fBXY_bool\fP enable)"
+.br
+.RI "\fIEnable or disable the background bitmap (affects next frame). \fP"
+.in -1c
+.in +1c
+.ti -1c
+.RI "void \fBXY_getcolor\fP (\fBXY_color\fP c, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a)"
+.br
+.RI "\fIBreaks an \fBXY_color\fP into its R, G, B and A components. \fP"
+.in -1cBackends that libcrtxy can use for drawing
+libcrtxy is being built on top of libSDL, the Simple DirectMedia Layer library (http://www.libsdl.org/), and therefore uses it (and SDL_Image for bitmap loading) as a backend. It should be reasonable for someone to develop an SDL+OpenGL backend for accelerated graphics.
+.PP
+For events (keyboard, mouse, joystick, etc.), your event loop, sound effects, etc., you use SDL functions and types directly. For video initialization, loading and displaying of bitmaps, and drawing vectors, libcrtxy's 'XY_' functions and types should be used.
+.PP
+\fBTodo\fP
+.RS 4
+Add OpenGL support.
+.RE
+.PP
+
+.SS "Options for rendering quality that libcrtxy provides"
+Depending on the target system (e.g., a high-powered desktop PC or an embedded handheld system with a slow CPU and no FPU), various options can be set in libcrtxy. On a slow system, fancy visual effects intended to simulate an arcade experience can be disabled (anti-aliasing, blurring, etc.).
+.PP
+Screen-size shouldn't matter to game-play, so physical screen size in pixels (e.g., 640x480 or 1280x1024) is up to the end-user, or person packaging your software for a particular target, as well. Your game logic is based around a virtual canvas size, and line positions are given using fixed-point values.
+.PP
+The options that can be set at runtime include:
+.SH "Display settings:"
+.PP
+.PD 0
+.IP "\(bu" 2
+Screen width & height 
+.IP "\(bu" 2
+Screen depth (16bpp, 24bpp or 32bpp) 
+.IP "\(bu" 2
+Window or fullscreen (requested or required) 
+.PP
+\fBTodo\fP
+.RS 4
+Utilize SDL_ListModes() 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Native screen resolution when in fullscreen
+.RE
+.PP
+
+.PP
+.SH "Rendering quality:"
+.PP
+.PD 0
+.IP "\(bu" 2
+Alpha blending (on, off, or 'fake') 
+.IP "\(bu" 2
+Anti-aliasing 
+.IP "\(bu" 2
+Gamma correction 
+.PP
+\fBTodo\fP
+.RS 4
+Support gamma values 
+.RE
+.PP
+
+.IP "\(bu" 2
+Backgrounds 
+.IP "\(bu" 2
+Bitmap scaling (fast or best) 
+.PP
+\fBTodo\fP
+.RS 4
+Implement best scaling
+.RE
+.PP
+
+.PP
+.SH "Special effects:"
+.PP
+.PD 0
+.IP "\(bu" 2
+Blurring 
+.PP
+\fBTodo\fP
+.RS 4
+Implement blur effect 
+.RE
+.PP
+
+.IP "\(bu" 2
+Additive effect 
+.PP
+\fBTodo\fP
+.RS 4
+Implement additive effect 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Persistence-of-vision effect
+.RE
+.PP
+
+.PP
+.SH "How options get set:"
+.PP
+The options that get used are determined by the following, and should occur in this order: 
+.PD 0
+
+.IP "\(bu" 2
+Hard-coded defaults (set at the time libcrtxy is compiled) 
+.IP "\(bu" 2
+System-wide 'libcrtxy' configuration file (e.g., '/etc/libcrtxy/libcrtxy.conf') 
+.IP "\(bu" 2
+User's own 'libcrtxy' configuration file (e.g., '~/.libcrtxyrc') 
+.IP "\(bu" 2
+Environment variables (e.g., 'CRTXY_SCALE=FAST') 
+.IP "\(bu" 2
+System-wide configuration file for the application (e.g., '/etc/some_game/some_game.conf') 
+.IP "\(bu" 2
+User's own configuration file for the application (e.g., '~/.some_gamerc') 
+.IP "\(bu" 2
+Command-line arguments (e.g., 'some_game --crtxy-bpp 32')
+.PP
+See also: \fBSetting Options\fP 
+.SS "Installing libcrtxy"
+.SH "Requirements"
+.PP
+libcrtxy requires the Simple DirectMedia Layer library (libSDL), available from http://www.libsdl.org/
+.PP
+For support for various formats of bitmap images (PNG, JPEG, GIF, etc.), SDL_image is also required, available from http://www.libsdl.org/projects/SDL_image/
+.SH "Compiling"
+.PP
+To compile libcrtxy, simply type \fCmake\fP.
+.SS "Compilation Options"
+You may override the following \fCMakefile\fP variables via command-line arguments to \fCmake\fP (e.g., \fCmake PREFIX=/home/username/opt/\fP):
+.PP
+.PD 0
+.IP "\(bu" 2
+\fCPREFIX\fP - Base path of where everything gets installed (default: \fC/usr/local\fP) 
+.IP "\(bu" 2
+\fCCONFDIR\fP - Path where libcrtxy's global configuration file will be installed, and looked for. (default: \fC$PREFIX/etc/libcrtxy\fP, unless \fCPREFIX\fP is \fC/usr\fP, in which case it is simply \fC/etc/libcrtxy\fP) 
+.IP "\(bu" 2
+\fCLIBDIR\fP - Path where libcrtxy's object files will be placed (and where \fCcrtxy-config --libs\fP will report them). (default: \fC$PREFIX/lib\fP) 
+.IP "\(bu" 2
+\fCINCDIR\fP - Path where libcrtxy's header files will be placed (and where \fCcrtxy-config --cflags\fP will report them). (default: \fC$PREFIX/include\fP) 
+.IP "\(bu" 2
+\fCBINDIR\fP - Path where the \fCcrtxy-config\fP helper tool will be installed. (default: \fC$PREFIX/bin\fP)
+.PP
+\fBTodo\fP
+.RS 4
+Documentation installation 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Man page installation
+.RE
+.PP
+.SH "Installing"
+.PP
+To install libcrtxy's library files, header files, default global configuration file and the \fCcrtxy-config\fP helper tool, simply type \fCmake install\fP.
+.PP
+\fBNote:\fP Provide \fCmake\fP with the same variable overrides you gave it when installing (e.g., \fCmake PREFIX=/home/username/opt/ install\fP)
+.SH "Compiling test apps"
+.PP
+Once libcrtxy is installed, you can build the test applications that came with the source. Type: \fCmake tests\fP.
+.PP
+.PD 0
+.IP "\(bu" 2
+drawlines - Draws a sequences of polygons 
+.IP "\(bu" 2
+rockdodge - A game-like example, where you control the thrust and direction of a space ship in a field of asteroids (rocks). Press [F] key to toggle between throttled (attempting max 30fps) and unthrottled framerate modes. 
+.IP "\(bu" 2
+polytest - Use the mouse to draw a sequence of attached lines, which will form a polygon when you cross back over them. 
+.PP
+\fBTodo\fP
+.RS 4
+Explain polytest right-click for adding dots.
+.RE
+.PP
+
+.PP
+
+.SS "Building Games with libcrtxy"
+.SH "Using crtxy-config to compile and link"
+.PP
+Use the \fCcrtxy-config\fP command get the options necessary to compile and link an application against libcrtxy.
+.PP
+.IP "\(bu" 2
+\fCcrtxy-config --cflags\fP 
+.br
+ This outputs compiler flags necessary to compile a C or C++ program with libcrtxy. 
+.br
+ Example: \fCgcc game.c -c `crtxy-config --cflags`\fP
+.PP
+.IP "\(bu" 2
+\fCcrtxy-config --libs\fP 
+.br
+ This outputs linker flags necessary to link a program against libcrtxy as a shared library. 
+.br
+ Example: \fCgcc -o game game.o other.o `crtxy-config --libs`\fP
+.PP
+.IP "\(bu" 2
+\fCcrtxy-config --static-libs\fP 
+.br
+ This outputs linker flags necessary to link a program against libcrtxy as a static library. 
+.br
+ Example: \fCgcc -o game game.o other.o `crtxy-config --static-libs`\fP
+.PP
+.IP "\(bu" 2
+\fCcrtxy-config --version\fP 
+.br
+ This outputs the version of libcrtxy that is installed. It's useful for automated checking of whether the installed version of libcrtxy is compatible with what your application expects.
+.PP
+\fBNote:\fP Since libcrtxy depends on libSDL, the output of \fCcrtxy-config\fP includes the output of libSDL's \fCsdl-config\fP for --cflags, --libs and --static-libs.
+.SH "Using crtxy-config to compile and link"
+.PP
+\fCcrtxy-config --cflags\fP should have told your compiler where to find libcrtxy's headers, so you should include the main header like this:
+.PP
+\fC#include 'crtxy.h'\fP
+.PP
+\fBNote:\fP libcrtxy depends on libSDL, so its \fCSDL.h\fP is included automatically. SDL_image library's \fCSDL_image.h\fP may also have been included. However, no harm is done by including them in your own source. 
+.SS "Setting Options"
+.SH "Available Options"
+.PP
+.SS "Display options"
+.PD 0
+.IP "\(bu" 2
+Screen width 
+.IP "\(bu" 2
+Screen height 
+.IP "\(bu" 2
+Screen color depth (bits per pixel (bpp)) 
+.IP "\(bu" 2
+Windowed, fullscreen required, or fullscreen requested
+.PP
+.SS "Rendering quality options"
+.PD 0
+.IP "\(bu" 2
+Alpha-blended lines (on, 'fake', or off) 
+.IP "\(bu" 2
+Anti-aliased lines (on or off) 
+.IP "\(bu" 2
+Gamma-corrected anti-aliasing (on or off) 
+.PP
+\fBTodo\fP
+.RS 4
+Support gamma values 
+.RE
+.PP
+
+.IP "\(bu" 2
+Backgrounds (on or off) 
+.IP "\(bu" 2
+Background bitmap scaling quality (best or fast)
+.PP
+.SS "Visual effects"
+.PD 0
+.IP "\(bu" 2
+Blur 
+.IP "\(bu" 2
+Additive lines
+.PP
+.SH "Where Options Can Get Set"
+.PP
+Options such as rendering quality settings and screen resolution can come from various places. They are listed below, in the most reasonable order that they should be picked up:
+.PP
+.PD 0
+.IP "\(bu" 2
+Defaults 
+.IP "\(bu" 2
+Global libcrtxy configuration file 
+.IP "\(bu" 2
+Local (user's) libcrtxy configuration file 
+.IP "\(bu" 2
+Global game configuration file 
+.IP "\(bu" 2
+Local (user's) game configuration file 
+.IP "\(bu" 2
+Environment variables 
+.IP "\(bu" 2
+Command-line options
+.PP
+.SS "Defaults"
+The \fC\fBXY_default_options()\fP\fP function sets some base values for the various options, in case no others are sent elsewhere. These are the values compiled into libcrtxy.
+.SS "Config. Files"
+The \fC\fBXY_load_options()\fP\fP function loads options from configuration files specific to libcrtxy. \fC\fBXY_load_options_from_file()\fP\fP may be used by applications to load options from arbitrary files (such as a game's own config. file).
+.PP
+.PD 0
+.IP "\(bu" 2
+\fCcrtxy-width=NNN\fP 
+.IP "\(bu" 2
+\fCcrtxy-height=NNN\fP 
+.IP "\(bu" 2
+\fCcrtxy-bpp={16|24|32|any}\fP 
+.IP "\(bu" 2
+\fCcrtxy-windowed\fP 
+.IP "\(bu" 2
+\fCcrtxy-fullscreen\fP 
+.IP "\(bu" 2
+\fCcrtxy-fullscreen-or-window\fP 
+.IP "\(bu" 2
+\fCcrtxy-alpha={on|fake|off}\fP 
+.IP "\(bu" 2
+\fCcrtxy-antialias={on|off}\fP 
+.IP "\(bu" 2
+\fCcrtxy-backgrounds={on|off}\fP 
+.IP "\(bu" 2
+\fCcrtxy-scaling={best|fast}\fP 
+.IP "\(bu" 2
+\fCcrtxy-gamma-correction={on|off}\fP 
+.PP
+\fBTodo\fP
+.RS 4
+Support gamma values 
+.RE
+.PP
+
+.IP "\(bu" 2
+\fCcrtxy-blur={on|off}\fP 
+.IP "\(bu" 2
+\fCcrtxy-additive={on|off}\fP
+.PP
+.SS "Environment Variables"
+\fC\fBXY_parse_envvars()\fP\fP examines the application's runtime enviroment for libcrtxy-related variables.
+.PP
+.PD 0
+.IP "\(bu" 2
+\fCCRTXY_WIDTH\fP 
+.IP "\(bu" 2
+\fCCRTXY_HEIGHT\fP 
+.IP "\(bu" 2
+\fCCRTXY_BPP\fP (16|24|32|ANY) 
+.IP "\(bu" 2
+\fCCRTXY_FULLSCREEN\fP (ON|OPTIONAL|OFF) 
+.IP "\(bu" 2
+\fCCRTXY_ALPHA\fP (ON|FAKE|OFF) 
+.IP "\(bu" 2
+\fCCRTXY_ANTIALIAS\fP (ON|OFF) 
+.IP "\(bu" 2
+\fCCRTXY_BACKGROUNDS\fP (ON|OFF) 
+.IP "\(bu" 2
+\fCCRTXY_SCALING\fP (BEST|FAST) 
+.IP "\(bu" 2
+\fCCRTXY_GAMMA_CORRECTION\fP (ON|OFF) 
+.PP
+\fBTodo\fP
+.RS 4
+Support gamma values 
+.RE
+.PP
+
+.IP "\(bu" 2
+\fCCRTXY_BLUR\fP (ON|OFF) 
+.IP "\(bu" 2
+\fCCRTXY_ADDITIVE\fP (ON|OFF)
+.PP
+.SS "Command-Line Arguments"
+Finally, the \fC\fBXY_parse_options()\fP\fP function can look for and parse and libcrtxy-related options found in the command-line arguments to an application.
+.PP
+.PD 0
+.IP "\(bu" 2
+\fC--crtxy-width NNN\fP 
+.IP "\(bu" 2
+\fC--crtxy-height NNN\fP 
+.IP "\(bu" 2
+\fC--crtxy-bpp {16|24|32|any}\fP 
+.IP "\(bu" 2
+\fC--crtxy-windowed\fP 
+.IP "\(bu" 2
+\fC--crtxy-fullscreen\fP 
+.IP "\(bu" 2
+\fC--crtxy-fullscreen-or-window\fP 
+.IP "\(bu" 2
+\fC--crtxy-alpha {on|fake|off}\fP 
+.IP "\(bu" 2
+\fC--crtxy-antialias {on|off}\fP 
+.IP "\(bu" 2
+\fC--crtxy-backgrounds {on|off}\fP 
+.IP "\(bu" 2
+\fC--crtxy-scaling {best|fast}\fP 
+.IP "\(bu" 2
+\fC--crtxy-gamma-correction {on|off}\fP 
+.PP
+\fBTodo\fP
+.RS 4
+Support gamma values 
+.RE
+.PP
+
+.IP "\(bu" 2
+\fC--crtxy-blur {on|off}\fP 
+.IP "\(bu" 2
+\fC--crtxy-additive {on|off}\fP 
+.IP "\(bu" 2
+\fC--help-crtxy\fP - Presents a list of libcrtxy-related usage, and quits. 
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void XY_default_options (\fBXY_options\fP * opts)"
+.PP
+Set opts to default (libcrtxy's compiled-time) options. 
+.PP
+Call this first, to get a base set of options, in case no other means is available.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIopts\fP is a pointer to an options structure to fill. 
+.RE
+.PP
+
+.SS "\fBXY_bool\fP XY_load_options (\fBXY_options\fP * opts)"
+.PP
+Load global, then local (user) libcrtxy config files into opts. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIopts\fP is a pointer to an options structure to fill. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: \fBXY_TRUE\fP. On failure, \fBXY_FALSE\fP, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_OPTION_BAD\fP 
+.IP "\(bu" 2
+\fBXY_ERR_OPTION_UNKNOWN\fP 
+.PP
+.RE
+.PP
+
+.SS "\fBXY_bool\fP XY_load_options_from_file (char * fname, \fBXY_options\fP * opts, \fBXY_bool\fP ignore_unknowns)"
+.PP
+Load arbitrary config file into opts. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP is the name of a file to load options from. 
+.br
+\fIopts\fP is a pointer to an options structure to fill. 
+.br
+\fIignore_unknowns\fP set to XY_TRUE to prevent function from aborting on unrecognized lines (useful if you want to let users put libcrtxy configuration options in an app-specific config file.) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: \fBXY_TRUE\fP. On failure, \fBXY_FALSE\fP, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_FILE_CANT_OPEN\fP 
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_OPTION_BAD\fP 
+.IP "\(bu" 2
+\fBXY_ERR_OPTION_UNKNOWN\fP
+.PP
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support a callback function for processing non-libcrtxy-related options without processing files twice. 
+.RE
+.PP
+
+.SS "int XY_parse_options (int * argc, char * argv[], \fBXY_options\fP * opts)"
+.PP
+Parse libcrtxy-related command-line arguments into opts. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIargc\fP is a count of arguments to parse. 
+.br
+\fIargv\fP is an array of arguments to parse. 
+.br
+\fIopts\fP is a pointer to an options structure to fill. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: 0 on success. On failure, an index into argv[] of an offending argument, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_OPTION_BAD\fP 
+.IP "\(bu" 2
+\fBXY_ERR_OPTION_UNKNOWN\fP 
+.PP
+.RE
+.PP
+
+.SS "\fBXY_bool\fP XY_parse_envvars (\fBXY_options\fP * opts)"
+.PP
+Read any libcrtxy-related environment variables into opts. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIopts\fP is a pointer to an options structure to fill. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: \fBXY_TRUE\fP. On failure, \fBXY_FALSE\fP, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_OPTION_BAD\fP 
+.PP
+.RE
+.PP
+
+.SS "const char* XY_errstr (void)"
+.PP
+Gets a string representing the most recent error code. 
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing a human-readable message describing the latest error code value. 
+.RE
+.PP
+
+.SS "void XY_print_options (FILE * fi, \fBXY_options\fP opts)"
+.PP
+Dumps options in opts to the file stream (eg, stderr or an opened logfile). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfi\fP is a file pointer to output to (stderr or stdout could be used, or a file that you've opened for write or append using fopen()) 
+.br
+\fIopts\fP is a pointer to an options structure that has been filled. 
+.RE
+.PP
+
+.SS "\fBXY_bitmap\fP* XY_load_bitmap_from_buffer (unsigned char * buffer, int size)"
+.PP
+Create a bitmap based on image data in a buffer. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIbuffer\fP is a pointer to memory containing image file data. 
+.br
+\fIsize\fP is the size of the image file data. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an \fBXY_bitmap\fP pointer on success, or NULL on failure and set error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_DECODE\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_CONVERT\fP 
+.PP
+.RE
+.PP
+
+.SS "void XY_free_bitmap (\fBXY_bitmap\fP * bitmap)"
+.PP
+Free a bitmap. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIbitmap\fP is an \fBXY_bitmap\fP pointer to free. (Do not use the pointer any more! You may reuse your variable, if you create a new bitmap, of course.) 
+.RE
+.PP
+
+.SS "\fBXY_bool\fP XY_set_background (\fBXY_color\fP color, \fBXY_bitmap\fP * bitmap, \fBXY_fixed\fP x, \fBXY_fixed\fP y, int posflags, int scaling)"
+.PP
+Set the background color, and optional bitmap, its position, and options for scaling it to the screen size. 
+.PP
+Enables background bitmap.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcolor\fP is an \fBXY_color\fP for the display's background. (The entire display will be this color, if no bitmap is provided, otherwise any part of the display not covered by the bitmap will be this color. Lines alpha-blended or anti-aliased in 'fake' rendering mode will blend against this color, as well.) 
+.br
+\fIbitmap\fP is an \fBXY_bitmap\fP pointer for a background image to use. It may be NULL if no background image is desired. 
+.br
+\fIx\fP represents how far right (or left, if negative) to nudge the background image after it has been positioned, in canvas units. Use 0 for no nudging. 
+.br
+\fIy\fP represents how far down (or up, if negative) to nudge the background image after it has been positioned, in canvas units. Use 0 for no nudging. 
+.br
+\fIposflags\fP determines how to position a bitmap. Use the '|' (or) bitwise operator to combine one horizontal choice (\fBXY_POS_LEFT\fP, \fBXY_POS_HCENTER\fP or \fBXY_POS_RIGHT\fP) with one vertical choice (\fBXY_POS_TOP\fP, \fBXY_POS_VCENTER\fP or \fBXY_POS_BOTTOM\fP). Use 0 as a shortcut for 'top left'. 
+.br
+\fIscaling\fP describes how the bitmap should be scaled. Use one of the following: \fBXY_SCALE_NONE\fP, \fBXY_SCALE_STRETCH\fP, \fBXY_SCALE_KEEP_ASPECT_WIDE\fP or \fBXY_SCALE_KEEP_ASPECT_TALL\fP. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: \fBXY_TRUE\fP. On failure, \fBXY_FALSE\fP, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_SCALE\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_CONVERT\fP 
+.PP
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support repeating backgrounds 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support color overlays 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support scaling bitmaps, relative to canvas 
+.RE
+.PP
+
+.SS "void XY_enable_background (\fBXY_bool\fP enable)"
+.PP
+Enable or disable the background bitmap (affects next frame). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIenable\fP set to \fBXY_TRUE\fP enables background bitmap (if any), and \fBXY_FALSE\fP disables it. 
+.RE
+.PP
+
+.SS "void XY_getcolor (\fBXY_color\fP c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a)"
+.PP
+Breaks an \fBXY_color\fP into its R, G, B and A components. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP An \fBXY_color\fP from which color components should be extracted. 
+.br
+\fIr\fP Pointer to a variable to contain the red component. 
+.br
+\fIg\fP Pointer to a variable to contain the blue component. 
+.br
+\fIb\fP Pointer to a variable to contain the green component. 
+.br
+\fIa\fP Pointer to a variable to contain the alpha component (0 represents transparent, 255 represents opaque). 
+.RE
+.PP
+

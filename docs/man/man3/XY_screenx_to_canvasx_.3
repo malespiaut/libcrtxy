@@ -1,0 +1,155 @@
+.TH "Screen/canvas conversions and queries." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Screen/canvas conversions and queries. \- 
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXY_fixed\fP \fBXY_screenx_to_canvasx\fP (int sx)"
+.br
+.RI "\fIConvert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas virtual world units (fixed point). \fP"
+.ti -1c
+.RI "\fBXY_fixed\fP \fBXY_screeny_to_canvasy\fP (int sy)"
+.br
+.RI "\fIConvert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas virtual world units (fixed point). \fP"
+.ti -1c
+.RI "void \fBXY_screen_to_canvas\fP (int sx, int sy, \fBXY_fixed\fP *cx, \fBXY_fixed\fP *cy)"
+.br
+.RI "\fIConvert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas virtual world units (fixed point). \fP"
+.ti -1c
+.RI "\fBXY_fixed\fP \fBXY_canvasx_to_screenx\fP (int cx)"
+.br
+.RI "\fIConvert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate (an integer). \fP"
+.ti -1c
+.RI "\fBXY_fixed\fP \fBXY_canvasy_to_screeny\fP (int cy)"
+.br
+.RI "\fIConvert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate (an integer). \fP"
+.ti -1c
+.RI "void \fBXY_canvas_to_screen\fP (\fBXY_fixed\fP cx, \fBXY_fixed\fP cy, int *sx, int *sy)"
+.br
+.RI "\fIConvert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate (an integer). \fP"
+.ti -1c
+.RI "int \fBXY_get_screenw\fP (void)"
+.br
+.RI "\fIReturns the screen's current width, in pixels (integer). \fP"
+.ti -1c
+.RI "int \fBXY_get_screenh\fP (void)"
+.br
+.RI "\fIReturns the screen's current height, in pixels (integer). \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBXY_fixed\fP XY_screenx_to_canvasx (int sx)"
+.PP
+Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas virtual world units (fixed point). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsx\fP is a screen X coordinate. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the screen X coordinate scaled to a corresponding coordinate in canvas units. 
+.RE
+.PP
+
+.SS "\fBXY_fixed\fP XY_screeny_to_canvasy (int sy)"
+.PP
+Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas virtual world units (fixed point). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsy\fP is a screen Y coordinate. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the screen Y coordinate scaled to a corresponding coordinate in canvas units. 
+.RE
+.PP
+
+.SS "void XY_screen_to_canvas (int sx, int sy, \fBXY_fixed\fP * cx, \fBXY_fixed\fP * cy)"
+.PP
+Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas virtual world units (fixed point). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsx\fP is a screen X coordinate. 
+.br
+\fIsy\fP is a screen Y coordinate. 
+.br
+\fIcx\fP is a pointer to a variable into which the screen X coordinate, scaled to a corresponding coordinate in canvas units, is to be placed. 
+.br
+\fIcy\fP is a pointer to a variable into which the screen Y coordinate, scaled to a corresponding coordinate in canvas units, is to be placed. 
+.RE
+.PP
+
+.SS "\fBXY_fixed\fP XY_canvasx_to_screenx (int cx)"
+.PP
+Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate (an integer). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcx\fP is an X coordinate in canvas units. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the screen X coordinate most closely corresponding to cx. 
+.RE
+.PP
+
+.SS "\fBXY_fixed\fP XY_canvasy_to_screeny (int cy)"
+.PP
+Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate (an integer). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcy\fP is an Y coordinate in canvas units. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the screen Y coordinate most closely corresponding to cy. 
+.RE
+.PP
+
+.SS "void XY_canvas_to_screen (\fBXY_fixed\fP cx, \fBXY_fixed\fP cy, int * sx, int * sy)"
+.PP
+Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate (an integer). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcx\fP is an X coordinate in canvas units. 
+.br
+\fIcy\fP is an Y coordinate in canvas units. 
+.br
+\fIsx\fP is a pointer to a variable into which a screen X coordinate most closely corresponding to cx is to be placed. 
+.br
+\fIsy\fP is a pointer to a variable into which a screen Y coordinate most closely corresponding to cy is to be placed. 
+.RE
+.PP
+
+.SS "int XY_get_screenw (void)"
+.PP
+Returns the screen's current width, in pixels (integer). 
+.PP
+\fBReturns:\fP
+.RS 4
+screen width, in pixels. 
+.RE
+.PP
+
+.SS "int XY_get_screenh (void)"
+.PP
+Returns the screen's current height, in pixels (integer). 
+.PP
+\fBReturns:\fP
+.RS 4
+screen height, in pixels. 
+.RE
+.PP
+

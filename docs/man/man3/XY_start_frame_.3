@@ -1,0 +1,58 @@
+.TH "Starting and ending a drawing frame." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Starting and ending a drawing frame. \- 
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBXY_start_frame\fP (int fps)"
+.br
+.RI "\fIMark the start of a frame. \fP"
+.ti -1c
+.RI "int \fBXY_end_frame\fP (\fBXY_bool\fP throttle)"
+.br
+.RI "\fIMark the end of a frame. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void XY_start_frame (int fps)"
+.PP
+Mark the start of a frame. 
+.PP
+Screen backbuffer is wiped to the background color and/or bitmap. Also setting of preferred FPS.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfps\fP The requested FPS, if \fBXY_end_frame()\fP's throttle option is used. 
+.RE
+.PP
+
+.SS "int XY_end_frame (\fBXY_bool\fP throttle)"
+.PP
+Mark the end of a frame. 
+.PP
+Screen backbuffer is made visible. Optionally, pause until (1000/fps) milliseconds have passed since \fBXY_start_frame()\fP was called. (If 'throttle' is set to \fBXY_TRUE\fP.)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthrottle\fP causes \fBXY_end_frame()\fP to pause the application (by calling SDL_Delay()) so that the amount of time between the last \fBXY_start_frame()\fP call and now is approximately 1000/fps milliseconds, if set to \fBXY_TRUE\fP. Otherwise, pauses only 1ms, to relinquish control to the OS. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The number of milliseconds since the last \fBXY_start_frame()\fP call. (This will be approximately '1000/fps', if throttle is \fBXY_TRUE\fP and the system was able to do everything in between quickly enough.)
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Get dirty rectangle merging to work. 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Subdivide dirty rectangles (to waste less around diagonal lines) 
+.RE
+.PP
+

@@ -1,0 +1,184 @@
+.TH "Fixed-point math functions." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Fixed-point math functions. \- 
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBXY_mult\fP(a, b)"
+.br
+.RI "\fIMultiply two XY_fixed values. \fP"
+.ti -1c
+.RI "#define \fBXY_qdiv\fP(a, b)"
+.br
+.RI "\fIDivide one XY_fixed value by another. \fP"
+.ti -1c
+.RI "#define \fBXY_div\fP(a, b)"
+.br
+.RI "\fIDivide one XY_fixed value by another. \fP"
+.ti -1c
+.RI "#define \fBXY_FIXED_DIV_ZERO\fP   ((1 << XY_FIXED_SHIFT_HALF) - 1)"
+.br
+.RI "\fIThe maximum value that, when \fBXY_div()\fP is used to divide two digits, the denominator may be, and be considered zero (due to shifting to reduce precision loss. \fP"
+.ti -1c
+.RI "#define \fBXY_fpart\fP(a)   ((a) & (XY_FIXED_ONE - 1))"
+.br
+.RI "\fIReturn the fractional part of 'a'. \fP"
+.ti -1c
+.RI "#define \fBXY_rfpart\fP(a)   (XY_FIXED_ONE - XY_fpart(a))"
+.br
+.RI "\fIReturn one minus the fractional part of 'a'. \fP"
+.ti -1c
+.RI "#define \fBXY_ipart\fP(a)   ((a) - XY_fpart(a))"
+.br
+.RI "\fIReturns the integer (whole) part of 'a'. \fP"
+.ti -1c
+.RI "#define \fBXY_round\fP(a)   (XY_ipart((a) + (1 << (XY_FIXED_SHIFT - 1))))"
+.br
+.RI "\fIRounds 'a' up to the nearest integer (whole). \fP"
+.ti -1c
+.RI "#define \fBXY_sin\fP(degrees)   (XY_cos(90 - (degrees)))"
+.br
+.RI "\fIReturns sine() of 'degrees'. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXY_fixed\fP \fBXY_cos\fP (int degrees)"
+.br
+.RI "\fIReturns cosine() of 'degrees'. \fP"
+.in -1c
+.SH "Define Documentation"
+.PP 
+.SS "#define XY_mult(a, b)"
+.PP
+\fBValue:\fP
+.PP
+.nf
+(((a) >> XY_FIXED_SHIFT_HALF) * \
+                      ((b) >> XY_FIXED_SHIFT_HALF))
+.fi
+Multiply two XY_fixed values. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP multiplicand 
+.br
+\fIb\fP multiplicand 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a multiplied by b, approximately 
+.RE
+.PP
+
+.SS "#define XY_qdiv(a, b)"
+.PP
+\fBValue:\fP
+.PP
+.nf
+(((a) / \
+                       ((b) >> XY_FIXED_SHIFT_HALF)) \
+                      << XY_FIXED_SHIFT_HALF)
+.fi
+Divide one XY_fixed value by another. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP numerator 
+.br
+\fIb\fP denominator 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a divided by b, approximately. 
+.RE
+.PP
+
+.SS "#define XY_div(a, b)"
+.PP
+\fBValue:\fP
+.PP
+.nf
+(((b) >> XY_FIXED_SHIFT_HALF) == 0 ? \
+                     XY_FIXED_NAN : XY_qdiv((a),(b)))
+.fi
+Divide one XY_fixed value by another. 
+.PP
+Returns Not-A-Number if denominator is (sufficient close to) zero.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP numerator 
+.br
+\fIb\fP denominator 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a divided by b, approximately, or \fBXY_FIXED_NAN\fP if b is zero (approximately) 
+.RE
+.PP
+
+.SS "#define XY_FIXED_DIV_ZERO   ((1 << XY_FIXED_SHIFT_HALF) - 1)"
+.PP
+The maximum value that, when \fBXY_div()\fP is used to divide two digits, the denominator may be, and be considered zero (due to shifting to reduce precision loss. 
+.PP
+) 
+.SS "#define XY_fpart(a)   ((a) & (XY_FIXED_ONE - 1))"
+.PP
+Return the fractional part of 'a'. 
+.PP
+.SS "#define XY_rfpart(a)   (XY_FIXED_ONE - XY_fpart(a))"
+.PP
+Return one minus the fractional part of 'a'. 
+.PP
+.SS "#define XY_ipart(a)   ((a) - XY_fpart(a))"
+.PP
+Returns the integer (whole) part of 'a'. 
+.PP
+.SS "#define XY_round(a)   (XY_ipart((a) + (1 << (XY_FIXED_SHIFT - 1))))"
+.PP
+Rounds 'a' up to the nearest integer (whole). 
+.PP
+.SS "#define XY_sin(degrees)   (XY_cos(90 - (degrees)))"
+.PP
+Returns sine() of 'degrees'. 
+.PP
+('degrees' is a non-fixed-point value, in degrees. Values outside 0-359 are accounted for.)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdegrees\fP is an angle, in degrees (between 0 and 359). 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+sine() of the angle, in XY_fixed. 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "\fBXY_fixed\fP XY_cos (int degrees)"
+.PP
+Returns cosine() of 'degrees'. 
+.PP
+('degrees' is a non-fixed-point value, in degrees. Values outside 0-359 are accounted for.)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdegrees\fP is an angle, in degrees (between 0 and 359). 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+cosine() of the angle, in XY_fixed. 
+.RE
+.PP
+

@@ -1,0 +1,70 @@
+.TH "Color manipulation and conversion." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Color manipulation and conversion. \- 
+.in +1c
+.ti -1c
+.RI "\fBXY_color\fP \fBXY_setcolor\fP (Uint8 r, Uint8 g, Uint8 b, Uint8 a)"
+.br
+.RI "\fICombines values for R, G, B and A components into an \fBXY_color\fP. \fP"
+.ti -1c
+.RI "void \fBXY_getcolor\fP (\fBXY_color\fP c, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a)"
+.br
+.RI "\fIBreaks an \fBXY_color\fP into its R, G, B and A components. \fP"
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef Uint32 \fBXY_color\fP"
+.br
+.RI "\fIColor type. \fP"
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef Uint32 \fBXY_color\fP"
+.PP
+Color type. 
+.PP
+.SH "Function Documentation"
+.PP 
+.SS "\fBXY_color\fP XY_setcolor (Uint8 r, Uint8 g, Uint8 b, Uint8 a)"
+.PP
+Combines values for R, G, B and A components into an \fBXY_color\fP. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIr\fP Red component (between 0 and 255). 
+.br
+\fIg\fP Green component (between 0 and 255). 
+.br
+\fIb\fP Blue component (between 0 and 255). 
+.br
+\fIa\fP Alpha component (between 0 (transparent) and 255 (opaque)). 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+An \fBXY_color\fP representing the RGBA values provided. 
+.RE
+.PP
+
+.SS "void XY_getcolor (\fBXY_color\fP c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a)"
+.PP
+Breaks an \fBXY_color\fP into its R, G, B and A components. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP An \fBXY_color\fP from which color components should be extracted. 
+.br
+\fIr\fP Pointer to a variable to contain the red component. 
+.br
+\fIg\fP Pointer to a variable to contain the blue component. 
+.br
+\fIb\fP Pointer to a variable to contain the green component. 
+.br
+\fIa\fP Pointer to a variable to contain the alpha component (0 represents transparent, 255 represents opaque). 
+.RE
+.PP
+

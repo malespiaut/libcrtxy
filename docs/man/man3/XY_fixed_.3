@@ -1,0 +1,95 @@
+.TH "Fixed-point." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Fixed-point. \- 
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "\fBFixed-point math functions.\fP"
+.br
+.in -1c
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBXY_FIXED_SHIFT\fP   16"
+.br
+.RI "\fIHow much to shift ints to get a fixed-point value. \fP"
+.ti -1c
+.RI "#define \fBXY_FIXED_SHIFT_HALF\fP   8"
+.br
+.RI "\fIFor half-shift during mult & divide macros. \fP"
+.ti -1c
+.RI "#define \fBXY_FIXED_ONE\fP   (1 << XY_FIXED_SHIFT)"
+.br
+.RI "\fIQuick way to get '1' as an XY_fixed. \fP"
+.ti -1c
+.RI "#define \fBXY_FIXED_HALF\fP   (1 << (XY_FIXED_SHIFT - 1))"
+.br
+.RI "\fIQuick way to get '0.5' as an XY_fixed. \fP"
+.ti -1c
+.RI "#define \fBXY_FIXED_MAX\fP   0x7FFFFFFF"
+.br
+.RI "\fIMaximum value an XY_fixed can hold. \fP"
+.ti -1c
+.RI "#define \fBXY_FIXED_MIN\fP   -(0x80000000)"
+.br
+.RI "\fIMinimum value an XY_fixed can hold. \fP"
+.ti -1c
+.RI "#define \fBXY_FIXED_NAN\fP   XY_FIXED_MAX"
+.br
+.RI "\fINot-a-number (NAN), occurs when you divide by zero. \fP"
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef Sint32 \fBXY_fixed\fP"
+.br
+.RI "\fIFixed-point type. \fP"
+.in -1c
+.SH "Define Documentation"
+.PP 
+.SS "#define XY_FIXED_SHIFT   16"
+.PP
+How much to shift ints to get a fixed-point value. 
+.PP
+
+.SS "#define XY_FIXED_SHIFT_HALF   8"
+.PP
+For half-shift during mult & divide macros. 
+.PP
+
+.SS "#define XY_FIXED_ONE   (1 << XY_FIXED_SHIFT)"
+.PP
+Quick way to get '1' as an XY_fixed. 
+.PP
+
+.SS "#define XY_FIXED_HALF   (1 << (XY_FIXED_SHIFT - 1))"
+.PP
+Quick way to get '0.5' as an XY_fixed. 
+.PP
+
+.SS "#define XY_FIXED_MAX   0x7FFFFFFF"
+.PP
+Maximum value an XY_fixed can hold. 
+.PP
+
+.SS "#define XY_FIXED_MIN   -(0x80000000)"
+.PP
+Minimum value an XY_fixed can hold. 
+.PP
+
+.SS "#define XY_FIXED_NAN   XY_FIXED_MAX"
+.PP
+Not-a-number (NAN), occurs when you divide by zero. 
+.PP
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef Sint32 \fBXY_fixed\fP"
+.PP
+Fixed-point type. 
+.PP
+

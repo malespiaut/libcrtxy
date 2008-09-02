@@ -1,0 +1,61 @@
+.TH "Intersection tests." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Intersection tests. \- 
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_lines_intersect\fP (\fBXY_line\fP line1, \fBXY_line\fP line2, \fBXY_fixed\fP *intersect_x, \fBXY_fixed\fP *intersect_y, \fBXY_intersection\fP *result)"
+.br
+.RI "\fIReturns whether two lines intersect. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_line_groups_intersect\fP (\fBXY_lines\fP *lines1, \fBXY_lines\fP *lines2)"
+.br
+.RI "\fIReturns whether any lines in one group intersect any lines in another. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBXY_bool\fP XY_lines_intersect (\fBXY_line\fP line1, \fBXY_line\fP line2, \fBXY_fixed\fP * intersect_x, \fBXY_fixed\fP * intersect_y, \fBXY_intersection\fP * result)"
+.PP
+Returns whether two lines intersect. 
+.PP
+Optionally (if not NULL), return the (x,y) coordinates of the intersection (if possible), and how the lines intersect (or don't): parallel, coincident, not intersecting, or intersecting.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIline1\fP is an \fBXY_line\fP structure containing a line. 
+.br
+\fIline2\fP is an \fBXY_line\fP structure containing a line. 
+.br
+\fIintersect_x\fP is a pointer to a variable into which the X coordinates of the intersection (if any) occurred; may be NULL to ignore. 
+.br
+\fIintersect_y\fP is a pointer to a variable into which the Y coordinates of the intersection (if any) occurred; may be NULL to ignore. 
+.br
+\fIresult\fP is a pointer to an XY_intersection variable into which the type of intersection (if any) occurred; may be NULL to ignore. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+\fBXY_TRUE\fP if the lines intersect or are coincident, \fBXY_FALSE\fP if they do not intersect or are parallel. 
+.RE
+.PP
+
+.SS "\fBXY_bool\fP XY_line_groups_intersect (\fBXY_lines\fP * lines1, \fBXY_lines\fP * lines2)"
+.PP
+Returns whether any lines in one group intersect any lines in another. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlines1\fP is an \fBXY_lines\fP pointer containing a collection of lines. 
+.br
+\fIlines2\fP is an \fBXY_lines\fP pointer containing a collection of lines. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+\fBXY_TRUE\fP if any lines in 'lines1' intersect or are coincident with any lines in 'lines2', \fBXY_FALSE\fP if not. 
+.RE
+.PP
+

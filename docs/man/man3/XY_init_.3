@@ -1,0 +1,89 @@
+.TH "Initializing and quitting libcrtxy." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Initializing and quitting libcrtxy. \- 
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_init\fP (\fBXY_options\fP *opts, \fBXY_fixed\fP canvasw, \fBXY_fixed\fP canvash)"
+.br
+.RI "\fIInitialize SDL (video only) and libcrtxy (with rendering and video options from opts), and set the virtual canvas size. \fP"
+.ti -1c
+.RI "void \fBXY_quit\fP (void)"
+.br
+.RI "\fIShut down libcrtxy and SDL. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBXY_bool\fP XY_init (\fBXY_options\fP * opts, \fBXY_fixed\fP canvasw, \fBXY_fixed\fP canvash)"
+.PP
+Initialize SDL (video only) and libcrtxy (with rendering and video options from opts), and set the virtual canvas size. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIopts\fP is a pointer to an options structure that has been filled. 
+.br
+\fIcanvasw\fP is the width (in XY_fixed units) of a virtual canvas which will be scaled to the real display. 
+.br
+\fIcanvash\fP is the height (in XY_fixed units) of a virtual canvas which will be scaled to the real display. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: \fBXY_TRUE\fP. On failure, \fBXY_FALSE\fP, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_INIT_VIDEO\fP 
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_INIT_DISPLAY\fP 
+.IP "\(bu" 2
+\fBXY_ERR_INIT_UNSUPPORTED_BPP\fP
+.PP
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Allow setting window class (SDL_VIDEO_X11_WMCLASS=xxx.yyy) 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Allow enabling/disabling screensaver (SDL_VIDEO_ALLOW_SCREENSAVER=1) 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Allow positioning the window (SDL_VIDEO_WINDOW_POS=center/nopref/...) 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Allow setting window icon (SDL_WM_SetIcon()) 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Allow setting window title (SDL_WM_SetCaption()) 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Allow hiding mouse (SDL_ShowCursor()) (separate function?) 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Allow resizable windows (SDL_RESIZABLE) 
+.RE
+.PP
+
+.SS "void XY_quit (void)"
+.PP
+Shut down libcrtxy and SDL. 
+.PP
+

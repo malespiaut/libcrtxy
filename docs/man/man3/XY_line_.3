@@ -1,0 +1,94 @@
+.TH "Geometry." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Geometry. \- 
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "\fBLine collection manipulation.\fP"
+.br
+.ti -1c
+.RI "\fBIntersection tests.\fP"
+.br
+.in -1c
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBXY_line\fP"
+.br
+.RI "\fIRepresents a single line. \fP"
+.ti -1c
+.RI "struct \fBXY_lines\fP"
+.br
+.RI "\fIA group of lines. \fP"
+.in -1c
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBXY_THIN\fP   XY_FIXED_ONE"
+.br
+.RI "\fIMinimum line thickness. \fP"
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBXY_intersection\fP { \fBXY_INTERSECTION_NONE\fP, \fBXY_INTERSECTION_INTERSECTING\fP, \fBXY_INTERSECTION_PARALLEL\fP, \fBXY_INTERSECTION_COINCIDENT\fP }"
+.br
+.RI "\fILine intersection results:. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBTodo\fP
+.RS 4
+Add inside-polygon test 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Add distance calculator 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Add wrapped lines to a group (a la Asteroids) 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Clip lines in a group 
+.RE
+.PP
+
+.SH "Define Documentation"
+.PP 
+.SS "#define XY_THIN   XY_FIXED_ONE"
+.PP
+Minimum line thickness. 
+.PP
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBXY_intersection\fP"
+.PP
+Line intersection results:. 
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIXY_INTERSECTION_NONE \fP\fP
+Lines do not intersect and are not parallel. 
+.TP
+\fB\fIXY_INTERSECTION_INTERSECTING \fP\fP
+Lines intersect at a point. 
+.TP
+\fB\fIXY_INTERSECTION_PARALLEL \fP\fP
+Lines are parallel (do not intersect). 
+.TP
+\fB\fIXY_INTERSECTION_COINCIDENT \fP\fP
+Lines are coincident (and, hence, intersect). 
+

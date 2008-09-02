@@ -1,0 +1,98 @@
+.TH "Drawing primitives." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Drawing primitives. \- 
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBXY_draw_line\fP (\fBXY_fixed\fP x1, \fBXY_fixed\fP y1, \fBXY_fixed\fP x2, \fBXY_fixed\fP y2, \fBXY_color\fP color, \fBXY_fixed\fP thickness)"
+.br
+.RI "\fIDraw a single line between (x1,y1) and (x2,y2) (in canvas virtual world units) and in the specified color/alpha and thickness. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_draw_lines\fP (\fBXY_lines\fP *lines)"
+.br
+.RI "\fIDraw a collection of lines. \fP"
+.ti -1c
+.RI "void \fBXY_draw_one_line\fP (\fBXY_line\fP line)"
+.br
+.RI "\fIDraw a single line using an \fBXY_line\fP struct. \fP"
+.ti -1c
+.RI "void \fBXY_draw_point\fP (\fBXY_fixed\fP x, \fBXY_fixed\fP y, \fBXY_color\fP color, \fBXY_fixed\fP thickness)"
+.br
+.RI "\fIDraw a point at (x,y) (in canvas virtual world units) in the specified color/alpha and thickness. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void XY_draw_line (\fBXY_fixed\fP x1, \fBXY_fixed\fP y1, \fBXY_fixed\fP x2, \fBXY_fixed\fP y2, \fBXY_color\fP color, \fBXY_fixed\fP thickness)"
+.PP
+Draw a single line between (x1,y1) and (x2,y2) (in canvas virtual world units) and in the specified color/alpha and thickness. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx1\fP is the X coordinate of the line's starting point. 
+.br
+\fIy1\fP is the Y coordinate of the line's starting point. 
+.br
+\fIx2\fP is the X coordinate of the line's ending point. 
+.br
+\fIy2\fP is the Y coordinate of the line's ending point. 
+.br
+\fIcolor\fP is an \fBXY_color\fP representing the color and transparency of the line. 
+.br
+\fIthickness\fP is an \fBXY_fixed\fP representing the thickness of the line. 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Create line clip routine (for efficiency) 
+.RE
+.PP
+
+.SS "\fBXY_bool\fP XY_draw_lines (\fBXY_lines\fP * lines)"
+.PP
+Draw a collection of lines. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlines\fP is an \fBXY_lines\fP pointer with a collection of lines to draw. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: \fBXY_TRUE\fP. On failure, \fBXY_FALSE\fP, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_LINES_INVALID\fP 
+.PP
+.RE
+.PP
+
+.SS "void XY_draw_one_line (\fBXY_line\fP line)"
+.PP
+Draw a single line using an \fBXY_line\fP struct. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIline\fP is an \fBXY_line\fP struct representing a line to draw. 
+.RE
+.PP
+
+.SS "void XY_draw_point (\fBXY_fixed\fP x, \fBXY_fixed\fP y, \fBXY_color\fP color, \fBXY_fixed\fP thickness)"
+.PP
+Draw a point at (x,y) (in canvas virtual world units) in the specified color/alpha and thickness. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP is the X coordinate of the point. 
+.br
+\fIy\fP is the Y coordinate of the point. 
+.br
+\fIcolor\fP is an \fBXY_color\fP representing the color and transparency of the point. 
+.br
+\fIthickness\fP is an \fBXY_fixed\fP representing the thickness of the point. 
+.RE
+.PP
+

@@ -3,12 +3,13 @@ http://libcrtxy.sf.net/
 
 Bill Kendrick <bill@newbreedsoftware.com>
 
-2008.08.16 (0.0.3)
+2008.09.02 (0.0.3)
 * License change
   + Including GNU LGPL 2.1, rather than 3.
 * Documentation
   + Improved doxygen documentation.
   + HTML documentation installed during 'make install'.
+  + Man pages installed during 'make install'.
 
 2008.08.16 (0.0.2)
 * Optimizations

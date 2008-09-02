@@ -16,249 +16,250 @@
     </ul>
   </div>
 <h1>src/crtxy.h</h1><a href="crtxy_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 
-<a name="l00328"></a>00328 <span class="preprocessor">#ifndef _CRTXY_H</span>
-<a name="l00329"></a>00329 <span class="preprocessor"></span><span class="preprocessor">#define _CRTXY_H</span>
-<a name="l00330"></a>00330 <span class="preprocessor"></span>
-<a name="l00331"></a>00331 <span class="preprocessor">#include &lt;SDL.h&gt;</span>
-<a name="l00332"></a>00332 
-<a name="l00333"></a>00333 <span class="preprocessor">#ifdef __cplusplus</span>
-<a name="l00334"></a>00334 <span class="preprocessor"></span><span class="keyword">extern</span> <span class="stringliteral">"C"</span> {
-<a name="l00335"></a>00335 <span class="preprocessor">#endif</span>
-<a name="l00336"></a>00336 <span class="preprocessor"></span>
-<a name="l00344"></a><a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf">00344</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
-<a name="l00345"></a><a class="code" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">00345</a>   <a class="code" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75" title="False.">XY_FALSE</a>, 
-<a name="l00346"></a><a class="code" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">00346</a>   <a class="code" href="group__generalGroup.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5" title="True.">XY_TRUE</a> 
-<a name="l00347"></a>00347 } <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a>;
-<a name="l00348"></a>00348 
-<a name="l00361"></a><a class="code" href="structXY__bitmap.html">00361</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>XY_bitmap_s {
-<a name="l00362"></a><a class="code" href="structXY__bitmap.html#54a2d7cc9648a7a583e6b62568723cc1">00362</a>   SDL_Surface * surf;
-<a name="l00363"></a>00363 } <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a>;
-<a name="l00364"></a>00364 
-<a name="l00373"></a><a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d">00373</a> <span class="keyword">typedef</span> Uint32 <a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a>;
-<a name="l00374"></a>00374 
-<a name="l00385"></a><a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053">00385</a> <span class="keyword">typedef</span> Sint32 <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a>;
-<a name="l00386"></a>00386 
-<a name="l00387"></a>00387 <span class="comment">/* Fixed-point math settings  */</span>
+<a name="l00330"></a>00330 <span class="preprocessor">#ifndef _CRTXY_H</span>
+<a name="l00331"></a>00331 <span class="preprocessor"></span><span class="preprocessor">#define _CRTXY_H</span>
+<a name="l00332"></a>00332 <span class="preprocessor"></span>
+<a name="l00333"></a>00333 <span class="preprocessor">#include &lt;SDL.h&gt;</span>
+<a name="l00334"></a>00334 
+<a name="l00335"></a>00335 <span class="preprocessor">#ifdef __cplusplus</span>
+<a name="l00336"></a>00336 <span class="preprocessor"></span><span class="keyword">extern</span> <span class="stringliteral">"C"</span> {
+<a name="l00337"></a>00337 <span class="preprocessor">#endif</span>
+<a name="l00338"></a>00338 <span class="preprocessor"></span>
+<a name="l00346"></a><a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf">00346</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
+<a name="l00347"></a><a class="code" href="group__XY__bool__.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75">00347</a>   <a class="code" href="group__XY__bool__.html#ggdc02865bfc2e638c1059cebeeac2b1bf47df51f1beb8ce1ad87384d244ac1b75" title="False.">XY_FALSE</a>, 
+<a name="l00348"></a><a class="code" href="group__XY__bool__.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5">00348</a>   <a class="code" href="group__XY__bool__.html#ggdc02865bfc2e638c1059cebeeac2b1bf4f26180899fa403dcf75d25462ce92c5" title="True.">XY_TRUE</a> 
+<a name="l00349"></a>00349 } <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a>;
+<a name="l00350"></a>00350 
+<a name="l00363"></a><a class="code" href="structXY__bitmap.html">00363</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>XY_bitmap_s {
+<a name="l00364"></a><a class="code" href="structXY__bitmap.html#54a2d7cc9648a7a583e6b62568723cc1">00364</a>   SDL_Surface * surf;
+<a name="l00365"></a>00365 } <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a>;
+<a name="l00366"></a>00366 
+<a name="l00375"></a><a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d">00375</a> <span class="keyword">typedef</span> Uint32 <a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a>;
+<a name="l00376"></a>00376 
+<a name="l00387"></a><a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053">00387</a> <span class="keyword">typedef</span> Sint32 <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a>;
 <a name="l00388"></a>00388 
-<a name="l00389"></a><a class="code" href="group__fixedGroup.html#g4c9a59884bef6674c7988dd0d08fe9ac">00389</a> <span class="preprocessor">#define XY_FIXED_SHIFT 16 </span>
-<a name="l00390"></a><a class="code" href="group__fixedGroup.html#g7d789fee5273838f05cb5f7ba53321cc">00390</a> <span class="preprocessor">#define XY_FIXED_SHIFT_HALF 8 </span>
-<a name="l00391"></a><a class="code" href="group__fixedGroup.html#g491966de233d94b4f590e55c05fd82e9">00391</a> <span class="preprocessor">#define XY_FIXED_ONE (1 &lt;&lt; XY_FIXED_SHIFT) </span>
-<a name="l00392"></a><a class="code" href="group__fixedGroup.html#g33002220cbe175e97cfdaf1075b3f498">00392</a> <span class="preprocessor">#define XY_FIXED_HALF (1 &lt;&lt; (XY_FIXED_SHIFT - 1)) </span>
-<a name="l00394"></a>00394 <span class="preprocessor"></span><span class="comment">/* Limits for fixed-point values (for signed 32-bit ints) */</span>
-<a name="l00395"></a>00395 
-<a name="l00396"></a><a class="code" href="group__fixedGroup.html#g50649caf7d181c81144633ee9611af64">00396</a> <span class="preprocessor">#define XY_FIXED_MAX 0x7FFFFFFF </span>
-<a name="l00397"></a><a class="code" href="group__fixedGroup.html#g1d042c0ea3ab3d8d396cd24b0c31d5dc">00397</a> <span class="preprocessor">#define XY_FIXED_MIN -(0x80000000) </span>
-<a name="l00398"></a><a class="code" href="group__fixedGroup.html#g7dba2b69c33f38f9d2c133057458f2ab">00398</a> <span class="preprocessor">#define XY_FIXED_NAN XY_FIXED_MAX </span>
-<a name="l00412"></a>00412 <span class="preprocessor"></span><span class="comment">/* Some standard thicknesses: */</span>
-<a name="l00413"></a>00413 
-<a name="l00414"></a><a class="code" href="group__geometryGroup.html#g4cdfee23384299c00ceb86ed0d21d018">00414</a> <span class="preprocessor">#define XY_THIN XY_FIXED_ONE </span>
-<a name="l00419"></a><a class="code" href="structXY__line.html">00419</a> <span class="preprocessor">typedef struct XY_line_s {</span>
-<a name="l00420"></a><a class="code" href="structXY__line.html#3fa71d4bf41d65f0fdcb84dc083f0527">00420</a> <span class="preprocessor"></span>  XY_fixed x1; 
-<a name="l00421"></a><a class="code" href="structXY__line.html#03dd8c9669ec191b3eaa95bf7520f137">00421</a>   XY_fixed y1; 
-<a name="l00422"></a><a class="code" href="structXY__line.html#f8bb2d1da954a83c67f64e186a7c8276">00422</a>   XY_fixed x2; 
-<a name="l00423"></a><a class="code" href="structXY__line.html#6e7581049a2f3ef496755b1beb6df3c4">00423</a>   XY_fixed y2; 
-<a name="l00424"></a><a class="code" href="structXY__line.html#c4ec482907cd2fcd5e907cfaa8641989">00424</a>   XY_color color; 
-<a name="l00425"></a><a class="code" href="structXY__line.html#414e53ddaeee18757e9654722a7f72d8">00425</a>   XY_fixed thickness; 
-<a name="l00426"></a>00426 } <a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a>;
-<a name="l00427"></a>00427 
-<a name="l00431"></a><a class="code" href="structXY__lines.html">00431</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>XY_lines_s {
-<a name="l00432"></a><a class="code" href="structXY__lines.html#2b04b20e21019d3f8e89d6b03b45029d">00432</a>   <span class="keywordtype">int</span> count; 
-<a name="l00433"></a><a class="code" href="structXY__lines.html#c7e81d7440b299ee2de74ca1b5b10997">00433</a>   <span class="keywordtype">int</span> max; 
-<a name="l00434"></a><a class="code" href="structXY__lines.html#7ae7eaa086767281906ecce6052f5935">00434</a>   <a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> * lines; 
-<a name="l00435"></a>00435 } <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a>;
-<a name="l00436"></a>00436 
-<a name="l00440"></a><a class="code" href="group__geometryGroup.html#gc5d4fdf2856d1add2e06b4d0827899cf">00440</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
-<a name="l00441"></a><a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cfc3a82b55c2f1f27095370bb6db904617">00441</a>   <a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cfc3a82b55c2f1f27095370bb6db904617" title="Lines do not intersect and are not parallel.">XY_INTERSECTION_NONE</a>, 
-<a name="l00442"></a><a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cf243a8b65889d0662f0222f1c41ae1de1">00442</a>   <a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cf243a8b65889d0662f0222f1c41ae1de1" title="Lines intersect at a point.">XY_INTERSECTION_INTERSECTING</a>, 
-<a name="l00443"></a><a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cffd3658f006a7f0634866b125afaa8249">00443</a>   <a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cffd3658f006a7f0634866b125afaa8249" title="Lines are parallel (do not intersect).">XY_INTERSECTION_PARALLEL</a>, 
-<a name="l00444"></a><a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cfb78c51bab1a6773def1123b1e5509a49">00444</a>   <a class="code" href="group__geometryGroup.html#ggc5d4fdf2856d1add2e06b4d0827899cfb78c51bab1a6773def1123b1e5509a49" title="Lines are coincident (and, hence, intersect).">XY_INTERSECTION_COINCIDENT</a> 
-<a name="l00445"></a>00445 } <a class="code" href="group__geometryGroup.html#gc5d4fdf2856d1add2e06b4d0827899cf" title="Line intersection results:.">XY_intersection</a>;
-<a name="l00446"></a>00446 
-<a name="l00457"></a><a class="code" href="group__optionsGroup.html#g7d8dbbc9a614cff31ee63e776128c625">00457</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
-<a name="l00458"></a><a class="code" href="group__optionsGroup.html#gg7d8dbbc9a614cff31ee63e776128c625e2eee5dd6a6433eaa51ea7a22518e6c8">00458</a>   <a class="code" href="group__optionsGroup.html#gg7d8dbbc9a614cff31ee63e776128c625e2eee5dd6a6433eaa51ea7a22518e6c8" title="Display in a window.">XY_OPT_WINDOWED</a>, 
-<a name="l00459"></a><a class="code" href="group__optionsGroup.html#gg7d8dbbc9a614cff31ee63e776128c62510a7d5a2339e35309c4b3a5babb6c7cd">00459</a>   <a class="code" href="group__optionsGroup.html#gg7d8dbbc9a614cff31ee63e776128c62510a7d5a2339e35309c4b3a5babb6c7cd" title="Fullscreen; fall back to window.">XY_OPT_FULLSCREEN_REQUEST</a>, 
-<a name="l00460"></a><a class="code" href="group__optionsGroup.html#gg7d8dbbc9a614cff31ee63e776128c625191aea2a11f0243996319668f2306e3c">00460</a>   <a class="code" href="group__optionsGroup.html#gg7d8dbbc9a614cff31ee63e776128c625191aea2a11f0243996319668f2306e3c" title="Fullscreen; abort if we cannot.">XY_OPT_FULLSCREEN_REQUIRED</a> 
-<a name="l00461"></a>00461 } <a class="code" href="group__optionsGroup.html#g7d8dbbc9a614cff31ee63e776128c625" title="Display settings for options.fullscreen.">XY_opt_fullscreen</a>;
-<a name="l00462"></a>00462 
-<a name="l00466"></a><a class="code" href="group__optionsGroup.html#g81ff2f45433a970c375f750f09bad12e">00466</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
-<a name="l00467"></a><a class="code" href="group__optionsGroup.html#gg81ff2f45433a970c375f750f09bad12eaa9a2952df0d8f45e1118e558edf3191">00467</a>   <a class="code" href="group__optionsGroup.html#gg81ff2f45433a970c375f750f09bad12eaa9a2952df0d8f45e1118e558edf3191" title="Combine current pixel with new pixel.">XY_OPT_ALPHA_BLEND</a>, 
-<a name="l00468"></a><a class="code" href="group__optionsGroup.html#gg81ff2f45433a970c375f750f09bad12e43f7715a5a5ce6bcf43a47b7b4fe7e14">00468</a>   <a class="code" href="group__optionsGroup.html#gg81ff2f45433a970c375f750f09bad12e43f7715a5a5ce6bcf43a47b7b4fe7e14" title="Combine background color with new pixel.">XY_OPT_ALPHA_FAKE</a>, 
-<a name="l00469"></a><a class="code" href="group__optionsGroup.html#gg81ff2f45433a970c375f750f09bad12e70f08b17be6db952ad83d92fc836fbde">00469</a>   <a class="code" href="group__optionsGroup.html#gg81ff2f45433a970c375f750f09bad12e70f08b17be6db952ad83d92fc836fbde" title="Just draw new pixel.">XY_OPT_ALPHA_OFF</a> 
-<a name="l00470"></a>00470 } <a class="code" href="group__optionsGroup.html#g81ff2f45433a970c375f750f09bad12e" title="Alpha-blending settings for options.alpha.">XY_opt_alpha</a>;
-<a name="l00471"></a>00471 
-<a name="l00475"></a><a class="code" href="group__optionsGroup.html#g68b79cb473b5c4bfb21ec522b2d8618e">00475</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
-<a name="l00476"></a><a class="code" href="group__optionsGroup.html#gg68b79cb473b5c4bfb21ec522b2d8618e967ff799ed086192a7d6d8fbb24bb451">00476</a>   <a class="code" href="group__optionsGroup.html#gg68b79cb473b5c4bfb21ec522b2d8618e967ff799ed086192a7d6d8fbb24bb451" title="Blend to smooth any stretching.">XY_OPT_SCALE_BEST</a>, 
-<a name="l00477"></a><a class="code" href="group__optionsGroup.html#gg68b79cb473b5c4bfb21ec522b2d8618ec442702874273f3504f07d75b5c23156">00477</a>   <a class="code" href="group__optionsGroup.html#gg68b79cb473b5c4bfb21ec522b2d8618ec442702874273f3504f07d75b5c23156" title="Stretch pixels with no blending.">XY_OPT_SCALE_FAST</a> 
-<a name="l00478"></a>00478 } <a class="code" href="group__optionsGroup.html#g68b79cb473b5c4bfb21ec522b2d8618e" title="Bitmap scaling quality settings for options.scaling.">XY_opt_scaling</a>;
-<a name="l00479"></a>00479 
-<a name="l00483"></a><a class="code" href="structXY__options.html">00483</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>XY_options_s {
-<a name="l00484"></a><a class="code" href="structXY__options.html#ba07f666d9a8a2e83aa11b23b6e5e04b">00484</a>   <span class="keywordtype">int</span> displayw;  
-<a name="l00485"></a><a class="code" href="structXY__options.html#4068b8b5fec2f7fd12858ae6f57289e4">00485</a>   <span class="keywordtype">int</span> displayh;  
-<a name="l00486"></a><a class="code" href="structXY__options.html#ec996a69635084d94656fae43de32b83">00486</a>   <span class="keywordtype">int</span> displaybpp; 
-<a name="l00487"></a><a class="code" href="structXY__options.html#830b78650252e1bcfc7c73b7e8e89e90">00487</a>   <a class="code" href="group__optionsGroup.html#g7d8dbbc9a614cff31ee63e776128c625" title="Display settings for options.fullscreen.">XY_opt_fullscreen</a> fullscreen; 
-<a name="l00488"></a><a class="code" href="structXY__options.html#ec17a0f85edaa6c93a039c42377156f2">00488</a>   <a class="code" href="group__optionsGroup.html#g81ff2f45433a970c375f750f09bad12e" title="Alpha-blending settings for options.alpha.">XY_opt_alpha</a> alpha;  
-<a name="l00489"></a><a class="code" href="structXY__options.html#eb3e1ac461c08868556840a7c70f8567">00489</a>   <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> antialias;  
-<a name="l00490"></a><a class="code" href="structXY__options.html#17b062c6312dcb16adbc96fc07ff7056">00490</a>   <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> gamma_correction;  
-<a name="l00491"></a><a class="code" href="structXY__options.html#c402ebcf11e512c812f79e1debb2af79">00491</a>   <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> blur;  
-<a name="l00492"></a><a class="code" href="structXY__options.html#a25692412e96ac4ae66186eb47e69d88">00492</a>   <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> additive;  
-<a name="l00493"></a><a class="code" href="structXY__options.html#edbec7dec05aa21212e8c8065c6ecfd0">00493</a>   <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> backgrounds;  
-<a name="l00494"></a><a class="code" href="structXY__options.html#b114f2ee4325a449f16684ce075f4b24">00494</a>   <a class="code" href="group__optionsGroup.html#g68b79cb473b5c4bfb21ec522b2d8618e" title="Bitmap scaling quality settings for options.scaling.">XY_opt_scaling</a> scaling;  
-<a name="l00495"></a>00495 } <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a>;
-<a name="l00496"></a>00496 
-<a name="l00501"></a><a class="code" href="group__optionsGroup.html#g449d7dabacfe4501a18d2d1f8a6d5727">00501</a> <span class="preprocessor">#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf"</span>
-<a name="l00502"></a>00502 <span class="preprocessor"></span>
-<a name="l00506"></a><a class="code" href="group__optionsGroup.html#g8a2d52a8dd709bad8e154ff29347d564">00506</a> <span class="preprocessor">#define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc"</span>
-<a name="l00507"></a>00507 <span class="preprocessor"></span>
-<a name="l00514"></a><a class="code" href="group__errorGroup.html#g4fa409eabc88ed4f137259438f62b467">00514</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
-<a name="l00515"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467296a3122a97e95dd5ce5ce532c90e8e3">00515</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467296a3122a97e95dd5ce5ce532c90e8e3" title="No error.">XY_ERR_NONE</a>, 
-<a name="l00516"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651">00516</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651" title="Bad value to an option.">XY_ERR_OPTION_BAD</a>, 
-<a name="l00517"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4677ca11232f4179b5479a32703cbf01e78">00517</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4677ca11232f4179b5479a32703cbf01e78" title="Unrecognized option.">XY_ERR_OPTION_UNKNOWN</a>, 
-<a name="l00518"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4675586ad34de6aa73248765e9d76abb01a">00518</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4675586ad34de6aa73248765e9d76abb01a" title="Cannot open file.">XY_ERR_FILE_CANT_OPEN</a>, 
-<a name="l00519"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">00519</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04" title="Cannot allocate memory.">XY_ERR_MEM_CANT_ALLOC</a>, 
-<a name="l00520"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4672191b54c37c0ea2ff852873432850aff">00520</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4672191b54c37c0ea2ff852873432850aff" title="Cannot initialize video subsystem.">XY_ERR_INIT_VIDEO</a>, 
-<a name="l00521"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467130405149a87c5fd99a8dca242ea1d79">00521</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467130405149a87c5fd99a8dca242ea1d79" title="Cannot open display.">XY_ERR_INIT_DISPLAY</a>, 
-<a name="l00522"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b46729791411a863d28d9a48708bfd84fe5c">00522</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b46729791411a863d28d9a48708bfd84fe5c" title="Unsupported (so far as we&amp;#39;re concerned) bpp.">XY_ERR_INIT_UNSUPPORTED_BPP</a>, 
-<a name="l00523"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467f074ed1612f3b0453cb9a002c16a8ae3">00523</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b467f074ed1612f3b0453cb9a002c16a8ae3" title="Error decoding image file (IMG_Load failed).">XY_ERR_BITMAP_CANT_DECODE</a>, 
-<a name="l00524"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673951d09b1044d269606c488a75edf151">00524</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4673951d09b1044d269606c488a75edf151" title="Cannot convert a surface to the display fmt.">XY_ERR_BITMAP_CANT_CONVERT</a>, 
-<a name="l00525"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b46740b0b690c11f8154b3abe524b4924e03">00525</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b46740b0b690c11f8154b3abe524b4924e03" title="Cannot scale an image (probably mem.">XY_ERR_BITMAP_CANT_SCALE</a>, 
-<a name="l00526"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">00526</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e" title="Invalid (NULL?) group of lines.">XY_ERR_LINES_INVALID</a>, 
-<a name="l00527"></a><a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b46785e880b7b8dedb70fdc57ab35eb90c1a">00527</a>   <a class="code" href="group__errorGroup.html#gg4fa409eabc88ed4f137259438f62b46785e880b7b8dedb70fdc57ab35eb90c1a">NUM_XY_ERRS</a>
-<a name="l00528"></a>00528 } <a class="code" href="group__errorGroup.html#g4fa409eabc88ed4f137259438f62b467">XY_err</a>;
-<a name="l00529"></a>00529 
-<a name="l00538"></a><a class="code" href="group__bitmapPositioningGroup.html#g2cbcc34162e79ca642e5f3402bf92f2d">00538</a> <span class="preprocessor">#define XY_POS_TOP 0x0 </span>
-<a name="l00539"></a><a class="code" href="group__bitmapPositioningGroup.html#g2fb8f573c7c2ac7ff59011446f27d3ce">00539</a> <span class="preprocessor">#define XY_POS_LEFT 0x0 </span>
-<a name="l00540"></a><a class="code" href="group__bitmapPositioningGroup.html#g1faea8bb460d6d9128898094940c2ca9">00540</a> <span class="preprocessor">#define XY_POS_HCENTER 0x1 </span>
-<a name="l00541"></a><a class="code" href="group__bitmapPositioningGroup.html#g750519ccc289cda020e515ab1f4dadde">00541</a> <span class="preprocessor">#define XY_POS_VCENTER 0x2 </span>
-<a name="l00542"></a><a class="code" href="group__bitmapPositioningGroup.html#g84659ab46287e5b7047a03bc2d763408">00542</a> <span class="preprocessor">#define XY_POS_RIGHT 0x4 </span>
-<a name="l00543"></a><a class="code" href="group__bitmapPositioningGroup.html#g9f4383c8ea8478cef75b1d9550b60c3a">00543</a> <span class="preprocessor">#define XY_POS_BOTTOM 0x8 </span>
-<a name="l00551"></a><a class="code" href="group__bitmapScalingGroup.html#g1094c4010960be996339b3d71b70f3e1">00551</a> <span class="preprocessor">#define XY_SCALE_NONE 0 </span>
-<a name="l00552"></a><a class="code" href="group__bitmapScalingGroup.html#gd79696c8e5845cdf9abd70cc57a473cf">00552</a> <span class="preprocessor">#define XY_SCALE_STRETCH 1 </span>
-<a name="l00553"></a><a class="code" href="group__bitmapScalingGroup.html#ge470bfdafe8967178f03e5b7ce5ce50e">00553</a> <span class="preprocessor">#define XY_SCALE_KEEP_ASPECT_WIDE 2 </span>
-<a name="l00554"></a><a class="code" href="group__bitmapScalingGroup.html#gb7af629968506ccb492c0458e8c59c91">00554</a> <span class="preprocessor">#define XY_SCALE_KEEP_ASPECT_TALL 3 </span>
-<a name="l00570"></a>00570 <span class="preprocessor">void XY_default_options(XY_options * opts);</span>
-<a name="l00571"></a>00571 <span class="preprocessor"></span>
-<a name="l00582"></a>00582 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__optionsGroup.html#gfa3679a3ce5bbb1c1aaa1f506c3e4097" title="Load global, then local (user) libcrtxy config files into opts.">XY_load_options</a>(<a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts);
-<a name="l00583"></a>00583 
-<a name="l00602"></a>00602 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__optionsGroup.html#g94451c696821afe53384fd9a78222c48" title="Load arbitrary config file into opts.">XY_load_options_from_file</a>(<span class="keywordtype">char</span> * fname, <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts,
-<a name="l00603"></a>00603                                   <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> ignore_unknowns);
-<a name="l00604"></a>00604 
-<a name="l00616"></a>00616 <span class="keywordtype">int</span> <a class="code" href="group__optionsGroup.html#g3c68f8bed2898ef3567026fdf4624872" title="Parse libcrtxy-related command-line arguments into opts.">XY_parse_options</a>(<span class="keywordtype">int</span> * argc, <span class="keywordtype">char</span> * argv[], <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts);
-<a name="l00617"></a>00617 
-<a name="l00626"></a>00626 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__optionsGroup.html#gd9266332f25f1c215d6f3009f2369d6c" title="Read any libcrtxy-related environment variables into opts.">XY_parse_envvars</a>(<a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts);
-<a name="l00627"></a>00627 
-<a name="l00659"></a>00659 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__initGroup.html#g520773b682eecad2dea3ad4c471f7dd6" title="Initialize SDL (video only) and libcrtxy (with rendering and video options from opts)...">XY_init</a>(<a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> canvasw, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> canvash);
-<a name="l00660"></a>00660 
-<a name="l00664"></a>00664 <span class="keywordtype">void</span> <a class="code" href="group__initGroup.html#g5b9d74c39ed096c99d1de1a6faca01dc" title="Shut down libcrtxy and SDL.">XY_quit</a>(<span class="keywordtype">void</span>);
-<a name="l00665"></a>00665 
-<a name="l00678"></a>00678 <a class="code" href="group__errorGroup.html#g4fa409eabc88ed4f137259438f62b467">XY_err</a> <a class="code" href="group__errorGroup.html#ga271716114c372ad96188426cadf8241" title="Gets the most recent error code.">XY_errcode</a>(<span class="keywordtype">void</span>);
-<a name="l00679"></a>00679 
-<a name="l00686"></a>00686 <span class="keyword">const</span> <span class="keywordtype">char</span> * <a class="code" href="group__errorGroup.html#gd94c1918b78469904af4781352c407f4" title="Gets a string representing the most recent error code.">XY_errstr</a>(<span class="keywordtype">void</span>);
-<a name="l00687"></a>00687 
-<a name="l00695"></a>00695 <span class="keywordtype">void</span> <a class="code" href="group__errorGroup.html#gf5ff106def16629beda4778743df809c" title="Dumps options in opts to the file stream (eg, stderr or an opened logfile).">XY_print_options</a>(FILE * fi, <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> opts);
-<a name="l00696"></a>00696 
-<a name="l00714"></a>00714 <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * <a class="code" href="group__bitmapGroup.html#g68a75d2a7659faf9ba7ac421740856ed" title="Create a bitmap based on an image file.">XY_load_bitmap</a>(<span class="keywordtype">char</span> * filename);
-<a name="l00715"></a>00715 
-<a name="l00727"></a>00727 <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * <a class="code" href="group__bitmapGroup.html#g7c73d4eeb18ebf66c81633d9536a2e4b" title="Create a bitmap based on image data in a buffer.">XY_load_bitmap_from_buffer</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> * buffer, <span class="keywordtype">int</span> size);
-<a name="l00728"></a>00728 
-<a name="l00736"></a>00736 <span class="keywordtype">void</span> <a class="code" href="group__bitmapGroup.html#ge0329cd6e05777d194314559203829b8" title="Free a bitmap.">XY_free_bitmap</a>(<a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * bitmap);
-<a name="l00737"></a>00737 
-<a name="l00738"></a>00738 
-<a name="l00739"></a>00739 <span class="comment">/* - Setting background: - */</span>
+<a name="l00389"></a>00389 <span class="comment">/* Fixed-point math settings  */</span>
+<a name="l00390"></a>00390 
+<a name="l00391"></a><a class="code" href="group__XY__fixed__.html#g4c9a59884bef6674c7988dd0d08fe9ac">00391</a> <span class="preprocessor">#define XY_FIXED_SHIFT 16 </span>
+<a name="l00392"></a><a class="code" href="group__XY__fixed__.html#g7d789fee5273838f05cb5f7ba53321cc">00392</a> <span class="preprocessor">#define XY_FIXED_SHIFT_HALF 8 </span>
+<a name="l00393"></a><a class="code" href="group__XY__fixed__.html#g491966de233d94b4f590e55c05fd82e9">00393</a> <span class="preprocessor">#define XY_FIXED_ONE (1 &lt;&lt; XY_FIXED_SHIFT) </span>
+<a name="l00394"></a><a class="code" href="group__XY__fixed__.html#g33002220cbe175e97cfdaf1075b3f498">00394</a> <span class="preprocessor">#define XY_FIXED_HALF (1 &lt;&lt; (XY_FIXED_SHIFT - 1)) </span>
+<a name="l00396"></a>00396 <span class="preprocessor"></span><span class="comment">/* Limits for fixed-point values (for signed 32-bit ints) */</span>
+<a name="l00397"></a>00397 
+<a name="l00398"></a><a class="code" href="group__XY__fixed__.html#g50649caf7d181c81144633ee9611af64">00398</a> <span class="preprocessor">#define XY_FIXED_MAX 0x7FFFFFFF </span>
+<a name="l00399"></a><a class="code" href="group__XY__fixed__.html#g1d042c0ea3ab3d8d396cd24b0c31d5dc">00399</a> <span class="preprocessor">#define XY_FIXED_MIN -(0x80000000) </span>
+<a name="l00400"></a><a class="code" href="group__XY__fixed__.html#g7dba2b69c33f38f9d2c133057458f2ab">00400</a> <span class="preprocessor">#define XY_FIXED_NAN XY_FIXED_MAX </span>
+<a name="l00414"></a>00414 <span class="preprocessor"></span><span class="comment">/* Some standard thicknesses: */</span>
+<a name="l00415"></a>00415 
+<a name="l00416"></a><a class="code" href="group__XY__line__.html#g4cdfee23384299c00ceb86ed0d21d018">00416</a> <span class="preprocessor">#define XY_THIN XY_FIXED_ONE </span>
+<a name="l00421"></a><a class="code" href="structXY__line.html">00421</a> <span class="preprocessor">typedef struct XY_line_s {</span>
+<a name="l00422"></a><a class="code" href="structXY__line.html#3fa71d4bf41d65f0fdcb84dc083f0527">00422</a> <span class="preprocessor"></span>  XY_fixed x1; 
+<a name="l00423"></a><a class="code" href="structXY__line.html#03dd8c9669ec191b3eaa95bf7520f137">00423</a>   XY_fixed y1; 
+<a name="l00424"></a><a class="code" href="structXY__line.html#f8bb2d1da954a83c67f64e186a7c8276">00424</a>   XY_fixed x2; 
+<a name="l00425"></a><a class="code" href="structXY__line.html#6e7581049a2f3ef496755b1beb6df3c4">00425</a>   XY_fixed y2; 
+<a name="l00426"></a><a class="code" href="structXY__line.html#c4ec482907cd2fcd5e907cfaa8641989">00426</a>   XY_color color; 
+<a name="l00427"></a><a class="code" href="structXY__line.html#414e53ddaeee18757e9654722a7f72d8">00427</a>   XY_fixed thickness; 
+<a name="l00428"></a>00428 } <a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a>;
+<a name="l00429"></a>00429 
+<a name="l00433"></a><a class="code" href="structXY__lines.html">00433</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>XY_lines_s {
+<a name="l00434"></a><a class="code" href="structXY__lines.html#2b04b20e21019d3f8e89d6b03b45029d">00434</a>   <span class="keywordtype">int</span> count; 
+<a name="l00435"></a><a class="code" href="structXY__lines.html#c7e81d7440b299ee2de74ca1b5b10997">00435</a>   <span class="keywordtype">int</span> max; 
+<a name="l00436"></a><a class="code" href="structXY__lines.html#7ae7eaa086767281906ecce6052f5935">00436</a>   <a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> * lines; 
+<a name="l00437"></a>00437 } <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a>;
+<a name="l00438"></a>00438 
+<a name="l00442"></a><a class="code" href="group__XY__line__.html#gc5d4fdf2856d1add2e06b4d0827899cf">00442</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
+<a name="l00443"></a><a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cfc3a82b55c2f1f27095370bb6db904617">00443</a>   <a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cfc3a82b55c2f1f27095370bb6db904617" title="Lines do not intersect and are not parallel.">XY_INTERSECTION_NONE</a>, 
+<a name="l00444"></a><a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cf243a8b65889d0662f0222f1c41ae1de1">00444</a>   <a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cf243a8b65889d0662f0222f1c41ae1de1" title="Lines intersect at a point.">XY_INTERSECTION_INTERSECTING</a>, 
+<a name="l00445"></a><a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cffd3658f006a7f0634866b125afaa8249">00445</a>   <a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cffd3658f006a7f0634866b125afaa8249" title="Lines are parallel (do not intersect).">XY_INTERSECTION_PARALLEL</a>, 
+<a name="l00446"></a><a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cfb78c51bab1a6773def1123b1e5509a49">00446</a>   <a class="code" href="group__XY__line__.html#ggc5d4fdf2856d1add2e06b4d0827899cfb78c51bab1a6773def1123b1e5509a49" title="Lines are coincident (and, hence, intersect).">XY_INTERSECTION_COINCIDENT</a> 
+<a name="l00447"></a>00447 } <a class="code" href="group__XY__line__.html#gc5d4fdf2856d1add2e06b4d0827899cf" title="Line intersection results:.">XY_intersection</a>;
+<a name="l00448"></a>00448 
+<a name="l00459"></a><a class="code" href="group__libcrtxy__options.html#g7d8dbbc9a614cff31ee63e776128c625">00459</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
+<a name="l00460"></a><a class="code" href="group__libcrtxy__options.html#gg7d8dbbc9a614cff31ee63e776128c625e2eee5dd6a6433eaa51ea7a22518e6c8">00460</a>   <a class="code" href="group__libcrtxy__options.html#gg7d8dbbc9a614cff31ee63e776128c625e2eee5dd6a6433eaa51ea7a22518e6c8" title="Display in a window.">XY_OPT_WINDOWED</a>, 
+<a name="l00461"></a><a class="code" href="group__libcrtxy__options.html#gg7d8dbbc9a614cff31ee63e776128c62510a7d5a2339e35309c4b3a5babb6c7cd">00461</a>   <a class="code" href="group__libcrtxy__options.html#gg7d8dbbc9a614cff31ee63e776128c62510a7d5a2339e35309c4b3a5babb6c7cd" title="Fullscreen; fall back to window.">XY_OPT_FULLSCREEN_REQUEST</a>, 
+<a name="l00462"></a><a class="code" href="group__libcrtxy__options.html#gg7d8dbbc9a614cff31ee63e776128c625191aea2a11f0243996319668f2306e3c">00462</a>   <a class="code" href="group__libcrtxy__options.html#gg7d8dbbc9a614cff31ee63e776128c625191aea2a11f0243996319668f2306e3c" title="Fullscreen; abort if we cannot.">XY_OPT_FULLSCREEN_REQUIRED</a> 
+<a name="l00463"></a>00463 } <a class="code" href="group__libcrtxy__options.html#g7d8dbbc9a614cff31ee63e776128c625" title="Display settings for options.fullscreen.">XY_opt_fullscreen</a>;
+<a name="l00464"></a>00464 
+<a name="l00468"></a><a class="code" href="group__libcrtxy__options.html#g81ff2f45433a970c375f750f09bad12e">00468</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
+<a name="l00469"></a><a class="code" href="group__libcrtxy__options.html#gg81ff2f45433a970c375f750f09bad12eaa9a2952df0d8f45e1118e558edf3191">00469</a>   <a class="code" href="group__libcrtxy__options.html#gg81ff2f45433a970c375f750f09bad12eaa9a2952df0d8f45e1118e558edf3191" title="Combine current pixel with new pixel.">XY_OPT_ALPHA_BLEND</a>, 
+<a name="l00470"></a><a class="code" href="group__libcrtxy__options.html#gg81ff2f45433a970c375f750f09bad12e43f7715a5a5ce6bcf43a47b7b4fe7e14">00470</a>   <a class="code" href="group__libcrtxy__options.html#gg81ff2f45433a970c375f750f09bad12e43f7715a5a5ce6bcf43a47b7b4fe7e14" title="Combine background color with new pixel.">XY_OPT_ALPHA_FAKE</a>, 
+<a name="l00471"></a><a class="code" href="group__libcrtxy__options.html#gg81ff2f45433a970c375f750f09bad12e70f08b17be6db952ad83d92fc836fbde">00471</a>   <a class="code" href="group__libcrtxy__options.html#gg81ff2f45433a970c375f750f09bad12e70f08b17be6db952ad83d92fc836fbde" title="Just draw new pixel.">XY_OPT_ALPHA_OFF</a> 
+<a name="l00472"></a>00472 } <a class="code" href="group__libcrtxy__options.html#g81ff2f45433a970c375f750f09bad12e" title="Alpha-blending settings for options.alpha.">XY_opt_alpha</a>;
+<a name="l00473"></a>00473 
+<a name="l00477"></a><a class="code" href="group__libcrtxy__options.html#g68b79cb473b5c4bfb21ec522b2d8618e">00477</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
+<a name="l00478"></a><a class="code" href="group__libcrtxy__options.html#gg68b79cb473b5c4bfb21ec522b2d8618e967ff799ed086192a7d6d8fbb24bb451">00478</a>   <a class="code" href="group__libcrtxy__options.html#gg68b79cb473b5c4bfb21ec522b2d8618e967ff799ed086192a7d6d8fbb24bb451" title="Blend to smooth any stretching.">XY_OPT_SCALE_BEST</a>, 
+<a name="l00479"></a><a class="code" href="group__libcrtxy__options.html#gg68b79cb473b5c4bfb21ec522b2d8618ec442702874273f3504f07d75b5c23156">00479</a>   <a class="code" href="group__libcrtxy__options.html#gg68b79cb473b5c4bfb21ec522b2d8618ec442702874273f3504f07d75b5c23156" title="Stretch pixels with no blending.">XY_OPT_SCALE_FAST</a> 
+<a name="l00480"></a>00480 } <a class="code" href="group__libcrtxy__options.html#g68b79cb473b5c4bfb21ec522b2d8618e" title="Bitmap scaling quality settings for options.scaling.">XY_opt_scaling</a>;
+<a name="l00481"></a>00481 
+<a name="l00485"></a><a class="code" href="structXY__options.html">00485</a> <span class="keyword">typedef</span> <span class="keyword">struct </span>XY_options_s {
+<a name="l00486"></a><a class="code" href="structXY__options.html#ba07f666d9a8a2e83aa11b23b6e5e04b">00486</a>   <span class="keywordtype">int</span> displayw;  
+<a name="l00487"></a><a class="code" href="structXY__options.html#4068b8b5fec2f7fd12858ae6f57289e4">00487</a>   <span class="keywordtype">int</span> displayh;  
+<a name="l00488"></a><a class="code" href="structXY__options.html#ec996a69635084d94656fae43de32b83">00488</a>   <span class="keywordtype">int</span> displaybpp; 
+<a name="l00489"></a><a class="code" href="structXY__options.html#830b78650252e1bcfc7c73b7e8e89e90">00489</a>   <a class="code" href="group__libcrtxy__options.html#g7d8dbbc9a614cff31ee63e776128c625" title="Display settings for options.fullscreen.">XY_opt_fullscreen</a> fullscreen; 
+<a name="l00490"></a><a class="code" href="structXY__options.html#ec17a0f85edaa6c93a039c42377156f2">00490</a>   <a class="code" href="group__libcrtxy__options.html#g81ff2f45433a970c375f750f09bad12e" title="Alpha-blending settings for options.alpha.">XY_opt_alpha</a> alpha;  
+<a name="l00491"></a><a class="code" href="structXY__options.html#eb3e1ac461c08868556840a7c70f8567">00491</a>   <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> antialias;  
+<a name="l00492"></a><a class="code" href="structXY__options.html#17b062c6312dcb16adbc96fc07ff7056">00492</a>   <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> gamma_correction;  
+<a name="l00493"></a><a class="code" href="structXY__options.html#c402ebcf11e512c812f79e1debb2af79">00493</a>   <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> blur;  
+<a name="l00494"></a><a class="code" href="structXY__options.html#a25692412e96ac4ae66186eb47e69d88">00494</a>   <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> additive;  
+<a name="l00495"></a><a class="code" href="structXY__options.html#edbec7dec05aa21212e8c8065c6ecfd0">00495</a>   <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> backgrounds;  
+<a name="l00496"></a><a class="code" href="structXY__options.html#b114f2ee4325a449f16684ce075f4b24">00496</a>   <a class="code" href="group__libcrtxy__options.html#g68b79cb473b5c4bfb21ec522b2d8618e" title="Bitmap scaling quality settings for options.scaling.">XY_opt_scaling</a> scaling;  
+<a name="l00497"></a>00497 } <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a>;
+<a name="l00498"></a>00498 
+<a name="l00503"></a><a class="code" href="group__libcrtxy__options.html#g449d7dabacfe4501a18d2d1f8a6d5727">00503</a> <span class="preprocessor">#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf"</span>
+<a name="l00504"></a>00504 <span class="preprocessor"></span>
+<a name="l00508"></a><a class="code" href="group__libcrtxy__options.html#g8a2d52a8dd709bad8e154ff29347d564">00508</a> <span class="preprocessor">#define XY_INIT_LIB_CONFIG_FILE_LOCAL ".libcrtxyrc"</span>
+<a name="l00509"></a>00509 <span class="preprocessor"></span>
+<a name="l00516"></a><a class="code" href="group__XY__err__.html#g4fa409eabc88ed4f137259438f62b467">00516</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> {
+<a name="l00517"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b467296a3122a97e95dd5ce5ce532c90e8e3">00517</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b467296a3122a97e95dd5ce5ce532c90e8e3" title="No error.">XY_ERR_NONE</a>, 
+<a name="l00518"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651">00518</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4674b6b5e1e3fa36ccec7fdeb7b53763651" title="Bad value to an option.">XY_ERR_OPTION_BAD</a>, 
+<a name="l00519"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4677ca11232f4179b5479a32703cbf01e78">00519</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4677ca11232f4179b5479a32703cbf01e78" title="Unrecognized option.">XY_ERR_OPTION_UNKNOWN</a>, 
+<a name="l00520"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4675586ad34de6aa73248765e9d76abb01a">00520</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4675586ad34de6aa73248765e9d76abb01a" title="Cannot open file.">XY_ERR_FILE_CANT_OPEN</a>, 
+<a name="l00521"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04">00521</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4673ec1cdce928d1d801ee3ef707e22df04" title="Cannot allocate memory.">XY_ERR_MEM_CANT_ALLOC</a>, 
+<a name="l00522"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4672191b54c37c0ea2ff852873432850aff">00522</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4672191b54c37c0ea2ff852873432850aff" title="Cannot initialize video subsystem.">XY_ERR_INIT_VIDEO</a>, 
+<a name="l00523"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b467130405149a87c5fd99a8dca242ea1d79">00523</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b467130405149a87c5fd99a8dca242ea1d79" title="Cannot open display.">XY_ERR_INIT_DISPLAY</a>, 
+<a name="l00524"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b46729791411a863d28d9a48708bfd84fe5c">00524</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b46729791411a863d28d9a48708bfd84fe5c" title="Unsupported (so far as we&amp;#39;re concerned) bpp.">XY_ERR_INIT_UNSUPPORTED_BPP</a>, 
+<a name="l00525"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b467f074ed1612f3b0453cb9a002c16a8ae3">00525</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b467f074ed1612f3b0453cb9a002c16a8ae3" title="Error decoding image file (IMG_Load failed).">XY_ERR_BITMAP_CANT_DECODE</a>, 
+<a name="l00526"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4673951d09b1044d269606c488a75edf151">00526</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4673951d09b1044d269606c488a75edf151" title="Cannot convert a surface to the display fmt.">XY_ERR_BITMAP_CANT_CONVERT</a>, 
+<a name="l00527"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b46740b0b690c11f8154b3abe524b4924e03">00527</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b46740b0b690c11f8154b3abe524b4924e03" title="Cannot scale an image (probably mem.">XY_ERR_BITMAP_CANT_SCALE</a>, 
+<a name="l00528"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e">00528</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b4671215ddd02aeeef7fabd97531f595188e" title="Invalid (NULL?) group of lines.">XY_ERR_LINES_INVALID</a>, 
+<a name="l00529"></a><a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b46785e880b7b8dedb70fdc57ab35eb90c1a">00529</a>   <a class="code" href="group__XY__err__.html#gg4fa409eabc88ed4f137259438f62b46785e880b7b8dedb70fdc57ab35eb90c1a">NUM_XY_ERRS</a>
+<a name="l00530"></a>00530 } <a class="code" href="group__XY__err__.html#g4fa409eabc88ed4f137259438f62b467">XY_err</a>;
+<a name="l00531"></a>00531 
+<a name="l00540"></a><a class="code" href="group__XY__POS__TOP__.html#g2cbcc34162e79ca642e5f3402bf92f2d">00540</a> <span class="preprocessor">#define XY_POS_TOP 0x0 </span>
+<a name="l00541"></a><a class="code" href="group__XY__POS__TOP__.html#g2fb8f573c7c2ac7ff59011446f27d3ce">00541</a> <span class="preprocessor">#define XY_POS_LEFT 0x0 </span>
+<a name="l00542"></a><a class="code" href="group__XY__POS__TOP__.html#g1faea8bb460d6d9128898094940c2ca9">00542</a> <span class="preprocessor">#define XY_POS_HCENTER 0x1 </span>
+<a name="l00543"></a><a class="code" href="group__XY__POS__TOP__.html#g750519ccc289cda020e515ab1f4dadde">00543</a> <span class="preprocessor">#define XY_POS_VCENTER 0x2 </span>
+<a name="l00544"></a><a class="code" href="group__XY__POS__TOP__.html#g84659ab46287e5b7047a03bc2d763408">00544</a> <span class="preprocessor">#define XY_POS_RIGHT 0x4 </span>
+<a name="l00545"></a><a class="code" href="group__XY__POS__TOP__.html#g9f4383c8ea8478cef75b1d9550b60c3a">00545</a> <span class="preprocessor">#define XY_POS_BOTTOM 0x8 </span>
+<a name="l00553"></a><a class="code" href="group__XY__SCALE__NONE__.html#g1094c4010960be996339b3d71b70f3e1">00553</a> <span class="preprocessor">#define XY_SCALE_NONE 0 </span>
+<a name="l00554"></a><a class="code" href="group__XY__SCALE__NONE__.html#gd79696c8e5845cdf9abd70cc57a473cf">00554</a> <span class="preprocessor">#define XY_SCALE_STRETCH 1 </span>
+<a name="l00555"></a><a class="code" href="group__XY__SCALE__NONE__.html#ge470bfdafe8967178f03e5b7ce5ce50e">00555</a> <span class="preprocessor">#define XY_SCALE_KEEP_ASPECT_WIDE 2 </span>
+<a name="l00556"></a><a class="code" href="group__XY__SCALE__NONE__.html#gb7af629968506ccb492c0458e8c59c91">00556</a> <span class="preprocessor">#define XY_SCALE_KEEP_ASPECT_TALL 3 </span>
+<a name="l00572"></a>00572 <span class="preprocessor">void XY_default_options(XY_options * opts);</span>
+<a name="l00573"></a>00573 <span class="preprocessor"></span>
+<a name="l00584"></a>00584 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__libcrtxy.html#gfa3679a3ce5bbb1c1aaa1f506c3e4097" title="Load global, then local (user) libcrtxy config files into opts.">XY_load_options</a>(<a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts);
+<a name="l00585"></a>00585 
+<a name="l00604"></a>00604 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__libcrtxy.html#g94451c696821afe53384fd9a78222c48" title="Load arbitrary config file into opts.">XY_load_options_from_file</a>(<span class="keywordtype">char</span> * fname, <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts,
+<a name="l00605"></a>00605                                   <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> ignore_unknowns);
+<a name="l00606"></a>00606 
+<a name="l00618"></a>00618 <span class="keywordtype">int</span> <a class="code" href="group__libcrtxy.html#g3c68f8bed2898ef3567026fdf4624872" title="Parse libcrtxy-related command-line arguments into opts.">XY_parse_options</a>(<span class="keywordtype">int</span> * argc, <span class="keywordtype">char</span> * argv[], <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts);
+<a name="l00619"></a>00619 
+<a name="l00628"></a>00628 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__libcrtxy.html#gd9266332f25f1c215d6f3009f2369d6c" title="Read any libcrtxy-related environment variables into opts.">XY_parse_envvars</a>(<a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts);
+<a name="l00629"></a>00629 
+<a name="l00661"></a>00661 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__init__.html#g520773b682eecad2dea3ad4c471f7dd6" title="Initialize SDL (video only) and libcrtxy (with rendering and video options from opts)...">XY_init</a>(<a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> * opts, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> canvasw, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> canvash);
+<a name="l00662"></a>00662 
+<a name="l00666"></a>00666 <span class="keywordtype">void</span> <a class="code" href="group__XY__init__.html#g5b9d74c39ed096c99d1de1a6faca01dc" title="Shut down libcrtxy and SDL.">XY_quit</a>(<span class="keywordtype">void</span>);
+<a name="l00667"></a>00667 
+<a name="l00680"></a>00680 <a class="code" href="group__XY__err__.html#g4fa409eabc88ed4f137259438f62b467">XY_err</a> <a class="code" href="group__XY__err__.html#ga271716114c372ad96188426cadf8241" title="Gets the most recent error code.">XY_errcode</a>(<span class="keywordtype">void</span>);
+<a name="l00681"></a>00681 
+<a name="l00688"></a>00688 <span class="keyword">const</span> <span class="keywordtype">char</span> * <a class="code" href="group__XY__err__.html#gd94c1918b78469904af4781352c407f4" title="Gets a string representing the most recent error code.">XY_errstr</a>(<span class="keywordtype">void</span>);
+<a name="l00689"></a>00689 
+<a name="l00697"></a>00697 <span class="keywordtype">void</span> <a class="code" href="group__XY__err__.html#gf5ff106def16629beda4778743df809c" title="Dumps options in opts to the file stream (eg, stderr or an opened logfile).">XY_print_options</a>(FILE * fi, <a class="code" href="structXY__options.html" title="Structure containing libcrtxy options (rendering level, screen size, etc.">XY_options</a> opts);
+<a name="l00698"></a>00698 
+<a name="l00716"></a>00716 <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * <a class="code" href="group__XY__bitmap__.html#g68a75d2a7659faf9ba7ac421740856ed" title="Create a bitmap based on an image file.">XY_load_bitmap</a>(<span class="keywordtype">char</span> * filename);
+<a name="l00717"></a>00717 
+<a name="l00729"></a>00729 <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * <a class="code" href="group__XY__bitmap__.html#g7c73d4eeb18ebf66c81633d9536a2e4b" title="Create a bitmap based on image data in a buffer.">XY_load_bitmap_from_buffer</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> * buffer, <span class="keywordtype">int</span> size);
+<a name="l00730"></a>00730 
+<a name="l00738"></a>00738 <span class="keywordtype">void</span> <a class="code" href="group__XY__bitmap__.html#ge0329cd6e05777d194314559203829b8" title="Free a bitmap.">XY_free_bitmap</a>(<a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * bitmap);
+<a name="l00739"></a>00739 
 <a name="l00740"></a>00740 
-<a name="l00775"></a>00775 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__bitmapGroup.html#g8633e7028cc5b9452598519420c97cde" title="Set the background color, and optional bitmap, its position, and options for scaling...">XY_set_background</a>(<a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * bitmap,
-<a name="l00776"></a>00776                           <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y, <span class="keywordtype">int</span> posflags, <span class="keywordtype">int</span> scaling);
-<a name="l00777"></a>00777 
-<a name="l00784"></a>00784 <span class="keywordtype">void</span> <a class="code" href="group__bitmapGroup.html#g272611caa1b6d0d27f3dac94f796ef52" title="Enable or disable the background bitmap (affects next frame).">XY_enable_background</a>(<a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> enable);
-<a name="l00785"></a>00785 
-<a name="l00802"></a>00802 <a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> <a class="code" href="group__colorGroup.html#g9ea71e06b087beb2b5581b3c00b1a35c" title="Combines values for R, G, B and A components into an XY_color.">XY_setcolor</a>(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-<a name="l00803"></a>00803 
-<a name="l00814"></a>00814 <span class="keywordtype">void</span> <a class="code" href="group__colorGroup.html#g37fdef0e0baf47e25bc9735e2684e4e4" title="Breaks an XY_color into its R, G, B and A components.">XY_getcolor</a>(<a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a);
-<a name="l00815"></a>00815 
-<a name="l00830"></a>00830 <span class="keywordtype">void</span> <a class="code" href="group__frameGroup.html#gfb0667323eb7ab4aeae9a3c435961911" title="Mark the start of a frame.">XY_start_frame</a>(<span class="keywordtype">int</span> fps);
-<a name="l00831"></a>00831 
-<a name="l00849"></a>00849 <span class="keywordtype">int</span> <a class="code" href="group__frameGroup.html#gac89da321b3c4960bfb4f8de66100fef" title="Mark the end of a frame.">XY_end_frame</a>(<a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> throttle);
-<a name="l00850"></a>00850 
-<a name="l00864"></a>00864 <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * <a class="code" href="group__lineCollectionGroup.html#g1a03c47c04f618ad8c5edba6c2241f2d" title="Create a new line collection.">XY_new_lines</a>(<span class="keywordtype">void</span>);
-<a name="l00865"></a>00865 
-<a name="l00875"></a>00875 <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * <a class="code" href="group__lineCollectionGroup.html#gf9d26a65f96dadc42362734b866d049b" title="Duplicates a collection.">XY_duplicate_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
-<a name="l00876"></a>00876 
-<a name="l00887"></a>00887 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__lineCollectionGroup.html#gae7e7e7bde0c1c29dad1913c8d5e4854" title="Free a line collection.">XY_free_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
-<a name="l00888"></a>00888 
-<a name="l00899"></a>00899 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__lineCollectionGroup.html#gd806d25cf569c098e80664c058289f3d" title="Reset a line collection so that it contains no lines.">XY_start_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
-<a name="l00900"></a>00900 
-<a name="l00918"></a>00918 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__lineCollectionGroup.html#g23e0b93545ec1c507cbeff5bc2373347" title="Add a line to a line collection.">XY_add_line</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines,
-<a name="l00919"></a>00919                     <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x1, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y1, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x2, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y2,
-<a name="l00920"></a>00920                     <a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> thickness);
-<a name="l00921"></a>00921 
-<a name="l00935"></a>00935 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__lineCollectionGroup.html#g1be6e2599d980d4ac09689b2fed17aac" title="Translate all lines within a collection.">XY_translate_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines,
-<a name="l00936"></a>00936                            <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y);
-<a name="l00937"></a>00937 
-<a name="l00949"></a>00949 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__lineCollectionGroup.html#g20daec25e33843875276590608965f20" title="Scale all lines within a collection (centered around the origin (0,0)).">XY_scale_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> xscale, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> yscale);
-<a name="l00950"></a>00950 
-<a name="l00962"></a>00962 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__lineCollectionGroup.html#geede2bb69a172168a61e24cf8fbcb721" title="Rotate all lines within a collection (centered around the origin (0,0)).">XY_rotate_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines, <span class="keywordtype">int</span> angle);
-<a name="l00963"></a>00963 
-<a name="l00985"></a>00985 <span class="keywordtype">void</span> <a class="code" href="group__drawingGroup.html#ga49eca76736b8709da4c976070e6b4f5" title="Draw a single line between (x1,y1) and (x2,y2) (in canvas virtual world units) and...">XY_draw_line</a>(<a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x1, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y1, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x2, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y2,
-<a name="l00986"></a>00986                   <a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> thickness);
-<a name="l00987"></a>00987 
-<a name="l00996"></a>00996 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__drawingGroup.html#ga28418dabe18d59ee4d2c989d803b09c" title="Draw a collection of lines.">XY_draw_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
-<a name="l00997"></a>00997 
-<a name="l01003"></a>01003 <span class="keywordtype">void</span> <a class="code" href="group__drawingGroup.html#gd0693d8c763c98860fb5d47c42b1832a" title="Draw a single line using an XY_line struct.">XY_draw_one_line</a>(<a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> line);
-<a name="l01004"></a>01004 
-<a name="l01015"></a>01015 <span class="keywordtype">void</span> <a class="code" href="group__drawingGroup.html#g6e769eed2fa296430e8d0661cd857bae" title="Draw a point at (x,y) (in canvas virtual world units) in the specified color/alpha...">XY_draw_point</a>(<a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y, <a class="code" href="group__colorGroup.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> thickness);
-<a name="l01016"></a>01016 
-<a name="l01032"></a><a class="code" href="group__fixedMathGroup.html#gf05c9edd71aac11022c56f9d54dae3ae">01032</a> <span class="preprocessor">#define XY_mult(a,b) (((a) &gt;&gt; XY_FIXED_SHIFT_HALF) * \</span>
-<a name="l01033"></a>01033 <span class="preprocessor">                      ((b) &gt;&gt; XY_FIXED_SHIFT_HALF))</span>
-<a name="l01034"></a>01034 <span class="preprocessor"></span>
-<a name="l01042"></a><a class="code" href="group__fixedMathGroup.html#g00d0d8c600d3c476ba8706b1ec7cf753">01042</a> <span class="preprocessor">#define XY_qdiv(a,b) (((a) / \</span>
-<a name="l01043"></a>01043 <span class="preprocessor">                       ((b) &gt;&gt; XY_FIXED_SHIFT_HALF)) \</span>
-<a name="l01044"></a>01044 <span class="preprocessor">                      &lt;&lt; XY_FIXED_SHIFT_HALF)</span>
-<a name="l01045"></a>01045 <span class="preprocessor"></span>
-<a name="l01055"></a><a class="code" href="group__fixedMathGroup.html#gf2b75c7937f4c8a02a604ee8c157e557">01055</a> <span class="preprocessor">#define XY_div(a,b) (((b) &gt;&gt; XY_FIXED_SHIFT_HALF) == 0 ? \</span>
-<a name="l01056"></a>01056 <span class="preprocessor">                     XY_FIXED_NAN : XY_qdiv((a),(b)))</span>
-<a name="l01057"></a>01057 <span class="preprocessor"></span>
-<a name="l01063"></a><a class="code" href="group__fixedMathGroup.html#g88978433a0508924b675cf20cab0c2e8">01063</a> <span class="preprocessor">#define XY_FIXED_DIV_ZERO ((1 &lt;&lt; XY_FIXED_SHIFT_HALF) - 1)</span>
-<a name="l01064"></a>01064 <span class="preprocessor"></span>
-<a name="l01068"></a><a class="code" href="group__fixedMathGroup.html#g81d37a8d66fcb10cb35fe4011389f7fe">01068</a> <span class="preprocessor">#define XY_fpart(a) ((a) &amp; (XY_FIXED_ONE - 1))</span>
-<a name="l01069"></a>01069 <span class="preprocessor"></span>
-<a name="l01073"></a><a class="code" href="group__fixedMathGroup.html#g7d3110fd151a058c0c51c96d4cabc719">01073</a> <span class="preprocessor">#define XY_rfpart(a) (XY_FIXED_ONE - XY_fpart(a))</span>
-<a name="l01074"></a>01074 <span class="preprocessor"></span>
-<a name="l01078"></a><a class="code" href="group__fixedMathGroup.html#g33d1a42ebe7c8a791f70b5d80377b55d">01078</a> <span class="preprocessor">#define XY_ipart(a) ((a) - XY_fpart(a))</span>
-<a name="l01079"></a>01079 <span class="preprocessor"></span>
-<a name="l01083"></a><a class="code" href="group__fixedMathGroup.html#g7c593f4e3e975a8467cead126a88ffc1">01083</a> <span class="preprocessor">#define XY_round(a) (XY_ipart((a) + (1 &lt;&lt; (XY_FIXED_SHIFT - 1))))</span>
-<a name="l01084"></a>01084 <span class="preprocessor"></span>
-<a name="l01092"></a>01092 <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__fixedMathGroup.html#g8d9a2ef2c6c2c7349e315c4f9f5a4f53" title="Returns cosine() of &amp;#39;degrees&amp;#39;.">XY_cos</a>(<span class="keywordtype">int</span> degrees);
-<a name="l01093"></a>01093 
-<a name="l01101"></a><a class="code" href="group__fixedMathGroup.html#g7887a18654cef93f859df1d9f84ef468">01101</a> <span class="preprocessor">#define XY_sin(degrees) (XY_cos(90 - (degrees)))</span>
-<a name="l01102"></a>01102 <span class="preprocessor"></span>
-<a name="l01118"></a>01118 <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__screenToCanvasGroup.html#g3c8ed254995ba15cb763e467c528e6b7" title="Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas...">XY_screenx_to_canvasx</a>(<span class="keywordtype">int</span> sx);
-<a name="l01119"></a>01119 
-<a name="l01128"></a>01128 <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__screenToCanvasGroup.html#g11d6ea7ce587c081e05fca0560013820" title="Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas...">XY_screeny_to_canvasy</a>(<span class="keywordtype">int</span> sy);
-<a name="l01129"></a>01129 
-<a name="l01141"></a>01141 <span class="keywordtype">void</span> <a class="code" href="group__screenToCanvasGroup.html#ge655c8d76670ce2fb5360bcc5a13b6dc" title="Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas...">XY_screen_to_canvas</a>(<span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * cx, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * cy);
-<a name="l01142"></a>01142 
-<a name="l01150"></a>01150 <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__screenToCanvasGroup.html#g7ec052dee1d62ebb6cdab51aa6decd96" title="Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate...">XY_canvasx_to_screenx</a>(<span class="keywordtype">int</span> cx);
-<a name="l01151"></a>01151 
-<a name="l01159"></a>01159 <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__screenToCanvasGroup.html#gad7da6f7aa629e7579eb4d0f11fdf3a4" title="Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate...">XY_canvasy_to_screeny</a>(<span class="keywordtype">int</span> cy);
-<a name="l01160"></a>01160 
-<a name="l01172"></a>01172 <span class="keywordtype">void</span> <a class="code" href="group__screenToCanvasGroup.html#gb5b4f8471210b28522f705ccc0fb5ab6" title="Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate...">XY_canvas_to_screen</a>(<a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> cx, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> cy, <span class="keywordtype">int</span> * sx, <span class="keywordtype">int</span> * sy);
-<a name="l01173"></a>01173 
-<a name="l01179"></a>01179 <span class="keywordtype">int</span> <a class="code" href="group__screenToCanvasGroup.html#gfd795ebf15751948ff49609b6eb175b8" title="Returns the screen&amp;#39;s current width, in pixels (integer).">XY_get_screenw</a>(<span class="keywordtype">void</span>);
-<a name="l01180"></a>01180 
-<a name="l01186"></a>01186 <span class="keywordtype">int</span> <a class="code" href="group__screenToCanvasGroup.html#gd6ddaf7b970f7592579e432bad9cef22" title="Returns the screen&amp;#39;s current height, in pixels (integer).">XY_get_screenh</a>(<span class="keywordtype">void</span>);
-<a name="l01187"></a>01187 
-<a name="l01213"></a>01213 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__intersectionGroup.html#gcca39a24ad05750a69276b6173a0e0d6" title="Returns whether two lines intersect.">XY_lines_intersect</a>(<a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> line1, <a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> line2,
-<a name="l01214"></a>01214                            <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * intersect_x, <a class="code" href="group__fixedGroup.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * intersect_y,
-<a name="l01215"></a>01215                            <a class="code" href="group__geometryGroup.html#gc5d4fdf2856d1add2e06b4d0827899cf" title="Line intersection results:.">XY_intersection</a> * result);
-<a name="l01216"></a>01216 
-<a name="l01225"></a>01225 <a class="code" href="group__generalGroup.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__intersectionGroup.html#g178b4538f0c90057aa60d943324c0d4f" title="Returns whether any lines in one group intersect any lines in another.">XY_line_groups_intersect</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines1, <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines2);
-<a name="l01226"></a>01226 
-<a name="l01229"></a>01229 <span class="preprocessor">#ifdef __cplusplus</span>
-<a name="l01230"></a>01230 <span class="preprocessor"></span>}
-<a name="l01231"></a>01231 <span class="preprocessor">#endif</span>
-<a name="l01232"></a>01232 <span class="preprocessor"></span>
-<a name="l01233"></a>01233 <span class="preprocessor">#endif </span><span class="comment">/* _CRTXY_H */</span>
+<a name="l00741"></a>00741 <span class="comment">/* - Setting background: - */</span>
+<a name="l00742"></a>00742 
+<a name="l00777"></a>00777 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__bitmap__.html#g8633e7028cc5b9452598519420c97cde" title="Set the background color, and optional bitmap, its position, and options for scaling...">XY_set_background</a>(<a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="structXY__bitmap.html" title="Bitmap type.">XY_bitmap</a> * bitmap,
+<a name="l00778"></a>00778                           <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y, <span class="keywordtype">int</span> posflags, <span class="keywordtype">int</span> scaling);
+<a name="l00779"></a>00779 
+<a name="l00786"></a>00786 <span class="keywordtype">void</span> <a class="code" href="group__XY__bitmap__.html#g272611caa1b6d0d27f3dac94f796ef52" title="Enable or disable the background bitmap (affects next frame).">XY_enable_background</a>(<a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> enable);
+<a name="l00787"></a>00787 
+<a name="l00804"></a>00804 <a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> <a class="code" href="group__XY__color__.html#g9ea71e06b087beb2b5581b3c00b1a35c" title="Combines values for R, G, B and A components into an XY_color.">XY_setcolor</a>(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+<a name="l00805"></a>00805 
+<a name="l00816"></a>00816 <span class="keywordtype">void</span> <a class="code" href="group__XY__color__.html#g37fdef0e0baf47e25bc9735e2684e4e4" title="Breaks an XY_color into its R, G, B and A components.">XY_getcolor</a>(<a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> c, Uint8 * r, Uint8 * g, Uint8 * b, Uint8 * a);
+<a name="l00817"></a>00817 
+<a name="l00832"></a>00832 <span class="keywordtype">void</span> <a class="code" href="group__XY__start__frame__.html#gfb0667323eb7ab4aeae9a3c435961911" title="Mark the start of a frame.">XY_start_frame</a>(<span class="keywordtype">int</span> fps);
+<a name="l00833"></a>00833 
+<a name="l00851"></a>00851 <span class="keywordtype">int</span> <a class="code" href="group__XY__start__frame__.html#gac89da321b3c4960bfb4f8de66100fef" title="Mark the end of a frame.">XY_end_frame</a>(<a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> throttle);
+<a name="l00852"></a>00852 
+<a name="l00866"></a>00866 <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * <a class="code" href="group__XY__lines__.html#g1a03c47c04f618ad8c5edba6c2241f2d" title="Create a new line collection.">XY_new_lines</a>(<span class="keywordtype">void</span>);
+<a name="l00867"></a>00867 
+<a name="l00877"></a>00877 <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * <a class="code" href="group__XY__lines__.html#gf9d26a65f96dadc42362734b866d049b" title="Duplicates a collection.">XY_duplicate_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
+<a name="l00878"></a>00878 
+<a name="l00889"></a>00889 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__.html#gae7e7e7bde0c1c29dad1913c8d5e4854" title="Free a line collection.">XY_free_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
+<a name="l00890"></a>00890 
+<a name="l00901"></a>00901 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__.html#gd806d25cf569c098e80664c058289f3d" title="Reset a line collection so that it contains no lines.">XY_start_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
+<a name="l00902"></a>00902 
+<a name="l00920"></a>00920 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__.html#g23e0b93545ec1c507cbeff5bc2373347" title="Add a line to a line collection.">XY_add_line</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines,
+<a name="l00921"></a>00921                     <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x1, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y1, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x2, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y2,
+<a name="l00922"></a>00922                     <a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> thickness);
+<a name="l00923"></a>00923 
+<a name="l00937"></a>00937 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__.html#g1be6e2599d980d4ac09689b2fed17aac" title="Translate all lines within a collection.">XY_translate_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines,
+<a name="l00938"></a>00938                            <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y);
+<a name="l00939"></a>00939 
+<a name="l00951"></a>00951 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__.html#g20daec25e33843875276590608965f20" title="Scale all lines within a collection (centered around the origin (0,0)).">XY_scale_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> xscale, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> yscale);
+<a name="l00952"></a>00952 
+<a name="l00964"></a>00964 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__.html#geede2bb69a172168a61e24cf8fbcb721" title="Rotate all lines within a collection (centered around the origin (0,0)).">XY_rotate_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines, <span class="keywordtype">int</span> angle);
+<a name="l00965"></a>00965 
+<a name="l00987"></a>00987 <span class="keywordtype">void</span> <a class="code" href="group__XY__draw__line__.html#ga49eca76736b8709da4c976070e6b4f5" title="Draw a single line between (x1,y1) and (x2,y2) (in canvas virtual world units) and...">XY_draw_line</a>(<a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x1, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y1, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x2, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y2,
+<a name="l00988"></a>00988                   <a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> thickness);
+<a name="l00989"></a>00989 
+<a name="l00998"></a>00998 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__draw__line__.html#ga28418dabe18d59ee4d2c989d803b09c" title="Draw a collection of lines.">XY_draw_lines</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines);
+<a name="l00999"></a>00999 
+<a name="l01005"></a>01005 <span class="keywordtype">void</span> <a class="code" href="group__XY__draw__line__.html#gd0693d8c763c98860fb5d47c42b1832a" title="Draw a single line using an XY_line struct.">XY_draw_one_line</a>(<a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> line);
+<a name="l01006"></a>01006 
+<a name="l01017"></a>01017 <span class="keywordtype">void</span> <a class="code" href="group__XY__draw__line__.html#g6e769eed2fa296430e8d0661cd857bae" title="Draw a point at (x,y) (in canvas virtual world units) in the specified color/alpha...">XY_draw_point</a>(<a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> x, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> y, <a class="code" href="group__XY__color__.html#gb3d90b95fe77988c4e18c9293512446d" title="Color type.">XY_color</a> color, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> thickness);
+<a name="l01018"></a>01018 
+<a name="l01034"></a><a class="code" href="group__XY__fixed__functions.html#gf05c9edd71aac11022c56f9d54dae3ae">01034</a> <span class="preprocessor">#define XY_mult(a,b) (((a) &gt;&gt; XY_FIXED_SHIFT_HALF) * \</span>
+<a name="l01035"></a>01035 <span class="preprocessor">                      ((b) &gt;&gt; XY_FIXED_SHIFT_HALF))</span>
+<a name="l01036"></a>01036 <span class="preprocessor"></span>
+<a name="l01044"></a><a class="code" href="group__XY__fixed__functions.html#g00d0d8c600d3c476ba8706b1ec7cf753">01044</a> <span class="preprocessor">#define XY_qdiv(a,b) (((a) / \</span>
+<a name="l01045"></a>01045 <span class="preprocessor">                       ((b) &gt;&gt; XY_FIXED_SHIFT_HALF)) \</span>
+<a name="l01046"></a>01046 <span class="preprocessor">                      &lt;&lt; XY_FIXED_SHIFT_HALF)</span>
+<a name="l01047"></a>01047 <span class="preprocessor"></span>
+<a name="l01057"></a><a class="code" href="group__XY__fixed__functions.html#gf2b75c7937f4c8a02a604ee8c157e557">01057</a> <span class="preprocessor">#define XY_div(a,b) (((b) &gt;&gt; XY_FIXED_SHIFT_HALF) == 0 ? \</span>
+<a name="l01058"></a>01058 <span class="preprocessor">                     XY_FIXED_NAN : XY_qdiv((a),(b)))</span>
+<a name="l01059"></a>01059 <span class="preprocessor"></span>
+<a name="l01065"></a><a class="code" href="group__XY__fixed__functions.html#g88978433a0508924b675cf20cab0c2e8">01065</a> <span class="preprocessor">#define XY_FIXED_DIV_ZERO ((1 &lt;&lt; XY_FIXED_SHIFT_HALF) - 1)</span>
+<a name="l01066"></a>01066 <span class="preprocessor"></span>
+<a name="l01070"></a><a class="code" href="group__XY__fixed__functions.html#g81d37a8d66fcb10cb35fe4011389f7fe">01070</a> <span class="preprocessor">#define XY_fpart(a) ((a) &amp; (XY_FIXED_ONE - 1))</span>
+<a name="l01071"></a>01071 <span class="preprocessor"></span>
+<a name="l01075"></a><a class="code" href="group__XY__fixed__functions.html#g7d3110fd151a058c0c51c96d4cabc719">01075</a> <span class="preprocessor">#define XY_rfpart(a) (XY_FIXED_ONE - XY_fpart(a))</span>
+<a name="l01076"></a>01076 <span class="preprocessor"></span>
+<a name="l01080"></a><a class="code" href="group__XY__fixed__functions.html#g33d1a42ebe7c8a791f70b5d80377b55d">01080</a> <span class="preprocessor">#define XY_ipart(a) ((a) - XY_fpart(a))</span>
+<a name="l01081"></a>01081 <span class="preprocessor"></span>
+<a name="l01085"></a><a class="code" href="group__XY__fixed__functions.html#g7c593f4e3e975a8467cead126a88ffc1">01085</a> <span class="preprocessor">#define XY_round(a) (XY_ipart((a) + (1 &lt;&lt; (XY_FIXED_SHIFT - 1))))</span>
+<a name="l01086"></a>01086 <span class="preprocessor"></span>
+<a name="l01094"></a>01094 <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__XY__fixed__functions.html#g8d9a2ef2c6c2c7349e315c4f9f5a4f53" title="Returns cosine() of &amp;#39;degrees&amp;#39;.">XY_cos</a>(<span class="keywordtype">int</span> degrees);
+<a name="l01095"></a>01095 
+<a name="l01103"></a><a class="code" href="group__XY__fixed__functions.html#g7887a18654cef93f859df1d9f84ef468">01103</a> <span class="preprocessor">#define XY_sin(degrees) (XY_cos(90 - (degrees)))</span>
+<a name="l01104"></a>01104 <span class="preprocessor"></span>
+<a name="l01120"></a>01120 <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__XY__screenx__to__canvasx__.html#g3c8ed254995ba15cb763e467c528e6b7" title="Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas...">XY_screenx_to_canvasx</a>(<span class="keywordtype">int</span> sx);
+<a name="l01121"></a>01121 
+<a name="l01130"></a>01130 <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__XY__screenx__to__canvasx__.html#g11d6ea7ce587c081e05fca0560013820" title="Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas...">XY_screeny_to_canvasy</a>(<span class="keywordtype">int</span> sy);
+<a name="l01131"></a>01131 
+<a name="l01143"></a>01143 <span class="keywordtype">void</span> <a class="code" href="group__XY__screenx__to__canvasx__.html#ge655c8d76670ce2fb5360bcc5a13b6dc" title="Convert a screen coordinate (an integer; eg, where the mouse was clicked) into canvas...">XY_screen_to_canvas</a>(<span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * cx, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * cy);
+<a name="l01144"></a>01144 
+<a name="l01152"></a>01152 <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__XY__screenx__to__canvasx__.html#g7ec052dee1d62ebb6cdab51aa6decd96" title="Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate...">XY_canvasx_to_screenx</a>(<span class="keywordtype">int</span> cx);
+<a name="l01153"></a>01153 
+<a name="l01161"></a>01161 <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> <a class="code" href="group__XY__screenx__to__canvasx__.html#gad7da6f7aa629e7579eb4d0f11fdf3a4" title="Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate...">XY_canvasy_to_screeny</a>(<span class="keywordtype">int</span> cy);
+<a name="l01162"></a>01162 
+<a name="l01174"></a>01174 <span class="keywordtype">void</span> <a class="code" href="group__XY__screenx__to__canvasx__.html#gb5b4f8471210b28522f705ccc0fb5ab6" title="Convert a canvas virtual world coordinate (fixed point) into the nearest screen coordinate...">XY_canvas_to_screen</a>(<a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> cx, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> cy, <span class="keywordtype">int</span> * sx, <span class="keywordtype">int</span> * sy);
+<a name="l01175"></a>01175 
+<a name="l01181"></a>01181 <span class="keywordtype">int</span> <a class="code" href="group__XY__screenx__to__canvasx__.html#gfd795ebf15751948ff49609b6eb175b8" title="Returns the screen&amp;#39;s current width, in pixels (integer).">XY_get_screenw</a>(<span class="keywordtype">void</span>);
+<a name="l01182"></a>01182 
+<a name="l01188"></a>01188 <span class="keywordtype">int</span> <a class="code" href="group__XY__screenx__to__canvasx__.html#gd6ddaf7b970f7592579e432bad9cef22" title="Returns the screen&amp;#39;s current height, in pixels (integer).">XY_get_screenh</a>(<span class="keywordtype">void</span>);
+<a name="l01189"></a>01189 
+<a name="l01215"></a>01215 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__intersect__.html#gcca39a24ad05750a69276b6173a0e0d6" title="Returns whether two lines intersect.">XY_lines_intersect</a>(<a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> line1, <a class="code" href="structXY__line.html" title="Represents a single line.">XY_line</a> line2,
+<a name="l01216"></a>01216                            <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * intersect_x, <a class="code" href="group__XY__fixed__.html#g7bad8d0a05a019d09099dd659a96a053" title="Fixed-point type.">XY_fixed</a> * intersect_y,
+<a name="l01217"></a>01217                            <a class="code" href="group__XY__line__.html#gc5d4fdf2856d1add2e06b4d0827899cf" title="Line intersection results:.">XY_intersection</a> * result);
+<a name="l01218"></a>01218 
+<a name="l01227"></a>01227 <a class="code" href="group__XY__bool__.html#gdc02865bfc2e638c1059cebeeac2b1bf" title="Boolean type.">XY_bool</a> <a class="code" href="group__XY__lines__intersect__.html#g178b4538f0c90057aa60d943324c0d4f" title="Returns whether any lines in one group intersect any lines in another.">XY_line_groups_intersect</a>(<a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines1, <a class="code" href="structXY__lines.html" title="A group of lines.">XY_lines</a> * lines2);
+<a name="l01228"></a>01228 
+<a name="l01231"></a>01231 <span class="preprocessor">#ifdef __cplusplus</span>
+<a name="l01232"></a>01232 <span class="preprocessor"></span>}
+<a name="l01233"></a>01233 <span class="preprocessor">#endif</span>
+<a name="l01234"></a>01234 <span class="preprocessor"></span>
+<a name="l01235"></a>01235 <span class="preprocessor">#endif </span><span class="comment">/* _CRTXY_H */</span>
+<a name="l01236"></a>01236 
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sat Aug 16 22:15:09 2008 for libcrtxy by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Tue Sep 2 01:07:20 2008 for libcrtxy by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.5 </small></address>
 </body>

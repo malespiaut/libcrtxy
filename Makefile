@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - August 16, 2008
+# July 28, 2008 - September 2, 2008
 
 PREFIX=/usr/local
 
@@ -22,6 +22,7 @@ LIBDIR=$(PREFIX)/lib
 INCDIR=$(PREFIX)/include
 BINDIR=$(PREFIX)/bin
 DOCDIR=$(PREFIX)/share/doc/libcrtxy
+MANDIR=$(PREFIX)/share/man/
 
 VER_MAJOR=0
 VER_MINOR=0
@@ -44,11 +45,12 @@ clean:
 	-rm drawlines rockdodge polytest
 
 cleandocs:
-	-rm -rf docs/html
-	-rm -rf docs/man
+	-rm -rf docs/html/*.*
+	-rm -rf docs/man/man3/*.*
 
 docs:	src/crtxy.h
 	doxygen docs/doxygen.cfg
+	cd docs/man/man3/ ; rm `ls | grep -v "^XY_" | grep -v "libcrtxy" | grep -v CVS`
 
 releaseclean:
 	-rm -rf build/libcrtxy-$(VERSION) build/libcrtxy-$(VERSION).tar.gz
@@ -89,6 +91,8 @@ install:
 	install -d $(DOCDIR)/html
 	cp docs/html/*.* $(DOCDIR)/html/
 	chmod 644 $(DOCDIR)/html/*.*
+	install -d $(MANDIR)/man3
+	cp docs/man/man3/*.* $(MANDIR)/man3
 
 libcrtxy.so:	$(OBJ)
 	$(CC) $(CFLAGS) -shared $^ -o libcrtxy.so

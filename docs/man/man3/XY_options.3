@@ -1,0 +1,125 @@
+.TH "XY_options" 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+XY_options \- Structure containing libcrtxy options (rendering level, screen size, etc.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <crtxy.h>\fP
+.PP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBdisplayw\fP"
+.br
+.RI "\fIWidth of window or fullscreen display. \fP"
+.ti -1c
+.RI "int \fBdisplayh\fP"
+.br
+.RI "\fIHeight of window or fullscreen display. \fP"
+.ti -1c
+.RI "int \fBdisplaybpp\fP"
+.br
+.RI "\fIDisplay depth (16bpp, 24bpp, 32bpp). \fP"
+.ti -1c
+.RI "\fBXY_opt_fullscreen\fP \fBfullscreen\fP"
+.br
+.RI "\fIWindow, Want Fullscreen or Require Fullscreen? \fP"
+.ti -1c
+.RI "\fBXY_opt_alpha\fP \fBalpha\fP"
+.br
+.RI "\fIAlpha-blend, fake it, or none at all (just on/off)? \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBantialias\fP"
+.br
+.RI "\fIAnti-alias lines (Xiaolin Wu) or not (Bresenham)? \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBgamma_correction\fP"
+.br
+.RI "\fIGamma correction when anti-aliasing. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBblur\fP"
+.br
+.RI "\fIAdd blur effect? \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBadditive\fP"
+.br
+.RI "\fIAdditive pixel effect? \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBbackgrounds\fP"
+.br
+.RI "\fISupport fullscreen background. \fP"
+.ti -1c
+.RI "\fBXY_opt_scaling\fP \fBscaling\fP"
+.br
+.RI "\fIFast or Best scaling? \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Structure containing libcrtxy options (rendering level, screen size, etc. 
+
+) 
+.SH "Field Documentation"
+.PP 
+.SS "int \fBXY_options::displayw\fP"
+.PP
+Width of window or fullscreen display. 
+.PP
+
+.SS "int \fBXY_options::displayh\fP"
+.PP
+Height of window or fullscreen display. 
+.PP
+
+.SS "int \fBXY_options::displaybpp\fP"
+.PP
+Display depth (16bpp, 24bpp, 32bpp). 
+.PP
+
+.SS "\fBXY_opt_fullscreen\fP \fBXY_options::fullscreen\fP"
+.PP
+Window, Want Fullscreen or Require Fullscreen? 
+.PP
+.SS "\fBXY_opt_alpha\fP \fBXY_options::alpha\fP"
+.PP
+Alpha-blend, fake it, or none at all (just on/off)? 
+.PP
+.SS "\fBXY_bool\fP \fBXY_options::antialias\fP"
+.PP
+Anti-alias lines (Xiaolin Wu) or not (Bresenham)? 
+.PP
+.SS "\fBXY_bool\fP \fBXY_options::gamma_correction\fP"
+.PP
+Gamma correction when anti-aliasing. 
+.PP
+\fBTodo\fP
+.RS 4
+Support gamma values (only doing 2.2 (close to sRGB) at the moment) 
+.RE
+.PP
+
+.SS "\fBXY_bool\fP \fBXY_options::blur\fP"
+.PP
+Add blur effect? 
+.PP
+.SS "\fBXY_bool\fP \fBXY_options::additive\fP"
+.PP
+Additive pixel effect? 
+.PP
+.SS "\fBXY_bool\fP \fBXY_options::backgrounds\fP"
+.PP
+Support fullscreen background. 
+.PP
+.SS "\fBXY_opt_scaling\fP \fBXY_options::scaling\fP"
+.PP
+Fast or Best scaling? 
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libcrtxy from the source code.

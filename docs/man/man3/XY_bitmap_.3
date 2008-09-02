@@ -1,0 +1,181 @@
+.TH "Background bitmap management." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Background bitmap management. \- 
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "\fBBitmap positioning flags.\fP"
+.br
+.ti -1c
+.RI "\fBOptions for scaling bitmaps that don't match screen/window size.\fP"
+.br
+.in -1c
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBXY_bitmap\fP"
+.br
+.RI "\fIBitmap type. \fP"
+.in -1c
+.in +1c
+.ti -1c
+.RI "\fBXY_bitmap\fP * \fBXY_load_bitmap\fP (char *filename)"
+.br
+.RI "\fICreate a bitmap based on an image file. \fP"
+.ti -1c
+.RI "\fBXY_bitmap\fP * \fBXY_load_bitmap_from_buffer\fP (unsigned char *buffer, int size)"
+.br
+.RI "\fICreate a bitmap based on image data in a buffer. \fP"
+.ti -1c
+.RI "void \fBXY_free_bitmap\fP (\fBXY_bitmap\fP *bitmap)"
+.br
+.RI "\fIFree a bitmap. \fP"
+.ti -1c
+.RI "\fBXY_bool\fP \fBXY_set_background\fP (\fBXY_color\fP color, \fBXY_bitmap\fP *bitmap, \fBXY_fixed\fP x, \fBXY_fixed\fP y, int posflags, int scaling)"
+.br
+.RI "\fISet the background color, and optional bitmap, its position, and options for scaling it to the screen size. \fP"
+.ti -1c
+.RI "void \fBXY_enable_background\fP (\fBXY_bool\fP enable)"
+.br
+.RI "\fIEnable or disable the background bitmap (affects next frame). \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBTodo\fP
+.RS 4
+Load bitmaps from an SDL_Surface 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Load bitmaps from RGBA pixel data 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "\fBXY_bitmap\fP* XY_load_bitmap (char * filename)"
+.PP
+Create a bitmap based on an image file. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilename\fP is the name of an image file to attempt to load. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an \fBXY_bitmap\fP pointer on success, or NULL on failure and set error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_DECODE\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_CONVERT\fP 
+.PP
+.RE
+.PP
+
+.SS "\fBXY_bitmap\fP* XY_load_bitmap_from_buffer (unsigned char * buffer, int size)"
+.PP
+Create a bitmap based on image data in a buffer. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIbuffer\fP is a pointer to memory containing image file data. 
+.br
+\fIsize\fP is the size of the image file data. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an \fBXY_bitmap\fP pointer on success, or NULL on failure and set error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_DECODE\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_CONVERT\fP 
+.PP
+.RE
+.PP
+
+.SS "void XY_free_bitmap (\fBXY_bitmap\fP * bitmap)"
+.PP
+Free a bitmap. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIbitmap\fP is an \fBXY_bitmap\fP pointer to free. (Do not use the pointer any more! You may reuse your variable, if you create a new bitmap, of course.) 
+.RE
+.PP
+
+.SS "\fBXY_bool\fP XY_set_background (\fBXY_color\fP color, \fBXY_bitmap\fP * bitmap, \fBXY_fixed\fP x, \fBXY_fixed\fP y, int posflags, int scaling)"
+.PP
+Set the background color, and optional bitmap, its position, and options for scaling it to the screen size. 
+.PP
+Enables background bitmap.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcolor\fP is an \fBXY_color\fP for the display's background. (The entire display will be this color, if no bitmap is provided, otherwise any part of the display not covered by the bitmap will be this color. Lines alpha-blended or anti-aliased in 'fake' rendering mode will blend against this color, as well.) 
+.br
+\fIbitmap\fP is an \fBXY_bitmap\fP pointer for a background image to use. It may be NULL if no background image is desired. 
+.br
+\fIx\fP represents how far right (or left, if negative) to nudge the background image after it has been positioned, in canvas units. Use 0 for no nudging. 
+.br
+\fIy\fP represents how far down (or up, if negative) to nudge the background image after it has been positioned, in canvas units. Use 0 for no nudging. 
+.br
+\fIposflags\fP determines how to position a bitmap. Use the '|' (or) bitwise operator to combine one horizontal choice (\fBXY_POS_LEFT\fP, \fBXY_POS_HCENTER\fP or \fBXY_POS_RIGHT\fP) with one vertical choice (\fBXY_POS_TOP\fP, \fBXY_POS_VCENTER\fP or \fBXY_POS_BOTTOM\fP). Use 0 as a shortcut for 'top left'. 
+.br
+\fIscaling\fP describes how the bitmap should be scaled. Use one of the following: \fBXY_SCALE_NONE\fP, \fBXY_SCALE_STRETCH\fP, \fBXY_SCALE_KEEP_ASPECT_WIDE\fP or \fBXY_SCALE_KEEP_ASPECT_TALL\fP. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+On success: \fBXY_TRUE\fP. On failure, \fBXY_FALSE\fP, and sets error code to one of the following: 
+.PD 0
+
+.IP "\(bu" 2
+\fBXY_ERR_MEM_CANT_ALLOC\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_SCALE\fP 
+.IP "\(bu" 2
+\fBXY_ERR_BITMAP_CANT_CONVERT\fP 
+.PP
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support repeating backgrounds 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support color overlays 
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Support scaling bitmaps, relative to canvas 
+.RE
+.PP
+
+.SS "void XY_enable_background (\fBXY_bool\fP enable)"
+.PP
+Enable or disable the background bitmap (affects next frame). 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIenable\fP set to \fBXY_TRUE\fP enables background bitmap (if any), and \fBXY_FALSE\fP disables it. 
+.RE
+.PP
+

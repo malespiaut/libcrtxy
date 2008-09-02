@@ -1,0 +1,108 @@
+.TH "Loading and setting options for rendering quality." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Loading and setting options for rendering quality. \- 
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBXY_options\fP"
+.br
+.RI "\fIStructure containing libcrtxy options (rendering level, screen size, etc. \fP"
+.in -1c
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBXY_INIT_LIB_CONFIG_FILE_GLOBAL\fP   CONFDIR '/libcrtxy.conf'"
+.br
+.RI "\fIWhere system-wide (global) config file lives. \fP"
+.ti -1c
+.RI "#define \fBXY_INIT_LIB_CONFIG_FILE_LOCAL\fP   '.libcrtxyrc'"
+.br
+.RI "\fIWhere user's (local) config file lives. \fP"
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBXY_opt_fullscreen\fP { \fBXY_OPT_WINDOWED\fP, \fBXY_OPT_FULLSCREEN_REQUEST\fP, \fBXY_OPT_FULLSCREEN_REQUIRED\fP }"
+.br
+.RI "\fIDisplay settings for options.fullscreen. \fP"
+.ti -1c
+.RI "enum \fBXY_opt_alpha\fP { \fBXY_OPT_ALPHA_BLEND\fP, \fBXY_OPT_ALPHA_FAKE\fP, \fBXY_OPT_ALPHA_OFF\fP }"
+.br
+.RI "\fIAlpha-blending settings for options.alpha. \fP"
+.ti -1c
+.RI "enum \fBXY_opt_scaling\fP { \fBXY_OPT_SCALE_BEST\fP, \fBXY_OPT_SCALE_FAST\fP }"
+.br
+.RI "\fIBitmap scaling quality settings for options.scaling. \fP"
+.in -1c
+.SH "Define Documentation"
+.PP 
+.SS "#define XY_INIT_LIB_CONFIG_FILE_GLOBAL   CONFDIR '/libcrtxy.conf'"
+.PP
+Where system-wide (global) config file lives. 
+.PP
+\fBTodo\fP
+.RS 4
+Make config locations configurable at build (FIXME) 
+.RE
+.PP
+
+.SS "#define XY_INIT_LIB_CONFIG_FILE_LOCAL   '.libcrtxyrc'"
+.PP
+Where user's (local) config file lives. 
+.PP
+\fBTodo\fP
+.RS 4
+Make config locations configurable at build (FIXME) 
+.RE
+.PP
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBXY_opt_fullscreen\fP"
+.PP
+Display settings for options.fullscreen. 
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIXY_OPT_WINDOWED \fP\fP
+Display in a window. 
+.TP
+\fB\fIXY_OPT_FULLSCREEN_REQUEST \fP\fP
+Fullscreen; fall back to window. 
+.TP
+\fB\fIXY_OPT_FULLSCREEN_REQUIRED \fP\fP
+Fullscreen; abort if we cannot. 
+.SS "enum \fBXY_opt_alpha\fP"
+.PP
+Alpha-blending settings for options.alpha. 
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIXY_OPT_ALPHA_BLEND \fP\fP
+Combine current pixel with new pixel. 
+.TP
+\fB\fIXY_OPT_ALPHA_FAKE \fP\fP
+Combine background color with new pixel. 
+.TP
+\fB\fIXY_OPT_ALPHA_OFF \fP\fP
+Just draw new pixel. 
+.SS "enum \fBXY_opt_scaling\fP"
+.PP
+Bitmap scaling quality settings for options.scaling. 
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIXY_OPT_SCALE_BEST \fP\fP
+Blend to smooth any stretching. 
+.TP
+\fB\fIXY_OPT_SCALE_FAST \fP\fP
+Stretch pixels with no blending. 
+
