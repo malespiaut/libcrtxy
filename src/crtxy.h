@@ -8,7 +8,7 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.42 2008/08/22 02:20:22 wkendrick Exp $
+$Id: crtxy.h,v 1.43 2008/09/02 07:57:19 wkendrick Exp $
 
 \section introSection Introduction
 
@@ -45,8 +45,6 @@ and can be used for sub-pixel movement) and trigonometry
 
 \subsection tocGeneralSubsection Running games that use libcrtxy
 \li \subpage libcrtxy_setting_options "Setting Options"
-
-\todo Construct man pages
 */
 
 /*! \page libcrtxy_backends Backends that libcrtxy can use for drawing

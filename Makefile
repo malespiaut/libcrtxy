@@ -47,7 +47,7 @@ cleandocs:
 	-rm -rf docs/html
 	-rm -rf docs/man
 
-docs/html:	src/crtxy.h
+docs:	src/crtxy.h
 	doxygen docs/doxygen.cfg
 
 releaseclean:
@@ -124,4 +124,4 @@ polytest.o:	src/polytest.c src/crtxy.h crtxy-config
 polytest:	polytest.o
 	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
 
-.PHONY: all clean install tests releaseclean releasedir release
+.PHONY: all clean install tests releaseclean releasedir release docs cleandocs
