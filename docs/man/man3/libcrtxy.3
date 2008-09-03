@@ -7,31 +7,31 @@ The CRT X-Y library (libcrtxy) \-
 
 .in +1c
 .ti -1c
-.RI "\fBBoolean type.\fP"
+.RI "\fBlibcrtxy boolean type\fP"
 .br
 .ti -1c
-.RI "\fBBackground bitmap management.\fP"
+.RI "\fBlibcrtxy background bitmap management\fP"
 .br
 .ti -1c
-.RI "\fBColor manipulation and conversion.\fP"
+.RI "\fBlibcrtxy color manipulation and conversion\fP"
 .br
 .ti -1c
-.RI "\fBFixed-point.\fP"
+.RI "\fBlibcrtxy fixed-point\fP"
 .br
 .ti -1c
-.RI "\fBGeometry.\fP"
+.RI "\fBlibcrtxy geometry\fP"
 .br
 .ti -1c
-.RI "\fBLoading and setting options for rendering quality.\fP"
+.RI "\fBlibcrtxy option constants and functions\fP"
 .br
 .ti -1c
-.RI "\fBError reporting.\fP"
+.RI "\fBXY_err - libcrtxy error reporting\fP"
 .br
 .ti -1c
-.RI "\fBBitmap positioning flags.\fP"
+.RI "\fBlibcrtxy bitmap positioning flags\fP"
 .br
 .ti -1c
-.RI "\fBOptions for scaling bitmaps that don't match screen/window size.\fP"
+.RI "\fBlibcrtxy options for scaling bitmaps that don't match screen/window size\fP"
 .br
 .ti -1c
 .RI "\fBInitializing and quitting libcrtxy.\fP"
@@ -127,7 +127,7 @@ Depending on the target system (e.g., a high-powered desktop PC or an embedded h
 Screen-size shouldn't matter to game-play, so physical screen size in pixels (e.g., 640x480 or 1280x1024) is up to the end-user, or person packaging your software for a particular target, as well. Your game logic is based around a virtual canvas size, and line positions are given using fixed-point values.
 .PP
 The options that can be set at runtime include:
-.SH "Display settings:"
+.SH "libcrtxy display settings"
 .PP
 .PD 0
 .IP "\(bu" 2
@@ -149,7 +149,7 @@ Native screen resolution when in fullscreen
 .PP
 
 .PP
-.SH "Rendering quality:"
+.SH "libcrtxy rendering quality settings"
 .PP
 .PD 0
 .IP "\(bu" 2
@@ -177,7 +177,7 @@ Implement best scaling
 .PP
 
 .PP
-.SH "Special effects:"
+.SH "libcrtxy special effects settings"
 .PP
 .PD 0
 .IP "\(bu" 2
@@ -204,7 +204,7 @@ Persistence-of-vision effect
 .PP
 
 .PP
-.SH "How options get set:"
+.SH "libcrtxy options propagation"
 .PP
 The options that get used are determined by the following, and should occur in this order: 
 .PD 0
@@ -226,12 +226,12 @@ Command-line arguments (e.g., 'some_game --crtxy-bpp 32')
 .PP
 See also: \fBSetting Options\fP 
 .SS "Installing libcrtxy"
-.SH "Requirements"
+.SH "libcrtxy requirements"
 .PP
 libcrtxy requires the Simple DirectMedia Layer library (libSDL), available from http://www.libsdl.org/
 .PP
 For support for various formats of bitmap images (PNG, JPEG, GIF, etc.), SDL_image is also required, available from http://www.libsdl.org/projects/SDL_image/
-.SH "Compiling"
+.SH "libcrtxy - compiling the library"
 .PP
 To compile libcrtxy, simply type \fCmake\fP.
 .SS "Compilation Options"
@@ -259,12 +259,12 @@ Documentation installation
 Man page installation
 .RE
 .PP
-.SH "Installing"
+.SH "libcrtxy - installing the library"
 .PP
 To install libcrtxy's library files, header files, default global configuration file and the \fCcrtxy-config\fP helper tool, simply type \fCmake install\fP.
 .PP
 \fBNote:\fP Provide \fCmake\fP with the same variable overrides you gave it when installing (e.g., \fCmake PREFIX=/home/username/opt/ install\fP)
-.SH "Compiling test apps"
+.SH "libcertxy - compiling the test applications"
 .PP
 Once libcrtxy is installed, you can build the test applications that came with the source. Type: \fCmake tests\fP.
 .PP
@@ -285,7 +285,7 @@ Explain polytest right-click for adding dots.
 .PP
 
 .SS "Building Games with libcrtxy"
-.SH "Using crtxy-config to compile and link"
+.SH "libcrtxy - Using crtxy-config to compile and link"
 .PP
 Use the \fCcrtxy-config\fP command get the options necessary to compile and link an application against libcrtxy.
 .PP
@@ -316,7 +316,7 @@ Use the \fCcrtxy-config\fP command get the options necessary to compile and link
  This outputs the version of libcrtxy that is installed. It's useful for automated checking of whether the installed version of libcrtxy is compatible with what your application expects.
 .PP
 \fBNote:\fP Since libcrtxy depends on libSDL, the output of \fCcrtxy-config\fP includes the output of libSDL's \fCsdl-config\fP for --cflags, --libs and --static-libs.
-.SH "Using crtxy-config to compile and link"
+.SH "libcrtxy - Using crtxy-config to compile and link"
 .PP
 \fCcrtxy-config --cflags\fP should have told your compiler where to find libcrtxy's headers, so you should include the main header like this:
 .PP
@@ -324,7 +324,7 @@ Use the \fCcrtxy-config\fP command get the options necessary to compile and link
 .PP
 \fBNote:\fP libcrtxy depends on libSDL, so its \fCSDL.h\fP is included automatically. SDL_image library's \fCSDL_image.h\fP may also have been included. However, no harm is done by including them in your own source. 
 .SS "Setting Options"
-.SH "Available Options"
+.SH "libcrtxy options breakdown"
 .PP
 .SS "Display options"
 .PD 0
@@ -364,7 +364,7 @@ Blur
 .IP "\(bu" 2
 Additive lines
 .PP
-.SH "Where Options Can Get Set"
+.SH "libcrtxy - Where Options Can Get Set"
 .PP
 Options such as rendering quality settings and screen resolution can come from various places. They are listed below, in the most reasonable order that they should be picked up:
 .PP

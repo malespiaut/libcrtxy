@@ -8,9 +8,9 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.43 2008/09/02 07:57:19 wkendrick Exp $
+$Id: crtxy.h,v 1.44 2008/09/03 06:43:25 wkendrick Exp $
 
-\section introSection Introduction
+\section introSection libcrtxy - Introduction
 
 "libcrtxy" is meant to allow game programmers to develop
 vector-graphics-style games like those from the late 1970s and early 1980s
@@ -33,17 +33,17 @@ and can be used for sub-pixel movement) and trigonometry
 
 (*) Names are trademarks of their respective trademark and copyright holders.
 
-\section tocSection More about libcrtxy
+\section tocSection libcrtxy - More about libcrtxy
 
-\subsection tocGeneralSubsection General
+\subsection tocGeneralSubsection libcrtxy - General Information
 \li \subpage libcrtxy_backends
 \li \subpage libcrtxy_options
 
-\subsection tocGeneralSubsection Programming games with libcrtxy
+\subsection tocProgrammingSubsection libcrtxy - Programming games with libcrtxy
 \li \subpage libcrtxy_installation "Installing libcrtxy"
 \li \subpage libcrtxy_building_games "Building Games with libcrtxy"
 
-\subsection tocGeneralSubsection Running games that use libcrtxy
+\subsection tocRunningSubsection libcrtxy - Running games that use libcrtxy
 \li \subpage libcrtxy_setting_options "Setting Options"
 */
 
@@ -79,7 +79,7 @@ positions are given using fixed-point values.
 
 The options that can be set at runtime include:
 
-\section optionsDisplaySection Display settings:
+\section optionsDisplaySection libcrtxy display settings
 
 \li Screen width & height
 \li Screen depth (16bpp, 24bpp or 32bpp)
@@ -87,19 +87,19 @@ The options that can be set at runtime include:
 \todo Utilize SDL_ListModes()
 \todo Native screen resolution when in fullscreen
 
-\section optionsRenderingSection Rendering quality:
+\section optionsRenderingSection libcrtxy rendering quality settings
 \li Alpha blending (on, off, or "fake")
 \li Anti-aliasing
 \li Gamma correction \todo Support gamma values
 \li Backgrounds
 \li Bitmap scaling (fast or best) \todo Implement best scaling
 
-\section optionsSFXSection Special effects:
+\section optionsSFXSection libcrtxy special effects settings
 \li Blurring \todo Implement blur effect
 \li Additive effect \todo Implement additive effect
 \todo Persistence-of-vision effect
 
-\section optionsHowSection How options get set:
+\section optionsHowSection libcrtxy options propagation
 The options that get used are determined by the following, and should
 occur in this order:
 \li Hard-coded defaults (set at the time libcrtxy is compiled)
@@ -120,7 +120,7 @@ See also: \ref libcrtxy_setting_options
 
 /** \page libcrtxy_installation Installing libcrtxy
 
-\section requirementsSection Requirements
+\section requirementsSection libcrtxy requirements
 
 libcrtxy requires the Simple DirectMedia Layer library (libSDL),
 available from http://www.libsdl.org/
@@ -129,7 +129,7 @@ For support for various formats of bitmap images (PNG, JPEG, GIF, etc.),
 SDL_image is also required, available from
 http://www.libsdl.org/projects/SDL_image/
 
-\section compilingSection Compiling
+\section compilingSection libcrtxy - compiling the library
 
 To compile libcrtxy, simply type <tt>make</tt>.
 
@@ -156,7 +156,7 @@ will be installed. (default: <tt>$PREFIX/bin</tt>)
 \todo Documentation installation
 \todo Man page installation
 
-\section installingSection Installing
+\section installingSection libcrtxy - installing the library
 
 To install libcrtxy's library files, header files, default global configuration
 file and the <tt>crtxy-config</tt> helper tool, simply type
@@ -166,7 +166,7 @@ file and the <tt>crtxy-config</tt> helper tool, simply type
 gave it when installing (e.g.,
 <tt>make PREFIX=/home/username/opt/ install</tt>)
 
-\section compilingTestsSection Compiling test apps
+\section compilingTestsSection libcertxy - compiling the test applications
 
 Once libcrtxy is installed, you can build the test applications that
 came with the source. Type: <tt>make tests</tt>.
@@ -184,7 +184,7 @@ will form a polygon when you cross back over them.
 
 /** \page libcrtxy_building_games Building Games with libcrtxy
 
-\section crtxy-configSection Using crtxy-config to compile and link
+\section crtxy-configSection libcrtxy - Using crtxy-config to compile and link
 
 Use the <tt>crtxy-config</tt> command get the
 options necessary to compile and link an application against libcrtxy.
@@ -214,7 +214,7 @@ options necessary to compile and link an application against libcrtxy.
 <tt>crtxy-config</tt> includes the output of libSDL's
 <tt>sdl-config</tt> for --cflags, --libs and --static-libs.
 
-\section crtxy-configSection Including libcrtxy's header
+\section crtxy-configSection libcrtxy - including libcrtxy's header file
 
 <tt>crtxy-config --cflags</tt> should have told your compiler where
 to find libcrtxy's headers, so you should include the main header like this:
@@ -230,7 +230,7 @@ source.
 
 /** \page libcrtxy_setting_options Setting Options
 
-\section optionsAvailable Available Options
+\section optionsAvailable libcrtxy options breakdown
 
 \subsection displayOptionsSubsection Display options
 \li Screen width
@@ -249,7 +249,7 @@ source.
 \li Blur
 \li Additive lines
 
-\section optionsFromSection Where Options Can Get Set
+\section optionsFromSection libcrtxy - Where Options Can Get Set
 
 Options such as rendering quality settings and screen resolution
 can come from various places.  They are listed below, in the most
@@ -336,12 +336,12 @@ application.
 extern "C" {
 #endif
 
-/** @defgroup XY_bool_ Boolean type.
+/** @defgroup XY_bool_ libcrtxy boolean type
  *  @{
  */
 
 /**
- * Boolean type.
+ * XY_bool - libcrtxy boolean type
  */
 typedef enum {
   XY_FALSE, /**< False */
@@ -350,7 +350,7 @@ typedef enum {
 
 /** @} */
 
-/** @defgroup XY_bitmap_ Background bitmap management.
+/** @defgroup XY_bitmap_ libcrtxy background bitmap management
  *  @{
  *
  *  \todo Load bitmaps from an SDL_Surface
@@ -358,7 +358,7 @@ typedef enum {
  */
 
 /**
- * Bitmap type.
+ * XY_bitmap - libcrtxy bitmap type.
  */
 typedef struct XY_bitmap_s {
   SDL_Surface * surf;
@@ -366,23 +366,23 @@ typedef struct XY_bitmap_s {
 
 /** @} */
 
-/** @defgroup XY_color_ Color manipulation and conversion.
+/** @defgroup XY_color_ libcrtxy color manipulation and conversion
  *  @{
  */
 /**
- * Color type.
+ * XY_color - libcrtxy color type.
  */
 typedef Uint32 XY_color;
 
 /** @} */
 
 
-/** @defgroup XY_fixed_ Fixed-point.
+/** @defgroup XY_fixed_ libcrtxy fixed-point
  *  @{
  */
 
 /**
- * Fixed-point type.
+ * XY_fixed - libcrtxy fixed-point type
  */
 typedef Sint32 XY_fixed;
 
@@ -402,7 +402,7 @@ typedef Sint32 XY_fixed;
 /** @} */
 
 
-/** @defgroup XY_line_ Geometry.
+/** @defgroup XY_line_ libcrtxy geometry
  *  @{
  *
  * \todo Add inside-polygon test
@@ -416,7 +416,7 @@ typedef Sint32 XY_fixed;
 #define XY_THIN XY_FIXED_ONE /**< Minimum line thickness. */
 
 /**
- * Represents a single line
+ * XY_line - libcrtxy structure representing a single line
  */
 typedef struct XY_line_s {
   XY_fixed x1; /**< X coordinate of line starting point */
@@ -428,7 +428,7 @@ typedef struct XY_line_s {
 } XY_line;
 
 /**
- * A group of lines
+ * XY_lines - libcrtxy structure representing a group of lines
  */
 typedef struct XY_lines_s {
   int count; /**< How many lines are currently in the group */
@@ -437,7 +437,7 @@ typedef struct XY_lines_s {
 } XY_lines;
 
 /**
- * Line intersection results:
+ * XY_intersection - libcrtxy line intersection results
  */
 typedef enum {
   XY_INTERSECTION_NONE, /**< Lines do not intersect and are not parallel */
@@ -449,12 +449,12 @@ typedef enum {
 /** @} */
 
 
-/** @defgroup libcrtxy_options Loading and setting options for rendering quality.
+/** @defgroup libcrtxy_options libcrtxy option constants and functions
  *  @{
  */
 
 /**
- * Display settings for options.fullscreen
+ * XY_opt_fullscreen - libcrtxy display settings for options.fullscreen
  */
 typedef enum {
   XY_OPT_WINDOWED, /**< Display in a window */
@@ -463,7 +463,7 @@ typedef enum {
 } XY_opt_fullscreen;
 
 /**
- * Alpha-blending settings for options.alpha
+ * XY_opt_alpha - libcrtxy alpha-blending settings for options.alpha
  */
 typedef enum {
   XY_OPT_ALPHA_BLEND, /**< Combine current pixel with new pixel */
@@ -472,7 +472,7 @@ typedef enum {
 } XY_opt_alpha;
 
 /**
- * Bitmap scaling quality settings for options.scaling
+ * XY_opt_scaling - libcrtxy bitmap scaling quality settings for options.scaling
  */
 typedef enum {
   XY_OPT_SCALE_BEST, /**< Blend to smooth any stretching */
@@ -480,7 +480,7 @@ typedef enum {
 } XY_opt_scaling;
 
 /**
- * Structure containing libcrtxy options (rendering level, screen size, etc.)
+ * XY_options - libcrtxy structure containing runtime options (rendering level, screen size, etc.)
  */
 typedef struct XY_options_s {
   int displayw;  /**< Width of window or fullscreen display. */
@@ -510,7 +510,7 @@ typedef struct XY_options_s {
 /** @} */
 
 
-/** @defgroup XY_err_ Error reporting.
+/** @defgroup XY_err_ XY_err - libcrtxy error reporting
  *  @{
  */
 typedef enum {
@@ -532,7 +532,7 @@ typedef enum {
 /** @} */
 
 
-/** @defgroup XY_POS_TOP_ Bitmap positioning flags.
+/** @defgroup XY_POS_TOP_ libcrtxy bitmap positioning flags
   * @ingroup XY_bitmap_
   * @{
   */
@@ -546,7 +546,7 @@ typedef enum {
 
 /** @} */
 
-/** @defgroup XY_SCALE_NONE_ Options for scaling bitmaps that don't match screen/window size.
+/** @defgroup XY_SCALE_NONE_ libcrtxy options for scaling bitmaps that don't match screen/window size
   * @ingroup XY_bitmap_
   * @{
   */

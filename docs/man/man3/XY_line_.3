@@ -1,8 +1,8 @@
-.TH "Geometry." 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.TH "libcrtxy geometry" 3 "2 Sep 2008" "libcrtxy" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-Geometry. \- 
+libcrtxy geometry \- 
 .SS "Modules"
 
 .in +1c
@@ -19,11 +19,11 @@ Geometry. \-
 .ti -1c
 .RI "struct \fBXY_line\fP"
 .br
-.RI "\fIRepresents a single line. \fP"
+.RI "\fI\fBXY_line\fP - libcrtxy structure representing a single line. \fP"
 .ti -1c
 .RI "struct \fBXY_lines\fP"
 .br
-.RI "\fIA group of lines. \fP"
+.RI "\fI\fBXY_lines\fP - libcrtxy structure representing a group of lines. \fP"
 .in -1c
 .SS "Defines"
 
@@ -39,7 +39,7 @@ Geometry. \-
 .ti -1c
 .RI "enum \fBXY_intersection\fP { \fBXY_INTERSECTION_NONE\fP, \fBXY_INTERSECTION_INTERSECTING\fP, \fBXY_INTERSECTION_PARALLEL\fP, \fBXY_INTERSECTION_COINCIDENT\fP }"
 .br
-.RI "\fILine intersection results:. \fP"
+.RI "\fIXY_intersection - libcrtxy line intersection results. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -75,7 +75,7 @@ Minimum line thickness.
 .PP 
 .SS "enum \fBXY_intersection\fP"
 .PP
-Line intersection results:. 
+XY_intersection - libcrtxy line intersection results. 
 .PP
 \fBEnumerator: \fP
 .in +1c
