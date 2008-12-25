@@ -8,7 +8,7 @@
 
 http://libcrtxy.sf.net/
 
-$Id: crtxy.h,v 1.44 2008/09/03 06:43:25 wkendrick Exp $
+$Id: crtxy.h,v 1.45 2008/12/25 16:43:03 wkendrick Exp $
 
 \section introSection libcrtxy - Introduction
 
@@ -1101,6 +1101,15 @@ XY_fixed XY_cos(int degrees);
  * \return sine() of the angle, in XY_fixed.
  */
 #define XY_sin(degrees) (XY_cos(90 - (degrees)))
+
+/**
+ * Returns sqrt() of 'i'.
+ *
+ * \paream i is the value to get the square root of, in XY_fixed.
+ * \return sqrt() of i, in XY_fixed.
+ */
+
+XY_fixed XY_sqrt(XY_fixed i);
 
 /** @} */
 

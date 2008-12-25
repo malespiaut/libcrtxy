@@ -3,6 +3,16 @@ http://libcrtxy.sf.net/
 
 Bill Kendrick <bill@newbreedsoftware.com>
 
+2008.12.25 (0.0.4)
+* Improvements
+  + Added XY_sqrt function
+  + Improved line intersection test
+  + Polytest test app adds fewer segments
+    (must be min. distance from last segment), improving intersection detection
+  + Added 'uninstall' target to Makefile
+* Additions
+  + Created command-line-based math function test app
+
 2008.09.02 (0.0.3)
 * License change
   + Including GNU LGPL 2.1, rather than 3.

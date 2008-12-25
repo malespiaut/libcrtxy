@@ -1,4 +1,4 @@
-.TH "Fixed-point math functions." 3 "13 Sep 2008" "libcrtxy" \" -*- nroff -*-
+.TH "Fixed-point math functions." 3 "25 Dec 2008" "libcrtxy" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -50,6 +50,10 @@ Fixed-point math functions. \-
 .RI "\fBXY_fixed\fP \fBXY_cos\fP (int degrees)"
 .br
 .RI "\fIReturns cosine() of 'degrees'. \fP"
+.ti -1c
+.RI "\fBXY_fixed\fP \fBXY_sqrt\fP (\fBXY_fixed\fP i)"
+.br
+.RI "\fIReturns sqrt() of 'i'. \fP"
 .in -1c
 .SH "Define Documentation"
 .PP 
@@ -179,6 +183,18 @@ Returns cosine() of 'degrees'.
 \fBReturns:\fP
 .RS 4
 cosine() of the angle, in XY_fixed. 
+.RE
+.PP
+
+.SS "\fBXY_fixed\fP XY_sqrt (\fBXY_fixed\fP i)"
+.PP
+Returns sqrt() of 'i'. 
+.PP
+i is the value to get the square root of, in XY_fixed. 
+.PP
+\fBReturns:\fP
+.RS 4
+sqrt() of i, in XY_fixed. 
 .RE
 .PP
 

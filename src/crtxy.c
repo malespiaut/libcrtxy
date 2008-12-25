@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - August 16, 2008
+  July 29, 2008 - December 25, 2008
 */
 
 #include "crtxy.h"
@@ -616,6 +616,7 @@ XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
   int i, err;
   int nextint, nexton;
   char * nextstr;
+  char * res;
 
   XY_err_code = XY_ERR_NONE;
 
@@ -629,7 +630,7 @@ XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
   i = 0;
   while (!feof(fi) && err == XY_ERR_NONE)
   {
-    fgets(line, sizeof(line), fi);
+    res = fgets(line, sizeof(line), fi);
     if (feof(fi))
       break;
     if (strlen(line) > 0)
@@ -2411,11 +2412,134 @@ void XY_rects_combine(SDL_Rect * rects, int r1, int r2)
   rects[r1].h = bottom1 - rects[r1].y + 1;
 }
 
+/* Based on Line-Line Intersection Method With C Code Sample
+   Public Domain, 2006 by Darel Rex Finley
+   http://www.alienryderflex.com/intersect/ */
+
+XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
+                           XY_fixed * intersect_x, XY_fixed * intersect_y,
+                           XY_intersection * result)
+{
+  XY_fixed distAB, theCos, theSin, newX, ABpos;
+  XY_fixed Ax, Ay, Bx, By, Cx, Cy, Dx, Dy;
+
+  Ax = line1.x1;
+  Ay = line1.y1;
+  Bx = line1.x2;
+  By = line1.y2;
+
+  Cx = line2.x1;
+  Cy = line2.y1;
+  Dx = line2.x2;
+  Dy = line2.y2;
+
+  if ((Ax == Bx && Ay == By) || (Cx == Dx && Cy == Dy))
+  {
+    /* Fail if either line segment is zero-length */
+    /* FIXME: We should test if the point is on the line... */
+    if (result != NULL)
+      *result = XY_INTERSECTION_NONE;
+    return(XY_FALSE);
+  }
+
+  if ((Ax == Cx && Ay == Cy) || (Bx == Cx && By == Cy) ||
+      (Ax == Dx && Ay == Dy) || (Bx == Dx && By == Dy))
+  {
+    /* Fail if the segments share an end-point */
+    /* FIXME: We should have a 'share an end-point' result */
+    if (result != NULL)
+      *result = XY_INTERSECTION_NONE;
+    return(XY_FALSE);
+  }
+
+  /* Step 1: Translate the system so that point A is in the origin */
+  Bx -= Ax;
+  By -= Ay;
+  Cx -= Ax;
+  Cy -= Ay;
+  Dx -= Ax;
+  Dy -= Ay;
+
+  /* Discover the length of segment A-B */
+  distAB = XY_sqrt(XY_mult(Bx, Bx) + XY_mult(By, By));
+
+  /* Step 2: Rotate the system so that point B is on the positive X axis */
+  theCos = XY_div(Bx, distAB);
+  theSin = XY_div(By, distAB);
+
+  newX = XY_mult(Cx, theCos) + XY_mult(Cy, theSin);
+  Cy = XY_mult(Cy, theCos) - XY_mult(Cx, theSin);
+  Cx = newX;
+
+  newX = XY_mult(Dx, theCos) + XY_mult(Dy, theSin);
+  Dy = XY_mult(Dy, theCos) - XY_mult(Dx, theSin);
+  Dx = newX;
+
+  if ((Cy < 0 && Dy < 0) || (Cy >= 0 && Dy >= 0))
+  {
+    /* Fail if segment C-D doesn't cross line A-B */
+    if (result != NULL)
+      *result = XY_INTERSECTION_NONE;
+    return(XY_FALSE);
+  }
+
+  /* Step 3: Discover the position of the intersection point along line A-B */
+  ABpos = Dx + XY_div(XY_mult(Cx - Dx, Dy), Dy - Cy);
+
+  if (ABpos < 0 || ABpos > distAB)
+  {
+    /* Fail if segment C-D crosses line A-B outside of segment A-B */
+    if (result != NULL)
+      *result = XY_INTERSECTION_NONE;
+    return(XY_FALSE);
+  }
+
+  /* Step 4: Apply the discovered position to line A-B in the original
+     coordinate system */
+
+
+  if (intersect_x != NULL)
+    *intersect_x = Ax + XY_mult(ABpos, theCos);
+
+  if (intersect_y != NULL)
+    *intersect_y = Ay + XY_mult(ABpos, theSin);
+
+  if (result != NULL)
+    *result = XY_INTERSECTION_INTERSECTING;
+
+  return (XY_TRUE);
+}
+
+/* Based on 'Doing It Fast'
+   By Bob Pendleton, 1993, 1997
+   http://gameprogrammer.com/4-fixed.html */
+
+XY_fixed XY_sqrt(XY_fixed i)
+{
+  XY_fixed root;
+  XY_fixed next;
+
+  if (i < XY_FIXED_ONE)
+    return(0);
+
+  next = i >> 2;
+
+  do
+  {
+    root = next;
+    next = (next + XY_div(i, next)) >> 1;
+  }
+  while (root != next);
+
+  return root;
+}
+
 /* Based on lines_intersect (xlines.c) by Mukesh Prasad,
    from Graphics Gems II.
    http://tog.acm.org/GraphicsGems/gemsii/xlines.c
    And http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/ */
 
+#if 0
 XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
                            XY_fixed * intersect_x, XY_fixed * intersect_y,
                            XY_intersection * result)
@@ -2531,6 +2655,7 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
 
   return (XY_TRUE);
 }
+#endif
 
 XY_bool XY_line_groups_intersect(XY_lines * lines1, XY_lines * lines2)
 {

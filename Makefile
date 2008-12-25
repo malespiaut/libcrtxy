@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - September 2, 2008
+# July 28, 2008 - December 25, 2008
 
 PREFIX=/usr/local
 
@@ -26,7 +26,7 @@ MANDIR=$(PREFIX)/share/man/
 
 VER_MAJOR=0
 VER_MINOR=0
-VER_REV=3
+VER_REV=4
 VERSION=$(VER_MAJOR).$(VER_MINOR).$(VER_REV)
 
 OBJ=crtxy.o
@@ -34,15 +34,15 @@ OBJ=crtxy.o
 
 all:	libcrtxy.so libcrtxy.a crtxy-config
 
-tests:	drawlines rockdodge polytest
+tests:	drawlines rockdodge polytest mathtest
 
 clean:
 	-rm libcrtxy.so
 	-rm libcrtxy.a
 	-rm crtxy.o
 	-rm crtxy-config
-	-rm drawlines.o rockdodge.o polytest.o
-	-rm drawlines rockdodge polytest
+	-rm drawlines.o rockdodge.o polytest.o mathtest.o
+	-rm drawlines rockdodge polytest mathtest
 
 cleandocs:
 	-rm -rf docs/html/*.*
@@ -92,7 +92,25 @@ install:
 	cp docs/html/*.* $(DOCDIR)/html/
 	chmod 644 $(DOCDIR)/html/*.*
 	install -d $(MANDIR)/man3
+	chmod 644 docs/man/man3/*.*
 	cp docs/man/man3/*.* $(MANDIR)/man3
+
+uninstall:
+	-rm $(LIBDIR)/libcrtxy.a
+	-rm $(LIBDIR)/libcrtxy.so.$(VERSION)
+	-rm $(LIBDIR)/libcrtxy.so.$(VER_MAJOR).$(VER_MINOR)
+	-rm $(LIBDIR)/libcrtxy.so.$(VER_MAJOR)
+	-rmdir $(LIBDIR)
+	-rm $(INCDIR)/crtxy.h
+	-rmdir $(INCDIR)
+	-rm $(BINDIR)/crtxy-config
+	-rmdir $(BINDIR)
+	-rm $(CONFDIR)/libcrtxy.conf
+	-rmdir $(CONFDIR)
+	-rm -r $(DOCDIR)
+	-rm $(MANDIR)/man3/XY_*
+	-rm $(MANDIR)/man3/libcrtxy*
+	-rmdir $(MANDIR)/man3
 
 libcrtxy.so:	$(OBJ)
 	$(CC) $(CFLAGS) -shared $^ -o libcrtxy.so
@@ -127,5 +145,11 @@ polytest.o:	src/polytest.c src/crtxy.h crtxy-config
 
 polytest:	polytest.o
 	$(CC) $< -o $@ $(shell ./crtxy-config --libs)
+
+mathtest.o:	src/mathtest.c src/crtxy.h crtxy-config
+	$(CC) -O2 -g -Wall $(shell ./crtxy-config --cflags) $< -c -o $@
+
+mathtest:	mathtest.o
+	$(CC) $< -o $@ $(shell ./crtxy-config --libs) -lm
 
 .PHONY: all clean install tests releaseclean releasedir release docs cleandocs

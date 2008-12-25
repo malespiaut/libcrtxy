@@ -36,6 +36,7 @@ int main(int argc, char * argv[])
   XY_fixed new_line_x, new_line_y;
   int ret;
   int i, ticks, tick_speed;
+  XY_fixed dist;
 
   XY_default_options(&opts);
 
@@ -130,27 +131,23 @@ int main(int argc, char * argv[])
         x2 = XY_screenx_to_canvasx(event.button.x);
         y2 = XY_screenx_to_canvasx(event.button.y);
 
-        if (x2 < x1)
-          x2 -= 1;
-        else
-          x2 += 1;
+        dist = XY_sqrt(XY_mult((x2 - x1), (x2 - x1)) +
+                       XY_mult((y2 - y1), (y2 - y1)));
 
-        if (y2 < y1)
-          y2 -= 1;
-        else
-          y2 += 1;
-
-        if (handle_intersect(lines, x1, y1, &x2, &y2))
+        if (dist > XY_FIXED_ONE)
         {
-          click = XY_FALSE;
-          tick_speed = 1000;
-          ticks = 1;
-        }
+          if (handle_intersect(lines, x1, y1, &x2, &y2))
+          {
+            click = XY_FALSE;
+            tick_speed = 1000;
+            ticks = 1;
+          }
         
-        XY_add_line(lines, x1, y1, x2, y2, white, XY_THIN);
+          XY_add_line(lines, x1, y1, x2, y2, white, XY_THIN);
 
-        new_line_x = x2;
-        new_line_y = y2;
+          new_line_x = x2;
+          new_line_y = y2;
+        }
       }
     }
 
