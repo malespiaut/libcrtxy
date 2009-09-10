@@ -53,7 +53,7 @@ int main(int argc, char * argv[])
       else
         xy_answer = math_answer = 0;
 
-      printf("libxycrt answer: %f (%d)\n", (float)xy_answer / (float)(2 << XY_FIXED_SHIFT - 1), xy_answer);
+      printf("libxycrt answer: %f (%d)\n", (float)xy_answer / (float)(2 << (XY_FIXED_SHIFT - 1)), xy_answer);
       printf("Math lib answer: %f\n", math_answer);
       printf("\n");
     }
