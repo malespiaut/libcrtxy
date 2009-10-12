@@ -3,7 +3,7 @@ http://libcrtxy.sf.net/
 
 Bill Kendrick <bill@newbreedsoftware.com>
 
-2009.10.09 (0.0.5)
+2009.10.12 (0.0.5)
 * Improvements
   + Detecting and avoiding infinite-loop situations in square-root routine.
 

@@ -2,9 +2,10 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - October 9, 2009
+# July 28, 2008 - October 12, 2009
 
 PREFIX=/usr/local
+CC=gcc
 
 # 'System-wide' Config file:
 ifeq ($(PREFIX),/usr)
@@ -13,8 +14,10 @@ else
   CONFDIR:=$(DESTDIR)$(PREFIX)/etc/libcrtxy
 endif
 
+# DEBUG_CFLAGS=-g
+
 SDL_CFLAGS=$(shell sdl-config --cflags)
-CFLAGS=-O2 -g -Wall \
+CFLAGS=-O2 $(DEBUG_CFLAGS) -Wall \
   $(SDL_CFLAGS) \
   -DPREFIX=\"$(PREFIX)\" -DCONFDIR=\"$(CONFDIR)\" \
   -DVERSION="$(VERSION)"
