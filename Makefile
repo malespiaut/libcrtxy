@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - December 25, 2008
+# July 28, 2008 - October 9, 2009
 
 PREFIX=/usr/local
 
@@ -26,7 +26,7 @@ MANDIR=$(PREFIX)/share/man/
 
 VER_MAJOR=0
 VER_MINOR=0
-VER_REV=4
+VER_REV=5
 VERSION=$(VER_MAJOR).$(VER_MINOR).$(VER_REV)
 
 OBJ=crtxy.o

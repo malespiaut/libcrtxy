@@ -6,7 +6,7 @@
 
   Bill Kendrick <bill@newbreedsoftware.com>
 
-  July 29, 2008 - December 25, 2008
+  July 29, 2008 - October 9, 2009
 */
 
 #include "crtxy.h"
@@ -1865,8 +1865,10 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color, XY_fixed thickness)
 
 XY_fixed XY_cos(int degrees)
 {
+printf("cos()"); fflush(stdout);
   while (degrees >= 360) degrees -= 360;
   while (degrees < 0) degrees += 360;
+printf("...\n");
 
   if (degrees < 90)
     return(XY_trig[degrees]);
@@ -2512,24 +2514,27 @@ XY_bool XY_lines_intersect(XY_line line1, XY_line line2,
 
 /* Based on 'Doing It Fast'
    By Bob Pendleton, 1993, 1997
-   http://gameprogrammer.com/4-fixed.html */
+   http://gameprogrammer.com/4-fixed.html
+   Added 'oldroot' hack to avoid infinite loop -bjk 2009.10.09 */
 
 XY_fixed XY_sqrt(XY_fixed i)
 {
-  XY_fixed root;
+  XY_fixed root, oldroot;
   XY_fixed next;
 
   if (i < XY_FIXED_ONE)
     return(0);
 
+  root = i;
   next = i >> 2;
 
   do
   {
+    oldroot = root;
     root = next;
     next = (next + XY_div(i, next)) >> 1;
   }
-  while (root != next);
+  while (root != next && oldroot != next);
 
   return root;
 }
