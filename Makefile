@@ -2,7 +2,7 @@
 #
 # Bill Kendrick <bill@newbreedsoftware.com>
 #
-# July 28, 2008 - October 12, 2009
+# July 28, 2008 - April 23, 2012
 
 PREFIX=/usr/local
 CC=gcc
@@ -17,7 +17,7 @@ endif
 # DEBUG_CFLAGS=-g
 
 SDL_CFLAGS=$(shell sdl-config --cflags)
-CFLAGS=-O2 $(DEBUG_CFLAGS) -Wall \
+CFLAGS=-O2 $(DEBUG_CFLAGS) -fPIC -Wall \
   $(SDL_CFLAGS) \
   -DPREFIX=\"$(PREFIX)\" -DCONFDIR=\"$(CONFDIR)\" \
   -DVERSION="$(VERSION)"

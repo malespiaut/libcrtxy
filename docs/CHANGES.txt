@@ -3,9 +3,12 @@ http://libcrtxy.sf.net/
 
 Bill Kendrick <bill@newbreedsoftware.com>
 
-2009.10.12 (0.0.5)
+2012.04.23 (0.0.5)
 * Improvements
   + Detecting and avoiding infinite-loop situations in square-root routine.
+* Fixes
+  + Added -fPIC link flag (needed it on my x86_64 system)
+  + Reordered linking of libcrtxy vs. SDL & friends
 
 2008.12.25 (0.0.4)
 * Improvements

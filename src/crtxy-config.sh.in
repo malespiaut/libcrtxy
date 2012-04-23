@@ -4,7 +4,7 @@
 
 # Bill Kendrick <bill@newbreedsoftware.com>
 
-# July 29, 2008 - July 29, 2008
+# July 29, 2008 - April 23, 2012
 
 
 if [ $# -ne 0 ]; then
@@ -17,7 +17,7 @@ if [ $# -ne 0 ]; then
     exit
   fi
   if [ $1 = "--libs" ]; then
-    echo `sdl-config --libs` -lSDL_image -L__LIBDIR__ -lcrtxy
+    echo -L__LIBDIR__ -lcrtxy `sdl-config --libs` -lSDL_image
     exit
   fi
   if [ $1 = "--static-libs" ]; then
