@@ -18,7 +18,7 @@ DCOMPILE_FLAGS = -D DEBUG -O0 -ggdb3
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH) -I /usr/include/SDL
 # General linker settings
-LINK_FLAGS =
+LINK_FLAGS = -lSDL -lSDL_image -lpthread
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings

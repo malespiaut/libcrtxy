@@ -18,7 +18,7 @@ DCOMPILE_FLAGS = -D DEBUG -O0 -ggdb3
 # Add additional include paths
 INCLUDES = -I $(SRC_PATH) -I ../../libcrtxy -I /usr/include/SDL
 # General linker settings
-LINK_FLAGS = -L ../../libcrtxy -l:libcrtxy.a -lSDL -lSDL_image
+LINK_FLAGS = -L ../../libcrtxy -l:libcrtxy.a -lSDL -lSDL_image -lpthread
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings
