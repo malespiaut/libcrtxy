@@ -500,7 +500,7 @@ typedef struct XY_options_s {
  * Where system-wide (global) config file lives.
  * \todo Make config locations configurable at build (FIXME)
  */
-#define XY_INIT_LIB_CONFIG_FILE_GLOBAL CONFDIR "/libcrtxy.conf"
+#define XY_INIT_LIB_CONFIG_FILE_GLOBAL "./libcrtxy.conf"
 /**
  * Where user's (local) config file lives.
  * \todo Make config locations configurable at build (FIXME)
