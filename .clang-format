@@ -1,0 +1,7 @@
+---
+Language: Cpp
+BasedOnStyle: Mozilla
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+BreakBeforeBraces: Allman
+ColumnLimit: 0
+Cpp11BracedListStyle: true
