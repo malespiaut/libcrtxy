@@ -13,12 +13,11 @@
 #include <crtxy.h>
 #include <math.h>
 
-int main(int argc, char * argv[])
+int main(void)
 {
   int choice;
   float val, math_answer;
   XY_fixed fixed_val, xy_answer;
-  int res;
 
   do
   {
@@ -26,15 +25,15 @@ int main(int argc, char * argv[])
     printf("Fixed point shift is %d\n\n", XY_FIXED_SHIFT);
 
     printf("(1) sqrt()\n"
-           "(2) cos() (angle in degrees)\n"
+           "(2) cosf() (angle in degrees)\n"
            "(0) exit\n"
            "Your choice? ");
-    res = scanf("%d", &choice);
+    scanf("%d", &choice);
 
     if (choice >= 1 && choice <= 2)
     {
       printf("Value? ");
-      res = scanf("%f", &val);
+      scanf("%f", &val);
 
       fixed_val = val; // Convert to int
       fixed_val = fixed_val << XY_FIXED_SHIFT;
@@ -43,18 +42,18 @@ int main(int argc, char * argv[])
       if (choice == 1)
       {
         xy_answer = XY_sqrt(fixed_val);
-        math_answer = sqrt(val);
+        math_answer = sqrtf(val);
       }
       else if (choice == 2)
       {
         xy_answer = XY_cos(val);
-        math_answer = cos(val * (M_PI / 180));
+        math_answer = cosf(val * (M_PIf / 180.0f));
       }
       else
         xy_answer = math_answer = 0;
 
-      printf("libxycrt answer: %f (%d)\n", (float)xy_answer / (float)(2 << (XY_FIXED_SHIFT - 1)), xy_answer);
-      printf("Math lib answer: %f\n", math_answer);
+      printf("libxycrt answer: %g (%d)\n", (double)xy_answer / (double)(2 << (XY_FIXED_SHIFT - 1)), xy_answer);
+      printf("Math lib answer: %g\n", (double)math_answer);
       printf("\n");
     }
   }

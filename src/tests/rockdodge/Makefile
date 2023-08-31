@@ -8,17 +8,17 @@ SRC_EXT = c
 # Path to the source directory, relative to the makefile
 SRC_PATH = .
 # Space-separated pkg-config libraries used by this project
-LIBS =
+LIBS = sdl12_compat SDL_image
 # General compiler flags
-COMPILE_FLAGS = -Wall -Wextra -Wpedantic
+COMPILE_FLAGS = -Wall -Wextra -Wpedantic -Wshadow -Wreturn-type -Wint-conversion -Wstrict-aliasing=2 -Wdouble-promotion
 # Additional release-specific flags
 RCOMPILE_FLAGS = -D NDEBUG -Ofast -g0 -s
 # Additional debug-specific flags
-DCOMPILE_FLAGS = -D DEBUG -O0 -ggdb3
+DCOMPILE_FLAGS = -D DEBUG -O0 -gdwarf-5
 # Add additional include paths
-INCLUDES = -I $(SRC_PATH) -I ../../libcrtxy -I /usr/include/SDL
+INCLUDES = -I $(SRC_PATH) -I ../../libcrtxy
 # General linker settings
-LINK_FLAGS = -L ../../libcrtxy -l:libcrtxy.a -lSDL -lSDL_image -lpthread
+LINK_FLAGS = -L ../../libcrtxy -l:libcrtxy.a -lpthread
 # Additional release-specific linker settings
 RLINK_FLAGS =
 # Additional debug-specific linker settings

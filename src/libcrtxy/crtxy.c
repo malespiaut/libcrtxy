@@ -9,9 +9,11 @@
   July 29, 2008 - October 9, 2009
 */
 
-#include "crtxy.h"
+#include <stddef.h>
+
 #include <SDL_image.h>
 
+#include "crtxy.h"
 #include "gamma_2_2.h"
 
 #define XY_DIRTY_RECT_STEP 128
@@ -223,9 +225,9 @@ XY_bool XY_parse_envvars(XY_options * opts)
     if (strcmp(nextstr, "ON") == 0 || strcmp(nextstr, "on") == 0)
       opts->fullscreen = XY_OPT_FULLSCREEN_REQUIRED;
     else if (strcmp(nextstr, "OPTIONAL") == 0 || strcmp(nextstr, "optional") == 0)
-      opts->alpha = XY_OPT_FULLSCREEN_REQUEST;
+      opts->alpha = (XY_opt_alpha)XY_OPT_FULLSCREEN_REQUEST;
     else if (strcmp(nextstr, "OFF") == 0 || strcmp(nextstr, "off") == 0)
-      opts->alpha = XY_OPT_WINDOWED;
+      opts->alpha = (XY_opt_alpha)XY_OPT_WINDOWED;
   }
 
   if (XY_grab_envvar("CRTXY_ALPHA", &nextint, &nexton, nextstr))
@@ -616,7 +618,6 @@ XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
   int i, err;
   int nextint, nexton;
   char * nextstr;
-  char * res;
 
   XY_err_code = XY_ERR_NONE;
 
@@ -630,7 +631,7 @@ XY_bool XY_load_options_from_file(char * fname, XY_options * opts,
   i = 0;
   while (!feof(fi) && err == XY_ERR_NONE)
   {
-    res = fgets(line, sizeof(line), fi);
+    fgets(line, sizeof(line), fi);
     if (feof(fi))
       break;
     if (strlen(line) > 0)
@@ -1355,7 +1356,7 @@ int XY_end_frame(XY_bool throttle)
 {
   Uint32 end_time;
   int sz, sz2, n;
-  void * * ptr;
+  ptrdiff_t * * ptr;
 
   if (XY_background_change)
   {
@@ -1374,7 +1375,8 @@ int XY_end_frame(XY_bool throttle)
     memset(ptr, 0, sz + sz2);
     memcpy(ptr, XY_dirty_rects, sz);
 
-    ptr = (void *) ((int) ptr + sz);
+    //ptr = (void *) ((int) ptr + sz);
+    ptr = (ptrdiff_t **)(((char *)ptr) + sz);
     memcpy(ptr, XY_dirty_rects_erasure, sz2);
 
     n = XY_dirty_rect_count + XY_dirty_rect_erasure_count;
@@ -1550,6 +1552,8 @@ XY_bool XY_scale_lines(XY_lines * lines, XY_fixed xscale, XY_fixed yscale)
 
 XY_bool XY_rotate_lines(XY_lines * lines, int angle)
 {
+  (void)lines;
+  (void)angle;
   /* FIXME: Do it */
 
   return(XY_TRUE);
@@ -1865,10 +1869,8 @@ void XY_draw_point(XY_fixed x, XY_fixed y, XY_color color, XY_fixed thickness)
 
 XY_fixed XY_cos(int degrees)
 {
-printf("cos()"); fflush(stdout);
   while (degrees >= 360) degrees -= 360;
   while (degrees < 0) degrees += 360;
-printf("...\n");
 
   if (degrees < 90)
     return(XY_trig[degrees]);
@@ -1927,6 +1929,8 @@ int XY_get_screenh(void)
 
 void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
+  (void)gamma_s2l;
+  (void)gamma_l2s;
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 2;
 
   if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
@@ -1937,6 +1941,8 @@ void putpixel_16(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph
 
 void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
+  (void)gamma_s2l;
+  (void)gamma_l2s;
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
 
   if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
@@ -1955,6 +1961,8 @@ void putpixel_24(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph
 
 void putpixel_32(SDL_Surface *surface, int x, int y, Uint32 pixel, XY_fixed alph, Uint16 * gamma_s2l, Uint8 * gamma_l2s)
 {
+  (void)gamma_s2l;
+  (void)gamma_l2s;
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * 4;
 
   if (x < 0 || y < 0 || x >= surface->w || y >= surface->h || alph == 0)
