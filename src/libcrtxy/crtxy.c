@@ -9,6 +9,7 @@
   July 29, 2008 - October 9, 2009
 */
 
+#include <math.h>
 #include <stddef.h>
 
 #include <SDL_image.h>
@@ -36,99 +37,6 @@ XY_bool XY_background_change;
 void (*putpixel)(SDL_Surface*, int, int, Uint32, XY_fixed alph, Uint16* gamma_s2l, Uint8* gamma_l2s);
 Uint32 (*getpixel)(SDL_Surface* surface, int x, int y);
 SDL_Surface* (*scale_surf)(SDL_Surface* orig, int new_w, int new_h);
-
-const int XY_trig[91] = {
-  65536,
-  65526,
-  65496,
-  65446,
-  65376,
-  65287,
-  65177,
-  65048,
-  64898,
-  64729,
-  64540,
-  64332,
-  64104,
-  63856,
-  63589,
-  63303,
-  62997,
-  62672,
-  62328,
-  61966,
-  61584,
-  61183,
-  60764,
-  60326,
-  59870,
-  59396,
-  58903,
-  58393,
-  57865,
-  57319,
-  56756,
-  56175,
-  55578,
-  54963,
-  54332,
-  53684,
-  53020,
-  52339,
-  51643,
-  50931,
-  50203,
-  49461,
-  48703,
-  47930,
-  47143,
-  46341,
-  45525,
-  44695,
-  43852,
-  42995,
-  42126,
-  41243,
-  40348,
-  39441,
-  38521,
-  37590,
-  36647,
-  35693,
-  34729,
-  33754,
-  32768,
-  31772,
-  30767,
-  29753,
-  28729,
-  27697,
-  26656,
-  25607,
-  24550,
-  23486,
-  22415,
-  21336,
-  20252,
-  19161,
-  18064,
-  16962,
-  15855,
-  14742,
-  13626,
-  12505,
-  11380,
-  10252,
-  9121,
-  7987,
-  6850,
-  5712,
-  4572,
-  3430,
-  2287,
-  1144,
-  0};
 
 const char* XY_errstr_txt[NUM_XY_ERRS] = {
   "",
@@ -181,6 +89,41 @@ void XY_add_dirty_rect(int x1, int y1, int x2, int y2);
 void XY_merge_dirty_rects(SDL_Rect* rects, int* cnt);
 XY_bool XY_rects_intersect(SDL_Rect* rects, int r1, int r2);
 void XY_rects_combine(SDL_Rect* rects, int r1, int r2);
+
+/* Arrays init */
+
+uint16_t XY_trig[91] = {0};
+
+void
+XY_trig_init(void)
+{
+  for (size_t i = 0; i < 91; ++i)
+  {
+    XY_trig[i] = (uint16_t)(cos(i * M_PI / 180.0) * (1 << 16));
+  }
+}
+
+uint16_t XY_gamma_screen_to_linear_2_2[256] = {0};
+
+void
+gamma_s2l_init(void)
+{
+  for (size_t i = 0; i < 256; ++i)
+  {
+    XY_gamma_screen_to_linear_2_2[i] = (uint16_t)floor(pow(i / 255.0, 2.2 /* target_gamma*/) * 65535.0);
+  }
+}
+
+uint8_t XY_gamma_linear_to_screen_2_2[65536] = {0};
+
+void
+gamma_l2s_init(void)
+{
+  for (size_t i = 0; i < 65536; ++i)
+  {
+    XY_gamma_linear_to_screen_2_2[i] = (uint8_t)floor(pow(i / 65535.0, (1.0 / 2.2) /*reverse_target_gamma*/) * 255.0);
+  }
+}
 
 /* Public functions: */
 
@@ -825,6 +768,11 @@ XY_load_options_from_file(char* fname, XY_options* opts, XY_bool ignore_unknowns
 XY_bool
 XY_init(XY_options* opts, XY_fixed canvasw, XY_fixed canvash)
 {
+  /* Init arrays */
+  XY_trig_init();
+  gamma_s2l_init();
+  gamma_l2s_init();
+
   int Bpp;
 
   XY_err_code = XY_ERR_NONE;

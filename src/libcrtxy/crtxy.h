@@ -1229,6 +1229,10 @@ extern "C"
 
   /** @} */
 
+  void XY_trig_init(void);
+  void gamma_s2l_init(void);
+  void gamma_l2s_init(void);
+
 #ifdef __cplusplus
 }
 #endif

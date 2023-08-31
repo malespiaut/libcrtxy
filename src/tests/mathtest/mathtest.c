@@ -20,6 +20,8 @@ main(void)
   float val, math_answer;
   XY_fixed fixed_val, xy_answer;
 
+  XY_trig_init();
+
   do
   {
     printf("libcrtxy mathtest\n");
