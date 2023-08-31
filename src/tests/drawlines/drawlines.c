@@ -11,13 +11,14 @@
 
 #include <crtxy.h>
 
-int main(int argc, char * argv[])
+int
+main(int argc, char* argv[])
 {
   int n, i, a, x1, y1, x2, y2;
   XY_options opts;
   XY_color black, color;
   XY_bool done, showbkgd;
-  XY_bitmap * bkgd;
+  XY_bitmap* bkgd;
   SDL_Event event;
   int ret;
 
@@ -26,48 +27,43 @@ int main(int argc, char * argv[])
   printf("\nDefault options:\n");
   XY_print_options(stdout, opts);
 
-
   ret = XY_load_options(&opts);
   if (!ret)
-    return(1);
+    return (1);
 
   printf("\nAfter loading options:\n");
   XY_print_options(stdout, opts);
 
-
   ret = XY_parse_envvars(&opts);
   if (!ret)
-    return(1);
+    return (1);
 
   printf("\nAfter parsing enviornment variables:\n");
   XY_print_options(stdout, opts);
-
 
   ret = XY_parse_options(&argc, argv, &opts);
   if (ret != 0)
   {
     fprintf(stderr, "Error setting libcrtxy options: %s\n", XY_errstr());
     fprintf(stderr, "Failed on %s\n", argv[ret]);
-    return(1);
+    return (1);
   }
 
   printf("\nAfter parsing options:\n");
   XY_print_options(stdout, opts);
 
-
-  if (!XY_init(&opts, 32<<XY_FIXED_SHIFT, 24<<XY_FIXED_SHIFT))
+  if (!XY_init(&opts, 32 << XY_FIXED_SHIFT, 24 << XY_FIXED_SHIFT))
   {
     fprintf(stderr, "Error initializing libcrtxy: %s\n", XY_errstr());
     XY_print_options(stderr, opts);
-    return(1);
+    return (1);
   }
 
   black = XY_setcolor(0x00, 0x00, 0x00, 0x00);
 
   bkgd = XY_load_bitmap("./testdata/test-bkgd2.png");
 
-  XY_set_background(black, bkgd, 0, 0,
-                    XY_POS_LEFT | XY_POS_TOP, XY_SCALE_STRETCH);
+  XY_set_background(black, bkgd, 0, 0, XY_POS_LEFT | XY_POS_TOP, XY_SCALE_STRETCH);
 
   n = 3;
   done = XY_FALSE;
@@ -116,11 +112,9 @@ int main(int argc, char * argv[])
     n++;
     if (n >= 30)
       n = 3;
-  }
-  while (!done);
+  } while (!done);
 
   XY_quit();
 
-  return(0);
+  return (0);
 }
-

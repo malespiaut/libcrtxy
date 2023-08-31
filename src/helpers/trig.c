@@ -1,7 +1,8 @@
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
 
-int main()
+int
+main()
 {
   long i, xxx;
 
@@ -15,6 +16,5 @@ int main()
       printf("\n\n");
   }
 
-  return(0);
+  return (0);
 }
-

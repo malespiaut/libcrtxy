@@ -11,7 +11,8 @@
 
 #include <crtxy.h>
 
-typedef struct point_s {
+typedef struct point_s
+{
   XY_bool alive;
   XY_fixed x, y;
 } point_t;
@@ -20,19 +21,17 @@ typedef struct point_s {
 
 point_t points[MAX_POINTS];
 
-
 void add_point(XY_fixed x, XY_fixed y);
-XY_bool handle_intersect(XY_lines * lines, XY_fixed x1, XY_fixed y1,
-                         XY_fixed * x2, XY_fixed * y2);
+XY_bool handle_intersect(XY_lines* lines, XY_fixed x1, XY_fixed y1, XY_fixed* x2, XY_fixed* y2);
 
-
-int main(int argc, char * argv[])
+int
+main(int argc, char* argv[])
 {
   XY_options opts;
   XY_color black, white;
   XY_bool done, click;
   SDL_Event event;
-  XY_lines * lines;
+  XY_lines* lines;
   XY_fixed new_line_x, new_line_y;
   int ret;
   int i, ticks, tick_speed;
@@ -42,25 +41,25 @@ int main(int argc, char * argv[])
 
   ret = XY_load_options(&opts);
   if (!ret)
-    return(1);
+    return (1);
 
   ret = XY_parse_envvars(&opts);
   if (!ret)
-    return(1);
+    return (1);
 
   ret = XY_parse_options(&argc, argv, &opts);
   if (ret != 0)
   {
     fprintf(stderr, "Error setting libcrtxy options: %s\n", XY_errstr());
     fprintf(stderr, "Failed on %s\n", argv[ret]);
-    return(1);
+    return (1);
   }
 
-  if (!XY_init(&opts, 32<<XY_FIXED_SHIFT, 24<<XY_FIXED_SHIFT))
+  if (!XY_init(&opts, 32 << XY_FIXED_SHIFT, 24 << XY_FIXED_SHIFT))
   {
     fprintf(stderr, "Error initializing libcrtxy: %s\n", XY_errstr());
     XY_print_options(stderr, opts);
-    return(1);
+    return (1);
   }
 
   black = XY_setcolor(0x00, 0x00, 0x00, 0xff);
@@ -142,7 +141,7 @@ int main(int argc, char * argv[])
             tick_speed = 1000;
             ticks = 1;
           }
-        
+
           XY_add_line(lines, x1, y1, x2, y2, white, XY_THIN);
 
           new_line_x = x2;
@@ -157,24 +156,22 @@ int main(int argc, char * argv[])
       {
         lines->count--;
         if (lines->count > 0)
-          memcpy(&(lines->lines[0]), &(lines->lines[1]),
-                 sizeof(XY_line) * lines->count);
+          memcpy(&(lines->lines[0]), &(lines->lines[1]), sizeof(XY_line) * lines->count);
       }
     }
-    
+
     ticks++;
 
     XY_end_frame(XY_TRUE);
-  }
-  while (!done);
+  } while (!done);
 
   XY_quit();
 
-  return(0);
+  return (0);
 }
 
-XY_bool handle_intersect(XY_lines * lines, XY_fixed x1, XY_fixed y1,
-                         XY_fixed * x2, XY_fixed * y2)
+XY_bool
+handle_intersect(XY_lines* lines, XY_fixed x1, XY_fixed y1, XY_fixed* x2, XY_fixed* y2)
 {
   XY_line l;
   int i;
@@ -205,22 +202,22 @@ XY_bool handle_intersect(XY_lines * lines, XY_fixed x1, XY_fixed y1,
           *y2 = newy;
 
           lines->count -= i;
-          memcpy(&(lines->lines[0]), &(lines->lines[i]),
-                 sizeof(XY_line) * lines->count);
+          memcpy(&(lines->lines[0]), &(lines->lines[i]), sizeof(XY_line) * lines->count);
 
           lines->lines[0].x1 = *x2;
           lines->lines[0].y1 = *y2;
 
-          return(XY_TRUE);
+          return (XY_TRUE);
         }
       }
     }
   }
 
-  return(XY_FALSE);
+  return (XY_FALSE);
 }
 
-void add_point(XY_fixed x, XY_fixed y)
+void
+add_point(XY_fixed x, XY_fixed y)
 {
   int i, found;
 

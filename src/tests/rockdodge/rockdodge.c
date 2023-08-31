@@ -20,16 +20,18 @@
 
 #define NUM_ROCKS 10
 
-typedef struct rock_s {
+typedef struct rock_s
+{
   XY_fixed x, y;
   XY_fixed xm, ym;
   int color;
   XY_fixed angle, anglem;
 } rock_t;
 
-void bounce(XY_fixed * a1, XY_fixed m1, XY_fixed * a2, XY_fixed m2);
+void bounce(XY_fixed* a1, XY_fixed m1, XY_fixed* a2, XY_fixed m2);
 
-int main(int argc, char * argv[])
+int
+main(int argc, char* argv[])
 {
   XY_options opts;
   XY_color black, white;
@@ -46,46 +48,46 @@ int main(int argc, char * argv[])
   XY_bool throttle_fps;
   int ticks_since;
   int a;
-  XY_lines * ship_lines;
-  XY_lines * rock_lines;
+  XY_lines* ship_lines;
+  XY_lines* rock_lines;
 
   XY_default_options(&opts);
 
   ret = XY_load_options(&opts);
   if (!ret)
-    return(1);
+    return (1);
 
   ret = XY_parse_envvars(&opts);
   if (!ret)
-    return(1);
+    return (1);
 
   ret = XY_parse_options(&argc, argv, &opts);
   if (ret != 0)
   {
     fprintf(stderr, "Error setting libcrtxy options: %s\n", XY_errstr());
     fprintf(stderr, "Failed on %s\n", argv[ret]);
-    return(1);
+    return (1);
   }
 
   if (!XY_init(&opts, WIDTH, HEIGHT))
   {
     fprintf(stderr, "Error initializing libcrtxy: %s\n", XY_errstr());
     XY_print_options(stderr, opts);
-    return(1);
+    return (1);
   }
 
   ship_lines = XY_new_lines();
   if (ship_lines == NULL)
   {
     fprintf(stderr, "Error creating ship line collection: %s\n", XY_errstr());
-    return(1);
+    return (1);
   }
 
   rock_lines = XY_new_lines();
   if (rock_lines == NULL)
   {
     fprintf(stderr, "Error creating rock line collection: %s\n", XY_errstr());
-    return(1);
+    return (1);
   }
 
   srand(SDL_GetTicks());
@@ -101,7 +103,6 @@ int main(int argc, char * argv[])
   flame_colors[0] = XY_setcolor(0xff, 0x00, 0x00, 0x88);
   flame_colors[1] = XY_setcolor(0xff, 0x88, 0x00, 0x88);
   flame_colors[2] = XY_setcolor(0xff, 0xff, 0x00, 0x88);
-
 
   XY_set_background(black, NULL, 0, 0, 0, 0);
 
@@ -197,7 +198,7 @@ int main(int argc, char * argv[])
     {
       rocks[i].x += ((rocks[i].xm * ticks_since) / 33);
       rocks[i].y += ((rocks[i].ym * ticks_since) / 33);
-    
+
       if (rocks[i].x < 0)
         rocks[i].x += WIDTH;
       else if (rocks[i].x >= WIDTH)
@@ -264,19 +265,19 @@ int main(int argc, char * argv[])
     for (i = 0; i < NUM_ROCKS; i++)
     {
       x1 = rocks[i].x +
-        XY_mult(XY_cos((rocks[i].angle >> XY_FIXED_SHIFT)), RADIUS);
+           XY_mult(XY_cos((rocks[i].angle >> XY_FIXED_SHIFT)), RADIUS);
       y1 = rocks[i].y -
-        XY_mult(XY_sin((rocks[i].angle >> XY_FIXED_SHIFT)), RADIUS);
+           XY_mult(XY_sin((rocks[i].angle >> XY_FIXED_SHIFT)), RADIUS);
 
       x2 = rocks[i].x +
-        XY_mult(XY_cos((rocks[i].angle >> XY_FIXED_SHIFT) + 120), RADIUS);
+           XY_mult(XY_cos((rocks[i].angle >> XY_FIXED_SHIFT) + 120), RADIUS);
       y2 = rocks[i].y -
-        XY_mult(XY_sin((rocks[i].angle >> XY_FIXED_SHIFT) + 120), RADIUS);
+           XY_mult(XY_sin((rocks[i].angle >> XY_FIXED_SHIFT) + 120), RADIUS);
 
       x3 = rocks[i].x +
-        XY_mult(XY_cos((rocks[i].angle >> XY_FIXED_SHIFT) + 240), RADIUS);
+           XY_mult(XY_cos((rocks[i].angle >> XY_FIXED_SHIFT) + 240), RADIUS);
       y3 = rocks[i].y -
-        XY_mult(XY_sin((rocks[i].angle >> XY_FIXED_SHIFT) + 240), RADIUS);
+           XY_mult(XY_sin((rocks[i].angle >> XY_FIXED_SHIFT) + 240), RADIUS);
 
       XY_start_lines(rock_lines);
 
@@ -284,15 +285,11 @@ int main(int argc, char * argv[])
       XY_add_line(rock_lines, x2, y2, x3, y3, colors[rocks[i].color], XY_THIN);
       XY_add_line(rock_lines, x3, y3, x1, y1, colors[rocks[i].color], XY_THIN);
 
-      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x1, y1,
-                  colors[rocks[i].color], XY_THIN);
-      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x2, y2,
-                  colors[rocks[i].color], XY_THIN);
-      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x3, y3,
-                  colors[rocks[i].color], XY_THIN);
+      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x1, y1, colors[rocks[i].color], XY_THIN);
+      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x2, y2, colors[rocks[i].color], XY_THIN);
+      XY_add_line(rock_lines, rocks[i].x, rocks[i].y, x3, y3, colors[rocks[i].color], XY_THIN);
 
       XY_draw_lines(rock_lines);
-
 
       if (XY_line_groups_intersect(ship_lines, rock_lines))
       {
@@ -307,28 +304,28 @@ int main(int argc, char * argv[])
     }
 
     ticks_since = XY_end_frame(throttle_fps);
-  }
-  while (!done);
+  } while (!done);
 
   XY_free_lines(ship_lines);
   XY_free_lines(rock_lines);
- 
+
   XY_quit();
 
-  return(0);
+  return (0);
 }
 
-void bounce(XY_fixed * a1, XY_fixed m1, XY_fixed * a2, XY_fixed m2)
+void
+bounce(XY_fixed* a1, XY_fixed m1, XY_fixed* a2, XY_fixed m2)
 {
   XY_fixed v1, v2, new_v1, new_v2;
 
   v1 = *a1;
   v2 = *a2;
 
-/*
-  new_v1 = (v1 * (m1 - m2) + (2 * m2 * v2)) / (m1 + m2);
-  new_v2 = (v2 * (m2 - m1) + (2 * m1 * v1)) / (m1 + m2);
-*/
+  /*
+    new_v1 = (v1 * (m1 - m2) + (2 * m2 * v2)) / (m1 + m2);
+    new_v2 = (v2 * (m2 - m1) + (2 * m1 * v1)) / (m1 + m2);
+  */
 
   new_v1 = XY_div((XY_mult(v1, (m1 - m2)) + XY_mult(2 * m2, v2)), (m1 + m2));
   new_v2 = XY_div((XY_mult(v2, (m2 - m1)) + XY_mult(2 * m1, v1)), (m1 + m2));

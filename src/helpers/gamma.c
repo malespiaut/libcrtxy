@@ -20,15 +20,16 @@
   conversion is more complicated and I won't go into it here.)
 */
 
+#include <inttypes.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include <inttypes.h>
 
 typedef uint8_t Uint8;
 typedef uint16_t Uint16;
 
-int main(int argc, char * argv[])
+int
+main(int argc, char* argv[])
 {
   float target_gamma, reverse_target_gamma;
   int n;
@@ -49,25 +50,25 @@ int main(int argc, char * argv[])
 
   printf("/* 8-bit screen component goes in, 16-bit linear component comes out. */\n");
   printf("Uint16 XY_gamma_screen_to_linear_%d_%d[256] = {\n  ", (int)floor(target_gamma), (int)(fmod(target_gamma, 10)));
-  for(n = 0; n < 256; ++n)
+  for (n = 0; n < 256; ++n)
   {
-    float f = powf(n/255.f, target_gamma);
+    float f = powf(n / 255.f, target_gamma);
     Uint16 s = (Uint16)floorf(f * 65535.f);
     printf("0x%04x /*%1.5f*/, ", s, f);
     if (n % 2 == 1)
       printf("\n  ");
   }
   printf("\n};\n\n");
-  
+
   printf("/* 16-bit linear component goes in, 8-bit screen component comes out.\n"
-  "   By shifting by an appropriate amount, you can theoretically shave orders of\n"
-  "   magnitude off this table's size. With sRGB, anyway; with straight gamma,\n"
-  "   you'll DRASTICALLY worsen the folding problem as described above. */\n\n");
+         "   By shifting by an appropriate amount, you can theoretically shave orders of\n"
+         "   magnitude off this table's size. With sRGB, anyway; with straight gamma,\n"
+         "   you'll DRASTICALLY worsen the folding problem as described above. */\n\n");
   printf("Uint8 XY_gamma_linear_to_screen_%d_%d[65536] = {\n", (int)floor(target_gamma), (int)(fmod(target_gamma, 10)));
   printf("  /* BEWARE OVERRUN */\n  ");
-  for(n = 0; n < 65536; ++n)
+  for (n = 0; n < 65536; ++n)
   {
-    float f = powf(n/65535.f, reverse_target_gamma);
+    float f = powf(n / 65535.f, reverse_target_gamma);
     Uint8 s = (Uint8)floorf(f * 255.f);
     printf("0x%02x /*%1.5f*/, ", s, f);
     if (n % 4 == 3)
@@ -75,4 +76,3 @@ int main(int argc, char * argv[])
   }
   printf("\n};\n\n");
 }
-

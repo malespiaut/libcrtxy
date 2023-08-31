@@ -9,11 +9,12 @@
   December 25, 2008 - December 25, 2008
 */
 
-#include <stdio.h>
 #include <crtxy.h>
 #include <math.h>
+#include <stdio.h>
 
-int main(void)
+int
+main(void)
 {
   int choice;
   float val, math_answer;
@@ -56,8 +57,7 @@ int main(void)
       printf("Math lib answer: %g\n", (double)math_answer);
       printf("\n");
     }
-  }
-  while (choice != 0);
+  } while (choice != 0);
 
-  return(0);
+  return (0);
 }
