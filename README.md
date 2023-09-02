@@ -1,6 +1,11 @@
 # libcrtxy CRT-XY Library
 
-![Snapshots from 'rockdoge' test program at 320x240 and 640x480, with anti-aliasing and gamma-correction on and off.](docs/img/comparison-rockdodge.png)
+<p align="center">
+<a href=""><img src="docs/img/drawlines.gif" alt="drawline demo", width="320px"></a>
+<a href=""><img src="docs/img/polytest.gif" alt="polytest demo", width="320px"></a>
+<a href=""><img src="docs/img/rockdodge.gif" alt="rockdodge demo", width="320px"></a>
+<a href=""><img src="docs/img/comparison-rockdodge.png" alt="Snapshots from 'rockdoge' test program at 320x240 and 640x480, with anti-aliasing and gamma-correction on and off.", width="288px"></a>
+</p>
 
 ## News from the original developer
 
